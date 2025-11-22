@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek - Sosyal</title>
+    <title>KYK Yemek</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -97,7 +97,7 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Profil & Auth Box */
+        /* Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -118,10 +118,12 @@
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        
+        /* Yorum Stili */
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
-        .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; }
+        .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
         .c-text { font-size: 0.95rem; color: #fff; }
         .comment-input-area { display: flex; gap: 10px; }
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
@@ -231,7 +233,6 @@
     </div>
 
 <script>
-    // --- API AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -254,7 +255,6 @@
     let selectedAvatarBase64 = null;
     let profileAvatarBase64 = null;
 
-    // OTURUM DURUMU
     if(auth) {
         auth.onAuthStateChanged(async (user) => {
             if (user) { 
@@ -270,7 +270,6 @@
         });
     }
 
-    // AVATARI VERİTABANINDAN ÇEKME
     async function loadUserAvatar(uid) {
         try {
             const doc = await db.collection('users').doc(uid).get();
@@ -284,7 +283,7 @@
         const container = document.getElementById('auth-container');
         if(currentUser) {
             const name = currentUser.displayName || "Üye";
-            const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar">${name.charAt(0).toUpperCase()}</div>`;
+            const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar" style="background:#ccc;color:#333;display:flex;align-items:center;justify-content:center;">${name.charAt(0).toUpperCase()}</div>`;
             
             container.innerHTML = `
                 <div class="login-btn" onclick="openProfileModal()">
@@ -308,7 +307,6 @@
         }
     }
 
-    // FOTO İŞLEME
     function handleAvatarSelect(input) { processImage(input, 'avatarPreview', (res) => selectedAvatarBase64 = res); }
     function handleProfileAvatarSelect(input) { processImage(input, 'profileAvatarPreview', (res) => profileAvatarBase64 = res); }
 
@@ -339,7 +337,6 @@
         }
     }
 
-    // KAYIT VE GİRİŞ
     function loginUser() {
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPass').value;
@@ -354,7 +351,6 @@
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
 
         try {
-            // Nick Kontrolü
             const snapshot = await db.collection('users').where('nick', '==', nick).get();
             if(!snapshot.empty) return alert("Bu kullanıcı adı zaten alınmış.");
 
@@ -363,7 +359,6 @@
 
             await user.updateProfile({ displayName: nick });
             
-            // Veritabanına Kullanıcıyı Kaydet (Fotoğraf ile)
             await db.collection('users').doc(user.uid).set({
                 nick: nick,
                 email: email,
@@ -386,7 +381,6 @@
         if(!newNick) return alert("Nick boş olamaz");
         
         try {
-            // Nick değiştiyse kontrol et
             if(newNick !== currentUser.displayName) {
                 const snapshot = await db.collection('users').where('nick', '==', newNick).get();
                 if(!snapshot.empty) return alert("Bu kullanıcı adı alınmış.");
@@ -394,13 +388,11 @@
 
             await currentUser.updateProfile({ displayName: newNick });
             
-            // DB güncelle
             let updateData = { nick: newNick };
             if(profileAvatarBase64) {
                 updateData.photoBase64 = profileAvatarBase64;
                 currentUserAvatar = profileAvatarBase64;
             }
-            // GÜNCELLEME: set({merge:true}) kullanarak hata önlendi
             await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
 
             alert("Güncellendi!");
@@ -432,7 +424,11 @@
         17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
         18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
         19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
+        20: { 
+            date: "20 Kasım 2025 Perşembe", 
+            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
+            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
+        },
         21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
         22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
         23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
@@ -444,6 +440,8 @@
         29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
         30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
     };
+
+    for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
 
     let currentMeal = 'dinner';
     let currentDayIndex = new Date().getDate();
@@ -615,13 +613,19 @@
             db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
             
             comments.forEach(c => { 
-                // Avatar gösterimi (varsa foto, yoksa baş harf)
                 let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;">${c.userName.charAt(0).toUpperCase()}</div>`;
+                
+                // KİŞİSEL ÖZELLİK: Freddie Tacı
+                let crownHtml = '';
+                if(c.userName === 'freddie') {
+                    crownHtml = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>';
+                }
+
                 list.innerHTML += `
                 <div class="single-comment">
                     ${avatarHtml}
                     <div class="c-content">
-                        <div class="c-user">${c.userName}</div>
+                        <div class="c-user">${c.userName}${crownHtml}</div>
                         <div class="c-text">${c.text}</div>
                     </div>
                 </div>`; 
@@ -634,7 +638,6 @@
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
         
-        // Yorum kaydederken kullanıcının mevcut fotosunu (base64) da kaydet
         db.collection('comments').add({ 
             docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar,
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
