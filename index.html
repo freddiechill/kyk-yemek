@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek - Sosyal</title>
+    <title>KYK Yemek</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/freddiechill/gorsel-depom/refs/heads/main/kykyemek_20251122_043032_0000.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/freddiechill/gorsel-depom/refs/heads/main/kykyemek_20251122_043032_0000.png">
@@ -27,7 +26,7 @@
             transition: background-color 0.3s; -webkit-user-select: none; user-select: none;
         }
 
-        /* Giriş Butonu */
+        /* GİRİŞ BUTONU */
         #auth-container { position: absolute; top: 20px; right: 20px; z-index: 6000; }
         .login-btn {
             background: #fff; color: #333; border: none; padding: 8px 15px; border-radius: 20px;
@@ -35,13 +34,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: 'Satoshi', sans-serif; transition: transform 0.2s;
         }
         .login-btn:active { transform: scale(0.95); }
-        .user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .user-avatar { width: 24px; height: 24px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #333; }
 
-        /* Header */
+        /* HEADER */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
         
-        /* Sol Buton */
+        /* SOL BUTON */
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
         .icon-btn {
             background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px);
@@ -52,8 +51,9 @@
         .icon-btn:active { transform: scale(0.9); background: #333; }
         .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
 
-        /* Carousel */
+        /* CAROUSEL */
         .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; }
+        
         .menu-card {
             position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 55vh;
             background: #1e1e1e; border-radius: 24px; border: 2px solid #333;
@@ -70,18 +70,17 @@
         .meal-title { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
         .switch-btn { background: #333; color: #fff; border: none; padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Satoshi', sans-serif; font-size: 0.8rem; }
         .pos-2 .switch-btn { opacity: 1; pointer-events: auto; }
-
         ul { list-style: none; padding: 10px 0; margin: 0; overflow-y: auto; flex: 1; }
         li { padding: 12px 20px; border-bottom: 1px solid #2c2c2c; font-size: 1.05rem; text-align: center; color: #ddd; }
-        
-        /* Sosyal Footer */
+        li:last-child { border-bottom: none; }
+
+        /* SOSYAL FOOTER */
         .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; }
         .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; }
         .social-action:active { transform: scale(0.9); }
-        .social-action svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; flex-shrink: 0; }
+        .social-action svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 2px; flex-shrink: 0; }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
-        .liked { color: #ef9a9a !important; } 
-        .disliked { color: #90caf9 !important; }
+        .liked { color: #ef9a9a !important; } .disliked { color: #90caf9 !important; }
 
         /* Navigasyon */
         .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 80px; height: 80vh; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; background: transparent; border: none; color: rgba(255,255,255,0.3); }
@@ -92,11 +91,24 @@
         body.theme-breakfast .menu-card { border-color: #fff59d; } body.theme-breakfast .meal-title { color: #fff59d; } body.theme-breakfast .switch-btn { background: #fff59d; color: #121212; }
         body.theme-dinner .menu-card { border-color: #ef9a9a; } body.theme-dinner .meal-title { color: #ef9a9a; } body.theme-dinner .switch-btn { background: #ef9a9a; color: #121212; }
 
-        /* Modals */
-        .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; }
-        .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; background: #1e1e1e; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); flex-direction: column; }
-        #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; flex-direction: column; }
-        .modal-header { text-align: center; margin-bottom: 15px; font-size: 1.3rem; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        /* MODALLAR (Yorum, Liste ve AUTH) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; align-items: center; justify-content: center; }
+        
+        /* Auth Modal */
+        .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; }
+        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
+        .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
+        .auth-tab.active { color: #fff; border-bottom: 2px solid #fff; }
+        .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #252525; color: #fff; box-sizing: border-box; font-family: 'Satoshi', sans-serif; outline: none; }
+        .auth-submit { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #fff; color: #000; font-weight: 900; cursor: pointer; font-family: 'Satoshi', sans-serif; }
+        .auth-close { margin-top: 15px; color: #888; cursor: pointer; font-size: 0.9rem; display: block; }
+
+        /* Yorum ve Liste Modalları */
+        .comment-modal, #fullListModal { display: none; position: fixed; background: #1e1e1e; box-sizing: border-box; flex-direction: column; }
+        .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
+        #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; }
         .c-user { font-size: 0.85rem; color: #aaa; font-weight: bold; margin-bottom: 4px; }
@@ -112,11 +124,6 @@
         .modal-toggle { padding: 10px 20px; border-radius: 10px; border: 1px solid #444; background: #1e1e1e; color: #888; font-family: 'Satoshi', sans-serif; font-weight: 700; cursor: pointer; }
         .modal-toggle.active-yellow { background: #fff59d; color: #121212; border-color: #fff59d; }
         .modal-toggle.active-red { background: #ef9a9a; color: #121212; border-color: #ef9a9a; }
-
-        @media (min-width: 768px) {
-            .menu-card { max-width: 400px; max-height: 60vh; }
-            .nav-btn { width: 120px; }
-        }
     </style>
 </head>
 <body class="theme-dinner">
@@ -128,9 +135,8 @@
     </div>
 
     <div id="auth-container">
-        <button class="login-btn" onclick="googleLogin()">
-            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" fill="currentColor"/></svg>
-            Giriş
+        <button class="login-btn" onclick="openAuthModal()">
+            Giriş / Kayıt
         </button>
     </div>
 
@@ -146,6 +152,30 @@
         <div class="menu-card" id="c2"></div>
         <div class="menu-card" id="c3"></div>
         <div class="menu-card" id="c4"></div>
+    </div>
+
+    <div id="authModal" class="modal-overlay">
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">Giriş Yap</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">Kayıt Ol</div>
+            </div>
+
+            <div id="loginForm">
+                <input type="email" id="loginEmail" class="auth-input" placeholder="E-posta">
+                <input type="password" id="loginPass" class="auth-input" placeholder="Şifre">
+                <button class="auth-submit" onclick="loginUser()">GİRİŞ YAP</button>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <input type="text" id="regNick" class="auth-input" placeholder="Kullanıcı Adı (Nick)">
+                <input type="email" id="regEmail" class="auth-input" placeholder="E-posta">
+                <input type="password" id="regPass" class="auth-input" placeholder="Şifre (En az 6 karakter)">
+                <button class="auth-submit" onclick="registerUser()">KAYIT OL</button>
+            </div>
+
+            <span class="auth-close" onclick="closeAuthModal()">Kapat</span>
+        </div>
     </div>
 
     <div id="commentModal" class="comment-modal">
@@ -167,7 +197,7 @@
     </div>
 
 <script>
-    // API KEYLERİN
+    // --- API AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -183,38 +213,104 @@
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
         auth = firebase.auth();
-        
-        // APK Redirect Sonucu
-        auth.getRedirectResult().then((result) => {
-            if (result && result.user) {
-                currentUser = result.user;
-                updateLoginButton();
-            }
-        }).catch((error) => console.log(error));
-
     } catch (e) { console.log(e); }
 
     let currentUser = null;
-    function googleLogin() {
-        if(!auth) return alert("Bağlantı hatası.");
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider); // APK için Redirect şart
-    }
 
     if(auth) {
         auth.onAuthStateChanged((user) => {
-            if (user) { currentUser = user; updateLoginButton(); }
+            if (user) { currentUser = user; updateLoginButton(); closeAuthModal(); }
+            else { currentUser = null; updateLoginButton(); }
         });
+    }
+
+    // --- YENİ GİRİŞ SİSTEMİ (E-POSTA/ŞİFRE) ---
+    function openAuthModal() {
+        if(currentUser) {
+            if(confirm("Çıkış yapmak istiyor musunuz?")) {
+                auth.signOut();
+            }
+        } else {
+            document.getElementById('authModal').style.display = 'flex';
+        }
+    }
+
+    function closeAuthModal() {
+        document.getElementById('authModal').style.display = 'none';
+    }
+
+    function switchAuthTab(tab) {
+        const loginForm = document.getElementById('loginForm');
+        const regForm = document.getElementById('registerForm');
+        const tabs = document.querySelectorAll('.auth-tab');
+
+        if(tab === 'login') {
+            loginForm.style.display = 'block'; regForm.style.display = 'none';
+            tabs[0].classList.add('active'); tabs[1].classList.remove('active');
+        } else {
+            loginForm.style.display = 'none'; regForm.style.display = 'block';
+            tabs[0].classList.remove('active'); tabs[1].classList.add('active');
+        }
+    }
+
+    function registerUser() {
+        const nick = document.getElementById('regNick').value;
+        const email = document.getElementById('regEmail').value;
+        const pass = document.getElementById('regPass').value;
+
+        if(!nick || !email || !pass) return alert("Lütfen tüm alanları doldurun.");
+
+        auth.createUserWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                // Nick'i kaydet
+                userCredential.user.updateProfile({
+                    displayName: nick
+                }).then(() => {
+                    alert("Kayıt başarılı! Hoşgeldin " + nick);
+                    closeAuthModal();
+                    updateLoginButton(); // İsmi güncellemek için
+                });
+            })
+            .catch((error) => {
+                alert("Hata: " + error.message);
+            });
+    }
+
+    function loginUser() {
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPass').value;
+
+        if(!email || !pass) return alert("E-posta ve şifre girin.");
+
+        auth.signInWithEmailAndPassword(email, pass)
+            .then(() => {
+                closeAuthModal();
+            })
+            .catch((error) => {
+                alert("Giriş başarısız: " + error.message);
+            });
     }
 
     function updateLoginButton() {
         const container = document.getElementById('auth-container');
         if(currentUser) {
-            container.innerHTML = `<div class="login-btn" style="padding:5px 10px;"><img src="${currentUser.photoURL}" class="user-avatar"><span>${currentUser.displayName.split(' ')[0]}</span></div>`;
+            // İsmin baş harfini göster
+            const name = currentUser.displayName || "Üye";
+            const initial = name.charAt(0).toUpperCase();
+            container.innerHTML = `
+                <div class="login-btn" onclick="openAuthModal()">
+                    <div class="user-avatar">${initial}</div>
+                    <span>${name}</span>
+                </div>`;
+        } else {
+            container.innerHTML = `
+                <button class="login-btn" onclick="openAuthModal()">
+                    Giriş / Kayıt
+                </button>`;
         }
     }
 
-    // VERİLER
+    // --- VERİLER VE UI ---
     const menuData = {
         1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
         2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
@@ -301,6 +397,7 @@
                     </div>
                 </div>
             `;
+
             if(i===2) {
                 document.getElementById('currentDate').innerText = menuData[targetDateIdx].date;
                 fetchStats(targetDateIdx);
@@ -329,6 +426,7 @@
     }
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
+    
     function toggleModal() {
         const modal = document.getElementById('fullListModal'); const eyeIcon = document.getElementById('icon-eye'); const eyeOffIcon = document.getElementById('icon-eye-off');
         if (modal.style.display === 'flex') { modal.style.display = 'none'; eyeIcon.style.display = 'block'; eyeOffIcon.style.display = 'none'; } 
@@ -385,6 +483,7 @@
             if (!doc.exists) {
                 transaction.set(docRef, { likes: 0, dislikes: 0, commentCount: 0, votes: {} });
             }
+            
             const data = doc.data() || { likes: 0, dislikes: 0, commentCount: 0, votes: {} };
             const votes = data.votes || {};
             const currentVote = votes[currentUser.uid];
@@ -401,6 +500,7 @@
                 if (type === 'like') newLikes++; else newDislikes++;
                 votes[currentUser.uid] = type;
             }
+
             transaction.update(docRef, { likes: newLikes, dislikes: newDislikes, votes: votes });
         });
     }
@@ -408,6 +508,7 @@
     let activeCommentDay = 0;
     function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
     function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
+    
     function loadComments(dayIdx) {
         const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
@@ -417,9 +518,6 @@
             let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
             comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             comments.forEach(c => { list.innerHTML += `<div class="single-comment"><div class="c-user">${c.userName}</div><div class="c-text">${c.text}</div></div>`; });
-            
-            // Sayaç Güncelleme
-            db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
         });
     }
 
@@ -427,11 +525,18 @@
         if(!currentUser) return alert("Giriş yapmalısınız.");
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
-        db.collection('comments').add({ docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-        input.value = '';
+        
+        const batch = db.batch();
+        const commentRef = db.collection('comments').doc();
+        batch.set(commentRef, { docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        
+        const statsRef = db.collection('daily_stats').doc(docId);
+        batch.set(statsRef, { commentCount: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+
+        batch.commit().then(() => { input.value = ''; });
     }
 
-    // MEDIAN.CO FORCE INTERNAL
+    // MEDIAN FORCE INTERNAL SCRIPT
     if (navigator.userAgent.indexOf('Median') > -1) {
         window.gonative = window.gonative || {};
         document.onclick = function (e) {
