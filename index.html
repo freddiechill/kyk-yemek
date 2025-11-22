@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek - Sosyal</title>
+    <title>KYK Yemek</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,7 +35,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: 'Satoshi', sans-serif; transition: transform 0.2s;
         }
         .login-btn:active { transform: scale(0.95); }
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
 
         /* HEADER */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
@@ -59,7 +59,7 @@
             position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh;
             background: #1e1e1e; border-radius: 24px; border: 2px solid #333;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 10px;
         }
         .pos-2 { z-index: 30; transform: translate(-50%, -50%) scale(1); opacity: 1; }
         .pos-1 { z-index: 20; transform: translate(-85%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
@@ -80,7 +80,6 @@
         .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
         .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
-        /* SVG BOZULMASINI ENGELLEMEK İÇİN: */
         .social-action svg { width: 28px; height: 28px; min-width: 28px; min-height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
         .liked { color: #ef9a9a !important; } .disliked { color: #90caf9 !important; }
@@ -97,7 +96,7 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Profil & Auth Box */
+        /* Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -118,8 +117,9 @@
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
-        .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; }
+        .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
         .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; }
         .c-text { font-size: 0.95rem; color: #fff; }
@@ -127,7 +127,6 @@
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif;}
 
-        /* Liste Elemanları */
         .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
         .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
         .day-content { font-size: 1rem; line-height: 1.6; text-align: center; color: #e0e0e0; white-space: pre-line; }
@@ -146,7 +145,7 @@
 
     <div class="left-controls">
         <button class="icon-btn" onclick="toggleModal()" title="Tüm Liste">
-            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            <svg id="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
         </button>
     </div>
 
@@ -232,7 +231,6 @@
     </div>
 
 <script>
-    // API KEYLER
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -251,30 +249,41 @@
     } catch (e) { console.log(e); }
 
     let currentUser = null;
+    let currentUserAvatar = null; 
     let selectedAvatarBase64 = null;
     let profileAvatarBase64 = null;
 
     // OTURUM DURUMU
     if(auth) {
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) { 
                 currentUser = user; 
+                await loadUserAvatar(user.uid); // Avatarı veritabanından çek
                 updateLoginButton(); 
                 closeAuthModal(); 
             } else { 
                 currentUser = null; 
+                currentUserAvatar = null;
                 updateLoginButton(); 
             }
         });
     }
 
-    // UI BUTON GÜNCELLEME
+    // AVATARI VERİTABANINDAN ÇEKME (Firebase Storage kullanmadan)
+    async function loadUserAvatar(uid) {
+        try {
+            const doc = await db.collection('users').doc(uid).get();
+            if(doc.exists && doc.data().photoBase64) {
+                currentUserAvatar = doc.data().photoBase64;
+            }
+        } catch(e) { console.log(e); }
+    }
+
     function updateLoginButton() {
         const container = document.getElementById('auth-container');
         if(currentUser) {
             const name = currentUser.displayName || "Üye";
-            const photo = currentUser.photoURL || ""; 
-            const imgHtml = photo ? `<img src="${photo}" class="user-avatar">` : `<div class="user-avatar">${name.charAt(0).toUpperCase()}</div>`;
+            const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar">${name.charAt(0).toUpperCase()}</div>`;
             
             container.innerHTML = `
                 <div class="login-btn" onclick="openProfileModal()">
@@ -286,8 +295,7 @@
         }
     }
 
-    // MODAL KONTROLLERİ
-    function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+    function openAuthModal() { if(currentUser) return; document.getElementById('authModal').style.display = 'flex'; }
     function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
     function switchAuthTab(tab) {
         if(tab === 'login') {
@@ -299,15 +307,7 @@
         }
     }
 
-    // PROFİL DÜZENLEME
-    function openProfileModal() {
-        if(!currentUser) return;
-        document.getElementById('profileModal').style.display = 'flex';
-        document.getElementById('profileNick').value = currentUser.displayName;
-        if(currentUser.photoURL) document.getElementById('profileAvatarPreview').src = currentUser.photoURL;
-    }
-    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
-
+    // FOTO İŞLEME
     function handleAvatarSelect(input) { processImage(input, 'avatarPreview', (res) => selectedAvatarBase64 = res); }
     function handleProfileAvatarSelect(input) { processImage(input, 'profileAvatarPreview', (res) => profileAvatarBase64 = res); }
 
@@ -326,7 +326,7 @@
                     else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
                     canvas.width = width; canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
-                    const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.6);
                     document.getElementById(previewId).src = base64;
                     document.getElementById(previewId).style.display = 'block';
                     if(document.getElementById('avatarLabel')) document.getElementById('avatarLabel').style.display = 'none';
@@ -338,7 +338,7 @@
         }
     }
 
-    // İŞLEMLER
+    // KAYIT VE GİRİŞ
     function loginUser() {
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPass').value;
@@ -353,34 +353,63 @@
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
 
         try {
-            // Nick kontrolü (Firestore'da 'usernames' koleksiyonu oluşturup bakıyoruz)
-            /* Not: Gerçek production'da Firestore rules ile benzersizlik daha iyi sağlanır,
-               burada client-side basit kontrol yapıyoruz. */
-            
+            // Nick Kontrolü (Firestore'da 'users' içinde arama)
+            const snapshot = await db.collection('users').where('nick', '==', nick).get();
+            if(!snapshot.empty) return alert("Bu kullanıcı adı zaten alınmış.");
+
             const userCred = await auth.createUserWithEmailAndPassword(email, pass);
-            await userCred.user.updateProfile({ displayName: nick, photoURL: selectedAvatarBase64 });
+            const user = userCred.user;
+
+            await user.updateProfile({ displayName: nick });
+            
+            // Veritabanına Kullanıcıyı Kaydet (Fotoğraf ile)
+            await db.collection('users').doc(user.uid).set({
+                nick: nick,
+                email: email,
+                photoBase64: selectedAvatarBase64 || null
+            });
+
             alert("Kayıt başarılı!");
         } catch (error) { alert("Hata: " + error.message); }
     }
+
+    function openProfileModal() {
+        document.getElementById('profileModal').style.display = 'flex';
+        document.getElementById('profileNick').value = currentUser.displayName;
+        if(currentUserAvatar) document.getElementById('profileAvatarPreview').src = currentUserAvatar;
+    }
+    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
     async function saveProfile() {
         const newNick = document.getElementById('profileNick').value.trim();
         if(!newNick) return alert("Nick boş olamaz");
         
         try {
-            await currentUser.updateProfile({
-                displayName: newNick,
-                photoURL: profileAvatarBase64 || currentUser.photoURL
-            });
-            alert("Profil güncellendi!");
+            // Nick değiştiyse kontrol et
+            if(newNick !== currentUser.displayName) {
+                const snapshot = await db.collection('users').where('nick', '==', newNick).get();
+                if(!snapshot.empty) return alert("Bu kullanıcı adı alınmış.");
+            }
+
+            await currentUser.updateProfile({ displayName: newNick });
+            
+            // DB güncelle
+            let updateData = { nick: newNick };
+            if(profileAvatarBase64) {
+                updateData.photoBase64 = profileAvatarBase64;
+                currentUserAvatar = profileAvatarBase64;
+            }
+            await db.collection('users').doc(currentUser.uid).update(updateData);
+
+            alert("Güncellendi!");
             updateLoginButton();
             closeProfileModal();
         } catch(e) { alert("Hata: " + e.message); }
     }
-
+    
     function logoutUser() { auth.signOut(); closeProfileModal(); }
 
-    // --- MENU VERİLERİ (TAM VE EKSİKSİZ 1-30 KASIM) ---
+    // --- MENÜ VERİLERİ ---
     const menuData = {
         1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
         2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
@@ -417,7 +446,6 @@
         29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
         30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
     };
-    for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
 
     let currentMeal = 'dinner';
     let currentDayIndex = new Date().getDate();
@@ -432,7 +460,6 @@
         applyClasses();
     });
 
-    // UI
     function getLoopedIndex(idx) { let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; }
 
     function renderAllCards(centerDateIdx) {
@@ -467,6 +494,7 @@
                     </div>
                 </div>
             `;
+
             if(i===2) {
                 document.getElementById('currentDate').innerText = menuData[targetDateIdx].date;
                 fetchStats(targetDateIdx);
@@ -485,6 +513,7 @@
         renderAllCards(currentDayIndex);
         applyClasses();
     }
+
     function applyClasses() {
         const classes = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4'];
         for(let i=0; i<5; i++) {
@@ -493,6 +522,7 @@
             el.classList.add(classes[i]);
         }
     }
+
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
@@ -515,28 +545,24 @@
         }
     }
 
-    // --- FIREBASE ---
+    // --- FIREBASE İŞLEMLERİ ---
     function fetchStats(dayIdx) {
         if(!db) return;
         const docId = `${currentMeal}_nov_${dayIdx}`;
         db.collection('daily_stats').doc(docId).onSnapshot(doc => {
             if(doc.exists) {
                 const data = doc.data();
-                const likeEl = document.getElementById(`like-count-${dayIdx}`);
-                const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`);
-                const commentEl = document.getElementById(`comment-count-${dayIdx}`);
-                
-                if(likeEl) likeEl.innerText = data.likes || 0;
-                if(dislikeEl) dislikeEl.innerText = data.dislikes || 0;
-                if(commentEl) commentEl.innerText = data.commentCount || 0; // Yorum sayısı
+                document.getElementById(`like-count-${dayIdx}`).innerText = data.likes || 0;
+                document.getElementById(`dislike-count-${dayIdx}`).innerText = data.dislikes || 0;
+                document.getElementById(`comment-count-${dayIdx}`).innerText = data.commentCount || 0;
                 
                 if(currentUser && data.votes && data.votes[currentUser.uid]) {
                     if(data.votes[currentUser.uid] === 'like') {
-                        likeEl.parentElement.classList.add('liked');
-                        dislikeEl.parentElement.classList.remove('disliked');
+                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked');
+                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked');
                     } else {
-                        dislikeEl.parentElement.classList.add('disliked');
-                        likeEl.parentElement.classList.remove('liked');
+                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked');
+                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked');
                     }
                 }
             }
@@ -561,13 +587,12 @@
             let newLikes = data.likes || 0;
             let newDislikes = data.dislikes || 0;
 
-            if (currentVote === type) { // Oyu geri çek
+            if (currentVote === type) {
                 if (type === 'like') newLikes--; else newDislikes--;
                 delete votes[currentUser.uid];
-            } else { // Yeni oy veya değiştir
+            } else {
                 if (currentVote === 'like') newLikes--;
                 if (currentVote === 'dislike') newDislikes--;
-
                 if (type === 'like') newLikes++; else newDislikes++;
                 votes[currentUser.uid] = type;
             }
@@ -588,11 +613,11 @@
             let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
             comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             
-            // YORUM SAYISINI GÜNCELLE
+            // Sayaç Güncelleme
             db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
             
             comments.forEach(c => { 
-                let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">${c.userName.charAt(0).toUpperCase()}</div>`;
+                let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar">${c.userName.charAt(0).toUpperCase()}</div>`;
                 list.innerHTML += `
                 <div class="single-comment">
                     ${avatarHtml}
@@ -609,8 +634,10 @@
         if(!currentUser) return alert("Giriş yapmalısınız.");
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
+        
+        // Kullanıcı fotosunu da kaydet
         db.collection('comments').add({ 
-            docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUser.photoURL, // Fotoğrafı da kaydet
+            docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar,
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         });
         input.value = '';
