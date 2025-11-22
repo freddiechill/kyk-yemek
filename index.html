@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KYK Yemek - Sosyal</title>
+    
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/freddiechill/gorsel-depom/refs/heads/main/kykyemek_20251122_043032_0000.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/freddiechill/gorsel-depom/refs/heads/main/kykyemek_20251122_043032_0000.png">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            font-weight: 700;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0; padding: 0;
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            -webkit-user-select: none; user-select: none;
+        }
+
+        /* GİRİŞ BUTONU */
+        #auth-container { position: absolute; top: 20px; right: 20px; z-index: 6000; }
+        .login-btn {
+            background: #fff; color: #333; border: none;
+            padding: 8px 15px; border-radius: 20px;
+            font-weight: 900; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-family: 'Satoshi', sans-serif;
+            transition: transform 0.2s;
+        }
+        .login-btn:active { transform: scale(0.95); }
+        .user-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+
+        /* HEADER */
+        .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
+        .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
+
+        /* SOL BUTON */
+        .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
+        .icon-btn {
+            background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
+            color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .icon-btn:active { transform: scale(0.9); background: #333; }
+        .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
+
+        /* CAROUSEL */
+        .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; }
+        
+        .menu-card {
+            position: absolute; top: 50%; left: 50%;
+            width: 85%; max-width: 380px;
+            height: auto; max-height: 55vh;
+            background: #1e1e1e; border-radius: 24px;
+            border: 2px solid #333;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s;
+            padding-bottom: 10px;
+        }
+
+        .pos-2 { z-index: 30; transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .pos-1 { z-index: 20; transform: translate(-85%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
+        .pos-3 { z-index: 20; transform: translate(-15%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
+        .pos-0 { z-index: 10; transform: translate(-150%, -50%) scale(0.7); opacity: 0; }
+        .pos-4 { z-index: 10; transform: translate(50%, -50%) scale(0.7); opacity: 0; }
+
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid #333; flex-shrink: 0; min-height: 50px;
+        }
+        .meal-title { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
+        
+        .switch-btn {
+            background: #333; color: #fff; border: none; padding: 6px 12px;
+            border-radius: 20px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; opacity: 0; pointer-events: none;
+            font-family: 'Satoshi', sans-serif; font-size: 0.8rem;
+        }
+        .pos-2 .switch-btn { opacity: 1; pointer-events: auto; }
+
+        ul { list-style: none; padding: 10px 0; margin: 0; overflow-y: auto; flex: 1; }
+        li { padding: 12px 20px; border-bottom: 1px solid #2c2c2c; font-size: 1.05rem; text-align: center; color: #ddd; }
+        li:last-child { border-bottom: none; }
+
+        /* SOSYAL FOOTER */
+        .social-footer {
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 12px; background: #151515; border-top: 1px solid #333;
+            flex-shrink: 0;
+        }
+        .social-action {
+            display: flex; flex-direction: column; align-items: center;
+            color: #888; cursor: pointer; transition: color 0.2s;
+            position: relative; width: 60px; /* Sabit genişlik, sıkışmayı önler */
+        }
+        .social-action:active { transform: scale(0.9); }
+        .social-action svg { 
+            width: 28px; height: 28px; /* İkon boyutu */
+            fill: currentColor; margin-bottom: 4px; 
+            flex-shrink: 0; /* İkonun büzüşmesini engelle */
+        }
+        .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
+        
+        .liked { color: #ef9a9a !important; } 
+        .disliked { color: #90caf9 !important; }
+
+        /* Navigasyon */
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 80px; height: 80vh; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; background: transparent; border: none; color: rgba(255,255,255,0.3); }
+        .nav-left { left: 0; justify-content: flex-start; padding-left: 10px; }
+        .nav-right { right: 0; justify-content: flex-end; padding-right: 10px; }
+
+        /* Temalar */
+        body.theme-breakfast .menu-card { border-color: #fff59d; } body.theme-breakfast .meal-title { color: #fff59d; } body.theme-breakfast .switch-btn { background: #fff59d; color: #121212; }
+        body.theme-dinner .menu-card { border-color: #ef9a9a; } body.theme-dinner .meal-title { color: #ef9a9a; } body.theme-dinner .switch-btn { background: #ef9a9a; color: #121212; }
+
+        /* Modals */
+        .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; }
+        .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; background: #1e1e1e; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); flex-direction: column; }
+        #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; flex-direction: column; }
+        .modal-header { text-align: center; margin-bottom: 15px; font-size: 1.3rem; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        
+        .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; }
+        .c-user { font-size: 0.85rem; color: #aaa; font-weight: bold; margin-bottom: 4px; }
+        .c-text { font-size: 1rem; color: #fff; }
+        
+        .comment-input-area { display: flex; gap: 10px; }
+        .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
+        .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif;}
+
+        .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
+        .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .day-content { font-size: 1rem; line-height: 1.6; text-align: center; color: #e0e0e0; white-space: pre-line; }
+        .modal-toggle-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .modal-toggle { padding: 10px 20px; border-radius: 10px; border: 1px solid #444; background: #1e1e1e; color: #888; font-family: 'Satoshi', sans-serif; font-weight: 700; cursor: pointer; }
+        .modal-toggle.active-yellow { background: #fff59d; color: #121212; border-color: #fff59d; }
+        .modal-toggle.active-red { background: #ef9a9a; color: #121212; border-color: #ef9a9a; }
+
+        @media (min-width: 768px) {
+            .menu-card { max-width: 400px; max-height: 60vh; }
+            .nav-btn { width: 120px; }
+        }
+    </style>
+</head>
+<body class="theme-dinner">
+
+    <div class="left-controls">
+        <button class="icon-btn" onclick="toggleModal()" title="Tüm Liste">
+            <svg id="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            <svg id="icon-eye-off" viewBox="0 0 24 24" style="display: none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2z"/></svg>
+        </button>
+    </div>
+
+    <div id="auth-container">
+        <button class="login-btn" onclick="googleLogin()">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" fill="currentColor"/></svg>
+            Giriş
+        </button>
+    </div>
+
+    <div class="header-container">
+        <div class="date-display" id="currentDate">Yükleniyor...</div>
+    </div>
+
+    <div class="carousel-container">
+        <button class="nav-btn nav-left" onclick="moveCarousel(-1)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+        <button class="nav-btn nav-right" onclick="moveCarousel(1)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+        <div class="menu-card" id="c0"></div>
+        <div class="menu-card" id="c1"></div>
+        <div class="menu-card" id="c2"></div>
+        <div class="menu-card" id="c3"></div>
+        <div class="menu-card" id="c4"></div>
+    </div>
+
+    <div id="commentModal" class="comment-modal">
+        <div class="comment-header"><span>Yorumlar</span><span onclick="closeComments()" style="cursor:pointer">&times;</span></div>
+        <div class="comment-list" id="commentList"></div>
+        <div class="comment-input-area">
+            <input type="text" id="commentInput" class="comment-input" placeholder="Bir şeyler yaz...">
+            <button class="send-btn" onclick="postComment()">Gönder</button>
+        </div>
+    </div>
+
+    <div id="fullListModal">
+        <div class="modal-header">Tüm Ayın Listesi</div>
+        <div class="modal-toggle-container">
+            <button class="modal-toggle" id="modalBtnBreakfast" onclick="renderFullList('breakfast')">Kahvaltı</button>
+            <button class="modal-toggle" id="modalBtnDinner" onclick="renderFullList('dinner')">Akşam</button>
+        </div>
+        <div class="modal-scroll-area" id="fullListContainer"></div>
+    </div>
+
+<script>
+    // API KEY
+    const firebaseConfig = {
+        apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
+        authDomain: "kyk-yemek-app.firebaseapp.com",
+        projectId: "kyk-yemek-app",
+        storageBucket: "kyk-yemek-app.firebasestorage.app",
+        messagingSenderId: "177253204360",
+        appId: "1:177253204360:web:0b0516ad80df3e5658fa3d",
+        measurementId: "G-EGGGN0B9J5"
+    };
+
+    let db, auth;
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        auth = firebase.auth();
+        auth.getRedirectResult().then((result) => {
+            if (result && result.user) {
+                currentUser = result.user;
+                updateLoginButton();
+            }
+        }).catch((error) => console.error("Redirect Error:", error));
+    } catch (e) { console.log(e); }
+
+    let currentUser = null;
+    function googleLogin() {
+        if(!auth) return alert("Bağlantı hatası.");
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithRedirect(provider);
+    }
+
+    if(auth) {
+        auth.onAuthStateChanged((user) => {
+            if (user) { currentUser = user; updateLoginButton(); }
+        });
+    }
+
+    function updateLoginButton() {
+        const container = document.getElementById('auth-container');
+        if(currentUser) {
+            container.innerHTML = `<div class="login-btn" style="padding:5px 10px;"><img src="${currentUser.photoURL}" class="user-avatar"><span>${currentUser.displayName.split(' ')[0]}</span></div>`;
+        }
+    }
+
+    const menuData = {
+        1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
+        3: { date: "3 Kasım 2025 Pazartesi", breakfast: ["Sucuklu Yumurta", "Kakaolu Kek", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Düğün Çorba", "Şinitzel + Elma Dilim Patates / Karışık Dolma", "Soslu Spagetti", "Havuç Tarator", "500 ml Su", "Çeyrek Ekmek"] },
+        4: { date: "4 Kasım 2025 Salı", breakfast: ["Karışık Kızartma", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Yüksük Çorba", "Çiftlik Köfte / Karışık Sebze Graten", "Tel Şehriyeli Pirinç Pilavı", "Kakaolu Puding", "500 ml Su", "Çeyrek Ekmek"] },
+        5: { date: "5 Kasım 2025 Çarşamba", breakfast: ["Sade Omlet", "Simit", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Tel Şehriye Çorba", "Tavuk Fajita / Bezelye Yemeği", "Sebzeli Bulgur Pilavı", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        6: { date: "6 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl (Salçalı/Kızartma)", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sebze Çorba / Ezogelin Çorba", "Izgara Köfte + Fırın Patates / Karnabahar Kızartması", "Peynirli Boru Makarna", "Pembe Sultan", "500 ml Su", "Çeyrek Ekmek"] },
+        7: { date: "7 Kasım 2025 Cuma", breakfast: ["Peynirli Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Yoğurt Çorba", "Nohut Yemeği / Patates Yemeği", "Pirinç Pilavı", "Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] },
+        8: { date: "8 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Domates Çorba", "Çiftlik Kebabı / Mücver", "Bulgur Pilavı", "Ege Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        9: { date: "9 Kasım 2025 Pazar", breakfast: ["Kaşarlı Omlet", "Dere Otlu Poğaça", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mandalina", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Mısır Çorba", "Köri Soslu Tavuk + Patates / Barbunya Yemeği", "Mantı", "Islak Kek", "500 ml Su", "Çeyrek Ekmek"] },
+        10: { date: "10 Kasım 2025 Pazartesi", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Tavuk Çorba", "Patlıcan Musakka / Ispanak Yemeği", "Garnitürlü Pirinç Pilavı", "Haydari", "500 ml Su", "Çeyrek Ekmek"] },
+        11: { date: "11 Kasım 2025 Salı", breakfast: ["Patatesli Yumurta", "Sade Açma", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Yayla Çorba", "Şinitzel + Fırın Patates / Taze Fasulye", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        12: { date: "12 Kasım 2025 Çarşamba", breakfast: ["Sade Omlet", "Peynirli Börek", "Krem Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Tel Şehriye Çorba", "Izgara Köfte Sandviç / İmam Bayıldı", "Soslu Spagetti", "Ayran", "500 ml Su", "Çeyrek Ekmek"] },
+        13: { date: "13 Kasım 2025 Perşembe", breakfast: ["Menemen", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Düğün Çorba / Ezogelin Çorba", "Tavuk Şiş Fırın Sebze / Mantar Sote", "Pirinç Pilavı", "Kemalpaşa Tatlısı", "500 ml Su", "Çeyrek Ekmek"] },
+        14: { date: "14 Kasım 2025 Cuma", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Yüksük Çorba", "Adana Kebap Lavaş / Patates Yemeği", "Sebzeli Bulgur Pilavı", "Yoğurtlu Köz Patlıcan", "500 ml Su", "Çeyrek Ekmek"] },
+        15: { date: "15 Kasım 2025 Cumartesi", breakfast: ["Sucuklu Yumurta", "Patates Kroket", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Domates Çorba", "Tavuk Fajita / Lahana Dolma", "Köri Soslu Kalem Makarna", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
+        16: { date: "16 Kasım 2025 Pazar", breakfast: ["Zeytinli/Peynirli Açma", "Kaşarlı Omlet", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Tel Şehriye Çorba", "Kuru Fasulye / Ratatuy", "Şehriyeli Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
+        17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
+        18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
+        19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        20: { 
+            date: "20 Kasım 2025 Perşembe", 
+            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
+            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
+        },
+        21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
+        22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
+        23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
+        24: { date: "24 Kasım 2025 Pazartesi", breakfast: ["Patatesli Börek", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Toyga Çorba / Mercimek Çorba", "Patlıcan Musakka / Barbunya Yemeği", "Pirinç Pilavı", "Çikolatalı Yaş Pasta", "500 ml Su", "Çeyrek Ekmek"] },
+        25: { date: "25 Kasım 2025 Salı", breakfast: ["Sucuklu Yumurta", "Sade Açma", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Şehriye Çorba / Düğün Çorba", "Tavuk Kalamar + Patates / Karışık Kızartma", "Soslu Mantı", "Cacık", "500 ml Su", "Çeyrek Ekmek"] },
+        26: { date: "26 Kasım 2025 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Krem Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sebze Çorba / Çeşmi Nigar Çorba", "Et Tantuni + Patates / Taze Fasulye", "Sebzeli Bulgur Pilavı", "Şakşuka", "500 ml Su", "Çeyrek Ekmek"] },
+        27: { date: "27 Kasım 2025 Perşembe", breakfast: ["Peynirli Omlet", "Simit", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Yoğurt Çorba", "Fırında Uskumru / Karışık Dolma", "İrmik Helvası", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        28: { date: "28 Kasım 2025 Cuma", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Yüksük Çorba", "Kaşarlı Köfte / Karnabahar Kızartması", "Salçalı Burgu Makarna", "Portakal", "500 ml Su", "Çeyrek Ekmek"] },
+        29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
+    };
+
+    for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
+
+    let currentMeal = 'dinner';
+    let currentDayIndex = new Date().getDate();
+    let cardPositions = [0, 1, 2, 3, 4];
+    const cards = [document.getElementById('c0'), document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3'), document.getElementById('c4')];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        if(today.getMonth() !== 10 || currentDayIndex > 30) currentDayIndex = 1;
+        updateTheme();
+        renderAllCards(currentDayIndex);
+        applyClasses();
+    });
+
+    function getLoopedIndex(idx) { let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; }
+
+    function renderAllCards(centerDateIdx) {
+        for (let i = 0; i < 5; i++) {
+            const domIndex = cardPositions[i];
+            const dateOffset = i - 2;
+            const targetDateIdx = getLoopedIndex(centerDateIdx + dateOffset);
+            const card = cards[domIndex];
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="meal-title">${currentMeal === 'breakfast' ? 'KAHVALTI' : 'AKŞAM'}</div>
+                    <button class="switch-btn ${i===2?'':'hidden-btn'}" onclick="toggleMealType()">
+                        <span class="switch-text">${currentMeal === 'breakfast' ? 'Akşama Geç' : 'Kahvaltıya Geç'}</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z"/></svg>
+                    </button>
+                </div>
+                <ul>${getMenuHtml(targetDateIdx)}</ul>
+                
+                <div class="social-footer">
+                    <div class="social-action" onclick="handleVote(${targetDateIdx}, 'like')">
+                        <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
+                        <span class="count-text" id="like-count-${targetDateIdx}">0</span>
+                    </div>
+                    <div class="social-action" onclick="handleVote(${targetDateIdx}, 'dislike')">
+                        <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.99.01h3.8c.43 0 .83.22 1.07.58l.79 1.19.79 1.19c.24.36.24.83-.01 1.19l-2.42 3.63c-.27.41-.19.96.19 1.27.16.13.36.2.56.2h9.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L15.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        <span class="count-text" id="dislike-count-${targetDateIdx}">0</span>
+                    </div>
+                    <div class="social-action" onclick="openComments(${targetDateIdx})">
+                        <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                        <span class="count-text" id="comment-count-${targetDateIdx}">0</span>
+                    </div>
+                </div>
+            `;
+            if(i===2) {
+                document.getElementById('currentDate').innerText = menuData[targetDateIdx].date;
+                fetchStats(targetDateIdx);
+            }
+        }
+    }
+
+    function getMenuHtml(idx) {
+        const items = (menuData[idx] && menuData[idx][currentMeal]) ? menuData[idx][currentMeal] : ["Veri yok"];
+        return items.map(i => `<li>${i}</li>`).join('');
+    }
+
+    function moveCarousel(direction) {
+        if(direction===1) { cardPositions.push(cardPositions.shift()); currentDayIndex = getLoopedIndex(currentDayIndex+1); } 
+        else { cardPositions.unshift(cardPositions.pop()); currentDayIndex = getLoopedIndex(currentDayIndex-1); }
+        renderAllCards(currentDayIndex);
+        applyClasses();
+    }
+    function applyClasses() {
+        const classes = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4'];
+        for(let i=0; i<5; i++) {
+            const el = cards[cardPositions[i]];
+            el.classList.remove(...classes);
+            el.classList.add(classes[i]);
+        }
+    }
+    function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
+    function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
+    function toggleModal() {
+        const modal = document.getElementById('fullListModal'); const eyeIcon = document.getElementById('icon-eye'); const eyeOffIcon = document.getElementById('icon-eye-off');
+        if (modal.style.display === 'flex') { modal.style.display = 'none'; eyeIcon.style.display = 'block'; eyeOffIcon.style.display = 'none'; } 
+        else { modal.style.display = 'flex'; eyeIcon.style.display = 'none'; eyeOffIcon.style.display = 'block'; renderFullList(currentMeal); }
+    }
+    function renderFullList(mealType) {
+        const container = document.getElementById('fullListContainer'); const btnBreakfast = document.getElementById('modalBtnBreakfast'); const btnDinner = document.getElementById('modalBtnDinner');
+        container.innerHTML = ''; btnBreakfast.className = 'modal-toggle'; btnDinner.className = 'modal-toggle';
+        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); else btnDinner.classList.add('active-red');
+        for (let i = 1; i <= 30; i++) {
+            const dayData = menuData[i];
+            if (dayData) {
+                const div = document.createElement('div'); div.className = 'day-row';
+                div.innerHTML = `<div class="day-header">${dayData.date}</div><div class="day-content">${dayData[mealType].join('<br>')}</div>`;
+                container.appendChild(div);
+            }
+        }
+    }
+
+    function fetchStats(dayIdx) {
+        if(!db) return;
+        const docId = `${currentMeal}_nov_${dayIdx}`;
+        db.collection('daily_stats').doc(docId).onSnapshot(doc => {
+            if(doc.exists) {
+                const data = doc.data();
+                const likeEl = document.getElementById(`like-count-${dayIdx}`);
+                const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`);
+                const commentEl = document.getElementById(`comment-count-${dayIdx}`);
+                if(likeEl) likeEl.innerText = data.likes || 0;
+                if(dislikeEl) dislikeEl.innerText = data.dislikes || 0;
+                if(commentEl) commentEl.innerText = data.commentCount || 0; // YORUM SAYISI DÜZELTİLDİ
+                
+                // Renklendirme
+                if(currentUser && data.votes && data.votes[currentUser.uid]) {
+                    if(data.votes[currentUser.uid] === 'like') {
+                        likeEl.parentElement.classList.add('liked');
+                        dislikeEl.parentElement.classList.remove('disliked');
+                    } else {
+                        dislikeEl.parentElement.classList.add('disliked');
+                        likeEl.parentElement.classList.remove('liked');
+                    }
+                }
+            }
+        });
+    }
+
+    function handleVote(dayIdx, type) {
+        if(!currentUser) return alert("Lütfen giriş yapın.");
+        if(!db) return;
+        const docId = `${currentMeal}_nov_${dayIdx}`;
+        const docRef = db.collection('daily_stats').doc(docId);
+
+        db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(docRef);
+            if (!doc.exists) {
+                transaction.set(docRef, { likes: 0, dislikes: 0, commentCount: 0, votes: {} });
+            }
+            const data = doc.data() || { likes: 0, dislikes: 0, commentCount: 0, votes: {} };
+            const votes = data.votes || {};
+            const currentVote = votes[currentUser.uid];
+
+            let newLikes = data.likes || 0;
+            let newDislikes = data.dislikes || 0;
+
+            if (currentVote === type) {
+                if (type === 'like') newLikes--; else newDislikes--;
+                delete votes[currentUser.uid];
+            } else {
+                if (currentVote === 'like') newLikes--;
+                if (currentVote === 'dislike') newDislikes--;
+                if (type === 'like') newLikes++; else newDislikes++;
+                votes[currentUser.uid] = type;
+            }
+            transaction.update(docRef, { likes: newLikes, dislikes: newDislikes, votes: votes });
+        });
+    }
+
+    let activeCommentDay = 0;
+    function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
+    function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
+    function loadComments(dayIdx) {
+        const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
+        if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
+        const docId = `${currentMeal}_nov_${dayIdx}`;
+        db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => {
+            list.innerHTML = ''; if(snapshot.empty) { list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; return; }
+            let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
+            comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            comments.forEach(c => { list.innerHTML += `<div class="single-comment"><div class="c-user">${c.userName}</div><div class="c-text">${c.text}</div></div>`; });
+            
+            // Yorum Sayısını Düzeltme (Otomatik)
+            db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
+        });
+    }
+    function postComment() {
+        if(!currentUser) return alert("Giriş yapmalısınız.");
+        const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
+        const docId = `${currentMeal}_nov_${activeCommentDay}`;
+        db.collection('comments').add({ docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        input.value = '';
+    }
+
+    // MEDIAN.CO FORCE INTERNAL
+    if (navigator.userAgent.indexOf('Median') > -1) {
+        window.gonative = window.gonative || {};
+        document.onclick = function (e) {
+            e = e ||  window.event;
+            var element = e.target || e.srcElement;
+            if (element.tagName == 'A' || (element.parentElement && element.parentElement.tagName == 'A')) {
+                var href = element.href || element.parentElement.href;
+                if (href.indexOf('google.com') > -1 || href.indexOf('firebase') > -1) {
+                    window.location.href = href; 
+                    return false; 
+                }
+            }
+        };
+    }
+</script>
+
+</body>
+</html>
