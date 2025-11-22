@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek</title>
+    <title>KYK Yemek - Sosyal</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,7 +50,7 @@
             color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s;
         }
         .icon-btn:active { transform: scale(0.9); background: #333; }
-        .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
+        .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; display: block; }
 
         /* CAROUSEL */
         .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; }
@@ -80,10 +80,18 @@
         .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
         .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
-        /* SVG BOZULMASINI ENGELLEMEK İÇİN: */
-        .social-action svg { width: 28px; height: 28px; min-width: 28px; min-height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
+        .social-action svg { 
+            width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; 
+            /* İkonun sıkışmasını engelle */
+            min-width: 28px; min-height: 28px; 
+        }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
-        .liked { color: #ef9a9a !important; } .disliked { color: #90caf9 !important; }
+        
+        /* BEĞENİ RENKLERİ (DÜZELTİLDİ) */
+        /* Like -> Pastel Yeşil */
+        .liked { color: #a5d6a7 !important; } 
+        /* Dislike -> Pastel Kırmızı */
+        .disliked { color: #ef9a9a !important; } 
 
         /* Navigasyon */
         .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 80px; height: 80vh; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; background: transparent; border: none; color: rgba(255,255,255,0.3); }
@@ -97,7 +105,7 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Auth Box */
+        /* Profil & Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -112,14 +120,14 @@
         .avatar-upload span { font-size: 0.8rem; color: #888; }
         #fileInput, #profileFileInput { display: none; }
 
-        /* Yorum & Liste Modal */
-        .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; flex-direction: column; }
-        .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
-        #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
-        .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        /* Yorum Modalı */
+        .comment-modal { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70vh; background: #1e1e1e; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); flex-direction: column; box-sizing: border-box; }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        /* Yorum Stili */
+        /* Yorum Kapatma Butonu (Sağ Üst) */
+        .close-comments-btn { font-size: 24px; color: #fff; cursor: pointer; background: #333; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        .comment-list { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
@@ -129,6 +137,10 @@
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif;}
 
+        /* Liste Modalı */
+        #fullListModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 4000; flex-direction: column; padding: 20px; padding-top: 80px; box-sizing: border-box; }
+        .modal-header { text-align: center; margin-bottom: 15px; font-size: 1.3rem; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .modal-scroll-area { overflow-y: auto; flex: 1; }
         .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
         .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
         .day-content { font-size: 1rem; line-height: 1.6; text-align: center; color: #e0e0e0; white-space: pre-line; }
@@ -148,6 +160,7 @@
     <div class="left-controls">
         <button class="icon-btn" onclick="toggleModal()" title="Tüm Liste">
             <svg id="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            <svg id="icon-eye-off" viewBox="0 0 24 24" style="display: none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.804 11.804 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2z"/></svg>
         </button>
     </div>
 
@@ -177,13 +190,11 @@
                 <div class="auth-tab active" onclick="switchAuthTab('login')">Giriş Yap</div>
                 <div class="auth-tab" onclick="switchAuthTab('register')">Kayıt Ol</div>
             </div>
-
             <div id="loginForm">
                 <input type="email" id="loginEmail" class="auth-input" placeholder="E-posta">
                 <input type="password" id="loginPass" class="auth-input" placeholder="Şifre">
                 <button class="auth-submit" onclick="loginUser()">GİRİŞ YAP</button>
             </div>
-
             <div id="registerForm" style="display:none;">
                 <div class="avatar-upload" onclick="document.getElementById('fileInput').click()">
                     <span id="avatarLabel">Foto Seç</span>
@@ -206,7 +217,6 @@
                 <img id="profileAvatarPreview" style="display:block;">
             </div>
             <input type="file" id="profileFileInput" accept="image/*" onchange="handleProfileAvatarSelect(this)">
-            
             <input type="text" id="profileNick" class="auth-input" placeholder="Yeni Nick">
             <button class="auth-submit" onclick="saveProfile()" style="margin-bottom:10px;">KAYDET</button>
             <button class="auth-submit" onclick="logoutUser()" style="background:#ef5350; color:#fff;">ÇIKIŞ YAP</button>
@@ -215,7 +225,10 @@
     </div>
 
     <div id="commentModal" class="comment-modal">
-        <div class="comment-header"><span>Yorumlar</span><span onclick="closeComments()" style="cursor:pointer">&times;</span></div>
+        <div class="comment-header">
+            <span>Yorumlar</span>
+            <div class="close-comments-btn" onclick="closeComments()">&times;</div>
+        </div>
         <div class="comment-list" id="commentList"></div>
         <div class="comment-input-area">
             <input type="text" id="commentInput" class="comment-input" placeholder="Bir şeyler yaz...">
@@ -403,7 +416,7 @@
     
     function logoutUser() { auth.signOut(); closeProfileModal(); }
 
-    // --- MENÜ VERİLERİ ---
+    // VERİLER
     const menuData = {
         1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
         2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
