@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek</title>
+    <title>KYK Yemek - Sosyal</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,21 +27,21 @@
             transition: background-color 0.3s; -webkit-user-select: none; user-select: none;
         }
 
-        /* GİRİŞ BUTONU */
+        /* Giriş Butonu */
         #auth-container { position: absolute; top: 20px; right: 20px; z-index: 6000; }
         .login-btn {
-            background: #fff; color: #333; border: none; padding: 5px 10px; border-radius: 20px;
+            background: #fff; color: #333; border: none; padding: 5px 12px; border-radius: 20px;
             font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: 'Satoshi', sans-serif; transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: 'Satoshi', sans-serif; transition: transform 0.2s; font-size: 0.85rem;
         }
         .login-btn:active { transform: scale(0.95); }
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
+        .user-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
 
-        /* HEADER */
+        /* Header */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
         
-        /* SOL BUTON */
+        /* Sol Buton */
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
         .icon-btn {
             background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px);
@@ -50,11 +50,10 @@
             color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s;
         }
         .icon-btn:active { transform: scale(0.9); background: #333; }
-        .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; }
+        .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; display: block; }
 
-        /* CAROUSEL */
+        /* Carousel */
         .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; }
-        
         .menu-card {
             position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh;
             background: #1e1e1e; border-radius: 24px; border: 2px solid #333;
@@ -77,28 +76,15 @@
         li:last-child { border-bottom: none; }
 
         /* SOSYAL FOOTER */
-        .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
-        
-        .social-action { 
-            display: flex; flex-direction: column; align-items: center; 
-            color: #888; cursor: pointer; transition: color 0.2s; 
-            position: relative; width: 60px; flex-shrink: 0; 
-        }
+        .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 15px 10px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
+        .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
+        .social-action svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
         
-        /* SVG AYARLARI (BOZULMAYI ÖNLER) */
-        .social-action svg { 
-            width: 26px; height: 26px; 
-            fill: currentColor; 
-            margin-bottom: 4px; 
-            display: block; /* Satır içi boşluğu önler */
-        }
-        
+        .flip-icon { transform: scaleY(-1); }
+
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
-        
-        /* RENKLER */
-        .liked { color: #a5d6a7 !important; }  /* Pastel Yeşil */
-        .disliked { color: #ef9a9a !important; } /* Pastel Kırmızı */
+        .liked { color: #a5d6a7 !important; } .disliked { color: #ef9a9a !important; }
 
         /* Navigasyon */
         .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 80px; height: 80vh; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; background: transparent; border: none; color: rgba(255,255,255,0.3); }
@@ -121,7 +107,6 @@
         .auth-submit { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #fff; color: #000; font-weight: 900; cursor: pointer; font-family: 'Satoshi', sans-serif; transition: transform 0.2s; }
         .auth-submit:active { transform: scale(0.95); }
         .auth-close { margin-top: 15px; color: #888; cursor: pointer; font-size: 0.9rem; display: block; }
-        
         .avatar-upload { width: 90px; height: 90px; border-radius: 50%; background: #333; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; border: 2px dashed #555; position: relative; }
         .avatar-upload img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .avatar-upload span { font-size: 0.8rem; color: #888; }
@@ -131,9 +116,12 @@
         .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; flex-direction: column; }
         .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
-        .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         
+        /* Modal Header */
+        .modal-header { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; position: relative; min-height: 32px; }
+        .close-modal-btn { position: absolute; right: 0; top: 0; font-size: 24px; color: #fff; cursor: pointer; width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        
+        .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
@@ -142,9 +130,6 @@
         .comment-input-area { display: flex; gap: 10px; }
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif;}
-        
-        /* Çarpı Butonu */
-        .close-modal-btn { font-size: 28px; cursor: pointer; color: #fff; line-height: 1; }
 
         .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
         .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
@@ -165,7 +150,9 @@
     <div class="left-controls">
         <button class="icon-btn" onclick="toggleModal()" title="Tüm Liste">
             <svg id="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-            <svg id="icon-eye-off" viewBox="0 0 24 24" style="display: none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.8 11.8 0 0 1 12 4.5c5 0 9.27 3.11 11 7.5-.53 1.34-1.44 2.51-2.56 3.4l2.26 2.26-1.41 1.41L2 4.27zM12 7c.31 0 .62.03.92.09l2.36 2.36C14.78 8.1 13.5 7 12 7z"/></svg>
+            <svg id="icon-eye-off" viewBox="0 0 24 24" style="display: none;">
+                <path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l3.06 3.06c1.39-1.23 2.49-2.77 3.18-4.53C21.27 7.11 17 4 12 4c-1.27 0-2.49.2-3.64.57l2.17 2.17c.47-.14.96-.24 1.47-.24zM2.71 3.16a.996.996 0 0 0 0 1.41l2.27 2.27C3.34 8.5 2.18 10.12 1.5 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.27 2.27c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.13 3.16c-.39-.39-1.03-.39-1.42 0zM12 16.5c-2.48 0-4.5-2.02-4.5-4.5 0-.55.1-1.06.28-1.53l5.75 5.75c-.47.18-.98.28-1.53.28z" fill="currentColor"/>
+            </svg>
         </button>
     </div>
 
@@ -230,7 +217,7 @@
     </div>
 
     <div id="commentModal" class="comment-modal">
-        <div class="comment-header">
+        <div class="modal-header">
             <span>Yorumlar</span>
             <div class="close-modal-btn" onclick="closeComments()">&times;</div>
         </div>
@@ -254,7 +241,6 @@
     </div>
 
 <script>
-    // API KEYLER
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -277,7 +263,6 @@
     let selectedAvatarBase64 = null;
     let profileAvatarBase64 = null;
 
-    // OTURUM DURUMU
     if(auth) {
         auth.onAuthStateChanged(async (user) => {
             if (user) { 
@@ -361,16 +346,13 @@
     }
 
     function loginUser() {
-        const email = document.getElementById('loginEmail').value;
-        const pass = document.getElementById('loginPass').value;
+        const email = document.getElementById('loginEmail').value; const pass = document.getElementById('loginPass').value;
         if(!email || !pass) return alert("Bilgileri girin.");
         auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
     }
 
     async function registerUser() {
-        const nick = document.getElementById('regNick').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const pass = document.getElementById('regPass').value;
+        const nick = document.getElementById('regNick').value.trim(); const email = document.getElementById('regEmail').value.trim(); const pass = document.getElementById('regPass').value;
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
 
         try {
@@ -409,14 +391,9 @@
             }
             await currentUser.updateProfile({ displayName: newNick });
             let updateData = { nick: newNick };
-            if(profileAvatarBase64) {
-                updateData.photoBase64 = profileAvatarBase64;
-                currentUserAvatar = profileAvatarBase64;
-            }
+            if(profileAvatarBase64) { updateData.photoBase64 = profileAvatarBase64; currentUserAvatar = profileAvatarBase64; }
             await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
-            alert("Güncellendi!");
-            updateLoginButton();
-            closeProfileModal();
+            alert("Güncellendi!"); updateLoginButton(); closeProfileModal();
         } catch(e) { alert("Hata: " + e.message); }
     }
     function logoutUser() { auth.signOut(); closeProfileModal(); }
@@ -457,12 +434,9 @@
         29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
         30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
     };
-
     for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
 
-    let currentMeal = 'dinner';
-    let currentDayIndex = new Date().getDate();
-    let cardPositions = [0, 1, 2, 3, 4];
+    let currentMeal = 'dinner', currentDayIndex = new Date().getDate(), cardPositions = [0, 1, 2, 3, 4];
     const cards = [document.getElementById('c0'), document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3'), document.getElementById('c4')];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -471,6 +445,14 @@
         updateTheme();
         renderAllCards(currentDayIndex);
         applyClasses();
+        
+        // Göz İkonu Başlangıç
+        const eyeIcon = document.getElementById('icon-eye');
+        const eyeOffIcon = document.getElementById('icon-eye-off');
+        if(eyeIcon && eyeOffIcon) {
+            eyeIcon.style.display = 'block';
+            eyeOffIcon.style.display = 'none';
+        }
     });
 
     function getLoopedIndex(idx) { let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; }
@@ -498,7 +480,7 @@
                         <span class="count-text" id="like-count-${targetDateIdx}">0</span>
                     </div>
                     <div class="social-action" onclick="handleVote(${targetDateIdx}, 'dislike')">
-                        <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.99.01h3.8c.43 0 .83.22 1.07.58l.79 1.19.79 1.19c.24.36.24.83-.01 1.19l-2.42 3.63c-.27.41-.19.96.19 1.27.16.13.36.2.56.2h9.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L15.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        <svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
                         <span class="count-text" id="dislike-count-${targetDateIdx}">0</span>
                     </div>
                     <div class="social-action" onclick="openComments(${targetDateIdx})">
@@ -539,29 +521,49 @@
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
+    // Göz İkonu ve Liste Mantığı (DÜZELTİLDİ)
     function toggleModal() {
-        const modal = document.getElementById('fullListModal'); const eyeIcon = document.getElementById('icon-eye'); const eyeOffIcon = document.getElementById('icon-eye-off');
-        if (modal.style.display === 'flex') { modal.style.display = 'none'; eyeIcon.style.display = 'block'; eyeOffIcon.style.display = 'none'; } 
-        else { modal.style.display = 'flex'; eyeIcon.style.display = 'none'; eyeOffIcon.style.display = 'block'; renderFullList(currentMeal); }
-    }
-    function renderFullList(mealType) {
-        const container = document.getElementById('fullListContainer'); const btnBreakfast = document.getElementById('modalBtnBreakfast'); const btnDinner = document.getElementById('modalBtnDinner');
-        container.innerHTML = ''; btnBreakfast.className = 'modal-toggle'; btnDinner.className = 'modal-toggle';
-        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); else btnDinner.classList.add('active-red');
+        const modal = document.getElementById('fullListModal'); 
+        const eyeIcon = document.getElementById('icon-eye'); 
+        const eyeOffIcon = document.getElementById('icon-eye-off');
         
-        // HIZLI YÜKLEME DÜZELTMESİ
-        setTimeout(() => {
-            for (let i = 1; i <= 30; i++) {
-                const dayData = menuData[i];
-                if (dayData) {
-                    const div = document.createElement('div'); div.className = 'day-row';
-                    div.innerHTML = `<div class="day-header">${dayData.date}</div><div class="day-content">${dayData[mealType].join('<br>')}</div>`;
-                    container.appendChild(div);
-                }
-            }
-        }, 50);
+        if (modal.style.display === 'flex') { 
+            modal.style.display = 'none'; 
+            eyeIcon.style.display = 'block'; 
+            eyeOffIcon.style.display = 'none'; 
+        } 
+        else { 
+            modal.style.display = 'flex'; 
+            eyeIcon.style.display = 'none'; 
+            eyeOffIcon.style.display = 'block'; 
+            // GECİKME YOK
+            renderFullList(currentMeal); 
+        }
     }
 
+    function renderFullList(mealType) {
+        const container = document.getElementById('fullListContainer'); const btnBreakfast = document.getElementById('modalBtnBreakfast'); const btnDinner = document.getElementById('modalBtnDinner');
+        
+        container.innerHTML = '';
+        btnBreakfast.className = 'modal-toggle';
+        btnDinner.className = 'modal-toggle';
+        
+        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); 
+        else btnDinner.classList.add('active-red');
+
+        // Veriyi doğrudan bas
+        for (let i = 1; i <= 30; i++) {
+            const dayData = menuData[i];
+            if (dayData) {
+                const div = document.createElement('div'); 
+                div.className = 'day-row';
+                div.innerHTML = `<div class="day-header">${dayData.date}</div><div class="day-content">${dayData[mealType].join('<br>')}</div>`;
+                container.appendChild(div);
+            }
+        }
+    }
+
+    // --- FIREBASE ---
     function fetchStats(dayIdx) {
         if(!db) return;
         const docId = `${currentMeal}_nov_${dayIdx}`;
@@ -578,11 +580,11 @@
                 
                 if(currentUser && data.votes && data.votes[currentUser.uid]) {
                     if(data.votes[currentUser.uid] === 'like') {
-                        likeEl.parentElement.classList.add('liked');
-                        dislikeEl.parentElement.classList.remove('disliked');
+                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked');
+                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked');
                     } else {
-                        dislikeEl.parentElement.classList.add('disliked');
-                        likeEl.parentElement.classList.remove('liked');
+                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked');
+                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked');
                     }
                 }
             }
@@ -607,10 +609,10 @@
             let newLikes = data.likes || 0;
             let newDislikes = data.dislikes || 0;
 
-            if (currentVote === type) { // Oyu geri çek
+            if (currentVote === type) {
                 if (type === 'like') newLikes--; else newDislikes--;
                 delete votes[currentUser.uid];
-            } else { // Yeni oy veya değiştir
+            } else {
                 if (currentVote === 'like') newLikes--;
                 if (currentVote === 'dislike') newDislikes--;
                 if (type === 'like') newLikes++; else newDislikes++;
@@ -632,13 +634,11 @@
             let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
             comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             
-            // Sayaç Oto-Düzeltme
             db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
             
             comments.forEach(c => { 
                 let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;">${c.userName.charAt(0).toUpperCase()}</div>`;
                 
-                // FREDDIE CROWN
                 let crownHtml = '';
                 if(c.userName === 'freddie') crownHtml = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>';
 
