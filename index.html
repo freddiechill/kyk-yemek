@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek</title>
+    <title>KYK Yemek - Sosyal</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -80,6 +80,7 @@
         .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
         .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
+        /* SVG BOZULMASINI ENGELLEMEK İÇİN: */
         .social-action svg { width: 28px; height: 28px; min-width: 28px; min-height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
         .liked { color: #ef9a9a !important; } .disliked { color: #90caf9 !important; }
@@ -96,7 +97,7 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Auth Box */
+        /* Profil & Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -117,7 +118,6 @@
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; }
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
-        
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
@@ -231,6 +231,7 @@
     </div>
 
 <script>
+    // --- API AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -258,7 +259,7 @@
         auth.onAuthStateChanged(async (user) => {
             if (user) { 
                 currentUser = user; 
-                await loadUserAvatar(user.uid); // Avatarı veritabanından çek
+                await loadUserAvatar(user.uid); 
                 updateLoginButton(); 
                 closeAuthModal(); 
             } else { 
@@ -269,7 +270,7 @@
         });
     }
 
-    // AVATARI VERİTABANINDAN ÇEKME (Firebase Storage kullanmadan)
+    // AVATARI VERİTABANINDAN ÇEKME
     async function loadUserAvatar(uid) {
         try {
             const doc = await db.collection('users').doc(uid).get();
@@ -353,7 +354,7 @@
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
 
         try {
-            // Nick Kontrolü (Firestore'da 'users' içinde arama)
+            // Nick Kontrolü
             const snapshot = await db.collection('users').where('nick', '==', nick).get();
             if(!snapshot.empty) return alert("Bu kullanıcı adı zaten alınmış.");
 
@@ -399,7 +400,8 @@
                 updateData.photoBase64 = profileAvatarBase64;
                 currentUserAvatar = profileAvatarBase64;
             }
-            await db.collection('users').doc(currentUser.uid).update(updateData);
+            // GÜNCELLEME: set({merge:true}) kullanarak hata önlendi
+            await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
 
             alert("Güncellendi!");
             updateLoginButton();
@@ -430,11 +432,7 @@
         17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
         18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
         19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { 
-            date: "20 Kasım 2025 Perşembe", 
-            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
-            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
-        },
+        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
         21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
         22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
         23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
@@ -513,7 +511,6 @@
         renderAllCards(currentDayIndex);
         applyClasses();
     }
-
     function applyClasses() {
         const classes = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4'];
         for(let i=0; i<5; i++) {
@@ -522,7 +519,6 @@
             el.classList.add(classes[i]);
         }
     }
-
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
@@ -545,24 +541,28 @@
         }
     }
 
-    // --- FIREBASE İŞLEMLERİ ---
+    // --- FIREBASE ---
     function fetchStats(dayIdx) {
         if(!db) return;
         const docId = `${currentMeal}_nov_${dayIdx}`;
         db.collection('daily_stats').doc(docId).onSnapshot(doc => {
             if(doc.exists) {
                 const data = doc.data();
-                document.getElementById(`like-count-${dayIdx}`).innerText = data.likes || 0;
-                document.getElementById(`dislike-count-${dayIdx}`).innerText = data.dislikes || 0;
-                document.getElementById(`comment-count-${dayIdx}`).innerText = data.commentCount || 0;
+                const likeEl = document.getElementById(`like-count-${dayIdx}`);
+                const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`);
+                const commentEl = document.getElementById(`comment-count-${dayIdx}`);
+                
+                if(likeEl) likeEl.innerText = data.likes || 0;
+                if(dislikeEl) dislikeEl.innerText = data.dislikes || 0;
+                if(commentEl) commentEl.innerText = data.commentCount || 0;
                 
                 if(currentUser && data.votes && data.votes[currentUser.uid]) {
                     if(data.votes[currentUser.uid] === 'like') {
-                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked');
-                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked');
+                        likeEl.parentElement.classList.add('liked');
+                        dislikeEl.parentElement.classList.remove('disliked');
                     } else {
-                        document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked');
-                        document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked');
+                        dislikeEl.parentElement.classList.add('disliked');
+                        likeEl.parentElement.classList.remove('liked');
                     }
                 }
             }
@@ -603,7 +603,6 @@
     let activeCommentDay = 0;
     function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
     function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
-    
     function loadComments(dayIdx) {
         const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
@@ -613,11 +612,11 @@
             let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
             comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             
-            // Sayaç Güncelleme
             db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
             
             comments.forEach(c => { 
-                let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar">${c.userName.charAt(0).toUpperCase()}</div>`;
+                // Avatar gösterimi (varsa foto, yoksa baş harf)
+                let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;">${c.userName.charAt(0).toUpperCase()}</div>`;
                 list.innerHTML += `
                 <div class="single-comment">
                     ${avatarHtml}
@@ -635,7 +634,7 @@
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
         
-        // Kullanıcı fotosunu da kaydet
+        // Yorum kaydederken kullanıcının mevcut fotosunu (base64) da kaydet
         db.collection('comments').add({ 
             docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar,
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
