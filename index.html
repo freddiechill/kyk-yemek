@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* MAVİ TIKLAMA EFEKTİNİ KALDIRMA */
         * { -webkit-tap-highlight-color: transparent; outline: none; }
 
         body {
@@ -32,7 +31,29 @@
             transition: background-color 0.3s; -webkit-user-select: none; user-select: none;
         }
 
-        #auth-container { position: absolute; top: 20px; right: 20px; z-index: 6000; }
+        /* ÜST BAR */
+        #auth-container { 
+            position: absolute; top: 20px; right: 20px; z-index: 6000; 
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        /* Bildirim Butonu */
+        .notif-btn {
+            position: relative; width: 36px; height: 36px; 
+            background: rgba(255,255,255,0.1); border-radius: 50%; 
+            display: none; 
+            align-items: center; justify-content: center; 
+            cursor: pointer; color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .notif-btn svg { width: 20px; height: 20px; fill: currentColor; }
+        .notif-badge {
+            position: absolute; top: -2px; right: -2px; 
+            width: 10px; height: 10px; background-color: #ef5350; 
+            border-radius: 50%; border: 2px solid #121212; 
+            display: none;
+        }
+
         .login-btn {
             background: #fff; color: #333; border: none; padding: 5px 12px; border-radius: 20px;
             font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 8px;
@@ -41,31 +62,31 @@
         .login-btn:active { transform: scale(0.95); }
         .user-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
 
+        /* BİLDİRİM MODALI */
+        #notificationModal .auth-box { max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;}
+        .notif-header { padding: 15px; border-bottom: 1px solid #333; font-size: 1.1rem; font-weight: bold; text-align: center; background: #222; width: 100%; box-sizing: border-box;}
+        .notif-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%; }
+        .notif-item { 
+            padding: 15px; border-bottom: 1px solid #333; cursor: pointer; 
+            display: flex; flex-direction: column; gap: 5px; background: #1e1e1e; transition: background 0.2s;
+            text-align: left;
+        }
+        .notif-item:hover { background: #252525; }
+        .notif-item.unread { background: #2a1a1a; border-left: 4px solid #ef5350; }
+        .notif-text { font-size: 0.9rem; color: #ddd; line-height: 1.4; }
+        .notif-text b { color: #fff; }
+        .notif-time { font-size: 0.75rem; color: #888; align-self: flex-end; }
+        .notif-empty { padding: 20px; text-align: center; color: #888; }
+
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
-        
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
-        .icon-btn {
-            background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
-            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
-            color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s;
-        }
+        .icon-btn { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s; }
         .icon-btn:active { transform: scale(0.9); background: #333; }
         .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; display: block; }
 
-        /* TOUCH ACTION EKLENDİ: Tarayıcının varsayılan kaydırmasını engelleme (yatayda) */
-        .carousel-container { 
-            position: relative; width: 100%; height: 65vh; perspective: 1000px; 
-            display: flex; align-items: center; justify-content: center;
-            touch-action: pan-y; /* Sadece dikey kaydırmaya izin ver, yatayı biz yöneteceğiz */
-        }
-        .menu-card {
-            position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh;
-            background: #1e1e1e; border-radius: 24px; border: 2px solid #333;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 10px;
-        }
+        .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
+        .menu-card { position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh; background: #1e1e1e; border-radius: 24px; border: 2px solid #333; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 10px; }
         .pos-2 { z-index: 30; transform: translate(-50%, -50%) scale(1); opacity: 1; }
         .pos-1 { z-index: 20; transform: translate(-85%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
         .pos-3 { z-index: 20; transform: translate(-15%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
@@ -82,14 +103,9 @@
         li:last-child { border-bottom: none; }
 
         .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 15px 10px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
-        .social-action { 
-            display: flex; flex-direction: column; align-items: center; 
-            color: #888; cursor: pointer; transition: color 0.2s; 
-            position: relative; width: 60px; flex-shrink: 0; 
-        }
+        .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
         .social-action svg { width: 28px; height: 28px; fill: currentColor; display: block; margin-bottom: 4px; }
-        
         .flip-icon { transform: scaleY(-1); }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
         .liked { color: #a5d6a7 !important; } .disliked { color: #ef9a9a !important; }
@@ -101,7 +117,6 @@
         body.theme-breakfast .menu-card { border-color: #fff59d; } body.theme-breakfast .meal-title { color: #fff59d; } body.theme-breakfast .switch-btn { background: #fff59d; color: #121212; }
         body.theme-dinner .menu-card { border-color: #ef9a9a; } body.theme-dinner .meal-title { color: #ef9a9a; } body.theme-dinner .switch-btn { background: #ef9a9a; color: #121212; }
 
-        /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
@@ -129,27 +144,19 @@
         .comment-list { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         
-        /* Yorum Kartı */
         .single-comment { 
-            background: #252525; 
-            padding: 12px; 
-            border-radius: 12px; 
-            margin-bottom: 10px; 
-            border: 1px solid #333; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 8px; 
-            position: relative; 
-            max-width: 100%;
-            box-sizing: border-box;
-            overflow-wrap: anywhere; 
-            word-break: break-word;
+            background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; word-break: break-word;
+            transition: background 0.5s ease, border-color 0.5s ease;
         }
+        
+        /* VURGULAMA ANİMASYONU */
+        @keyframes flash {
+            0% { background-color: #4a2a2a; border-color: #ef5350; }
+            100% { background-color: #252525; border-color: #333; }
+        }
+        .highlight-comment { animation: flash 2s ease-out forwards; }
 
-        /* Düz Yanıt Stili */
-        .reply-comment { 
-            margin-left: 35px; background: #1a1a1a; border-left: 2px solid #444; width: calc(100% - 35px);
-        }
+        .reply-comment { margin-left: 35px; background: #1a1a1a; border-left: 2px solid #444; width: calc(100% - 35px); }
         .reply-icon { position: absolute; left: -22px; top: 15px; width: 14px; height: 14px; fill: #777; }
 
         .c-top { display: flex; gap: 10px; width: 100%; }
@@ -157,6 +164,9 @@
         .c-content { flex: 1; min-width: 0; }
         .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
         .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
+
+        /* İKON BOYUTU 10px */
+        .badge-icon { width: auto; height: 10px; vertical-align: middle; margin-left: 2px; }
 
         .mention-text { color: #90caf9; font-weight: bold; margin-right: 5px; }
 
@@ -277,6 +287,14 @@
         </div>
     </div>
 
+    <div id="notificationModal" class="modal-overlay">
+        <div class="auth-box">
+            <div class="notif-header">Bildirimler</div>
+            <div class="notif-list" id="notificationList"></div>
+            <span class="auth-close" onclick="document.getElementById('notificationModal').style.display='none'">Kapat</span>
+        </div>
+    </div>
+
     <div id="commentModal" class="comment-modal">
         <div class="modal-header">
             <span>Yorumlar</span>
@@ -328,6 +346,7 @@
 
     let currentUser = null, currentUserAvatar = null, selectedAvatarBase64 = null, profileAvatarBase64 = null;
     let tempUserData = {}, generatedVerificationCode = null;
+    let scrollTargetId = null;
 
     if(auth) {
         auth.onAuthStateChanged(async (user) => {
@@ -336,6 +355,7 @@
                 await loadUserAvatar(user.uid); 
                 updateLoginButton(); 
                 closeAuthModal(); 
+                listenForNotifications();
             } else { 
                 currentUser = null; 
                 currentUserAvatar = null;
@@ -356,12 +376,113 @@
         if(currentUser) {
             const name = currentUser.displayName || "Üye";
             const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar" style="background:#ccc;color:#333;display:flex;align-items:center;justify-content:center;">${name.charAt(0).toUpperCase()}</div>`;
-            container.innerHTML = `<div class="login-btn" onclick="openProfileModal()">${imgHtml}<span>${name}</span></div>`;
+            
+            container.innerHTML = `
+                <div class="notif-btn" style="display:flex;" onclick="showNotifications()">
+                    <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                    <div id="notifBadge" class="notif-badge"></div>
+                </div>
+                <div class="login-btn" onclick="openProfileModal()">
+                    ${imgHtml}
+                    <span>${name}</span>
+                </div>`;
         } else {
             container.innerHTML = `<button class="login-btn" onclick="openAuthModal()">Giriş / Kayıt</button>`;
         }
     }
 
+    // BİLDİRİM SİSTEMİ
+    function listenForNotifications() {
+        if (!currentUser) return;
+        db.collection('notifications')
+            .where('toUserId', '==', currentUser.uid)
+            .orderBy('createdAt', 'desc')
+            .limit(10)
+            .onSnapshot(snapshot => {
+                let hasUnread = false;
+                snapshot.forEach(doc => {
+                    if (!doc.data().read) hasUnread = true;
+                });
+                const badge = document.getElementById('notifBadge');
+                if (badge) badge.style.display = hasUnread ? 'block' : 'none';
+            }, error => {
+                console.log("Bildirim Hatası:", error);
+            });
+    }
+
+    function showNotifications() {
+        const modal = document.getElementById('notificationModal');
+        const list = document.getElementById('notificationList');
+        modal.style.display = 'flex';
+        list.innerHTML = '<div class="notif-empty">Yükleniyor...</div>';
+
+        db.collection('notifications')
+            .where('toUserId', '==', currentUser.uid)
+            .orderBy('createdAt', 'desc')
+            .limit(20)
+            .get()
+            .then(snapshot => {
+                list.innerHTML = '';
+                if (snapshot.empty) {
+                    list.innerHTML = '<div class="notif-empty">Henüz bildirim yok.</div>';
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const n = doc.data();
+                    const unreadClass = n.read ? '' : 'unread';
+                    const actionText = n.type === 'like' ? 'yorumunu beğendi.' : 'yorumuna yanıt verdi.';
+                    const timeStr = timeAgo(n.createdAt);
+                    
+                    list.innerHTML += `
+                    <div class="notif-item ${unreadClass}" onclick="handleNotificationClick('${doc.id}', '${n.docId}', '${n.commentId}')">
+                        <div class="notif-text"><b>${n.fromUserName}</b> ${actionText}</div>
+                        <div class="notif-time">${timeStr}</div>
+                    </div>`;
+                });
+            })
+            .catch(error => {
+                list.innerHTML = `<div class="notif-empty" style="color:#ef5350; font-size:0.8rem; padding:10px;">
+                    Hata: İndeks eksik.<br>Lütfen tarayıcı konsolundaki (F12) linke tıklayın.
+                </div>`;
+                console.error("BURAYA TIKLAYIP INDEX OLUŞTUR:", error);
+            });
+    }
+
+    function handleNotificationClick(notifId, docId, commentId) {
+        db.collection('notifications').doc(notifId).update({ read: true });
+        document.getElementById('notificationModal').style.display = 'none';
+
+        if(docId) {
+            const parts = docId.split('_');
+            if(parts.length === 3) {
+                const mealType = parts[0];
+                const dayIdx = parseInt(parts[2]);
+
+                if (currentMeal !== mealType) {
+                    currentMeal = mealType;
+                    updateTheme();
+                    renderAllCards(currentDayIndex);
+                }
+                scrollTargetId = commentId;
+                openComments(dayIdx);
+            }
+        }
+    }
+
+    function sendNotification(toUserId, type, docId, commentId) {
+        if (!currentUser || toUserId === currentUser.uid) return;
+        db.collection('notifications').add({
+            toUserId: toUserId,
+            fromUserName: currentUser.displayName,
+            type: type,
+            docId: docId,
+            commentId: commentId,
+            read: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+
+    // ... (Auth functions) ...
     function openAuthModal() { if(currentUser) return; document.getElementById('authModal').style.display = 'flex'; switchAuthTab('login'); }
     function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
     function switchAuthTab(tab) {
@@ -378,7 +499,6 @@
 
     function handleAvatarSelect(input) { processImage(input, 'avatarPreview', (res) => selectedAvatarBase64 = res); }
     function handleProfileAvatarSelect(input) { processImage(input, 'profileAvatarPreview', (res) => profileAvatarBase64 = res); }
-
     function processImage(input, previewId, callback) {
         if (input.files && input.files[0]) {
             const file = input.files[0];
@@ -416,12 +536,19 @@
         const nick = document.getElementById('regNick').value.trim(); const email = document.getElementById('regEmail').value.trim(); const pass = document.getElementById('regPass').value;
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
         if(pass.length < 6) return alert("Şifre en az 6 karakter olmalı.");
+        
+        const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
+        if (!englishCharRegex.test(nick)) {
+           return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir.");
+        }
+        
         try {
-            const snapshot = await db.collection('users').where('nick', '==', nick).get();
+            const nickLower = nick.toLowerCase();
+            const snapshot = await db.collection('users').where('nickLower', '==', nickLower).get();
             if(!snapshot.empty) return alert("Bu nick alınmış.");
             
             generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            tempUserData = { nick, email, pass, photo: selectedAvatarBase64 };
+            tempUserData = { nick, nickLower, email, pass, photo: selectedAvatarBase64 };
 
             const templateParams = { to_name: nick, to_email: email, code: generatedVerificationCode };
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
@@ -442,7 +569,7 @@
             const userCred = await auth.createUserWithEmailAndPassword(tempUserData.email, tempUserData.pass);
             const user = userCred.user;
             await user.updateProfile({ displayName: tempUserData.nick });
-            await db.collection('users').doc(user.uid).set({ nick: tempUserData.nick, email: tempUserData.email, photoBase64: tempUserData.photo || null });
+            await db.collection('users').doc(user.uid).set({ nick: tempUserData.nick, nickLower: tempUserData.nickLower, email: tempUserData.email, photoBase64: tempUserData.photo || null });
             alert("Hesap oluşturuldu!");
             closeAuthModal();
             tempUserData = {}; generatedVerificationCode = null;
@@ -455,23 +582,40 @@
         if(currentUserAvatar) document.getElementById('profileAvatarPreview').src = currentUserAvatar;
     }
     function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+    
     async function saveProfile() {
         const newNick = document.getElementById('profileNick').value.trim();
+        const newNickLower = newNick.toLowerCase();
         if(!newNick) return alert("Nick boş olamaz");
+        
+        const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
+        if (!englishCharRegex.test(newNick)) {
+           return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir.");
+        }
+
         try {
             if(newNick !== currentUser.displayName) {
-                const snapshot = await db.collection('users').where('nick', '==', newNick).get();
+                const snapshot = await db.collection('users').where('nickLower', '==', newNickLower).get();
                 if(!snapshot.empty) return alert("Bu nick alınmış.");
             }
             await currentUser.updateProfile({ displayName: newNick });
-            let updateData = { nick: newNick };
+            let updateData = { nick: newNick, nickLower: newNickLower };
             if(profileAvatarBase64) { updateData.photoBase64 = profileAvatarBase64; currentUserAvatar = profileAvatarBase64; }
             await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
+            
+            const batch = db.batch();
+            const commentsSnap = await db.collection('comments').where('userId', '==', currentUser.uid).get();
+            commentsSnap.forEach(doc => {
+                batch.update(doc.ref, { userName: newNick, userPhoto: (profileAvatarBase64 || currentUserAvatar) });
+            });
+            await batch.commit();
+            
             alert("Güncellendi!"); updateLoginButton(); closeProfileModal();
         } catch(e) { alert("Hata: " + e.message); }
     }
     function logoutUser() { auth.signOut(); closeProfileModal(); }
 
+    // VERİLER
     const menuData = {
         1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
         2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
@@ -492,11 +636,7 @@
         17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
         18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
         19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { 
-            date: "20 Kasım 2025 Perşembe", 
-            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
-            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
-        },
+        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
         21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
         22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
         23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
@@ -654,6 +794,14 @@
                 }
             }
         });
+        
+        // Sayacı zorla düzelt
+        db.collection('comments').where('docId', '==', docId).onSnapshot(snap => {
+            const count = snap.size;
+            const el = document.getElementById(`comment-count-${dayIdx}`);
+            if(el) el.innerText = count;
+            db.collection('daily_stats').doc(docId).set({ commentCount: count }, { merge: true });
+        });
     }
 
     function handleVote(dayIdx, type) {
@@ -734,6 +882,18 @@
             rootComments.forEach(root => {
                 list.innerHTML += renderTree(root);
             });
+            
+            if(scrollTargetId) {
+                setTimeout(() => {
+                    const el = document.getElementById('comment-'+scrollTargetId);
+                    if(el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.classList.add('highlight-comment');
+                        setTimeout(() => el.classList.remove('highlight-comment'), 2000);
+                    }
+                    scrollTargetId = null;
+                }, 500);
+            }
         });
     }
 
@@ -755,11 +915,17 @@
 
     function createCommentHTML(c, isReply) {
         let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;">${c.userName.charAt(0).toUpperCase()}</div>`;
-        let crownHtml = (c.userName === 'freddie') ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>' : '';
+        
+        let badgeHtml = '';
+        if(c.userName === 'freddie') {
+            badgeHtml = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>';
+        } else if(c.userName === 'Saya' || c.userName === 'saya') {
+            badgeHtml = '<img src="https://raw.githubusercontent.com/freddiechill/gorsel-depom/59349c4a1cbc0e97cc30e17192a4f1bf024fa852/seytan-boynuz.svg" class="badge-icon" alt="badge">';
+        }
         
         let deleteBtn = '';
         if(currentUser && (currentUser.uid === c.userId || currentUser.displayName === 'freddie')) {
-            deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}')"><i class="fas fa-trash"></i></span>`;
+            deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}', '${c.docId}')"><i class="fas fa-trash"></i></span>`;
         }
         
         let replyBtn = '';
@@ -782,16 +948,16 @@
             <div class="c-top">
                 ${avatarHtml}
                 <div class="c-content">
-                    <div class="c-user">${c.userName}${crownHtml}</div>
+                    <div class="c-user">${c.userName}${badgeHtml}</div>
                     <div class="c-text">${mentionHtml}${c.text}</div>
                 </div>
             </div>
             <div class="c-actions">
-                <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like')">
+                <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like', '${c.userId}')">
                    <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
                    <span id="clike-${c.id}">${c.likes || 0}</span>
                 </div>
-                <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike')">
+                <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike', '${c.userId}')">
                    <svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
                    <span id="cdislike-${c.id}">${c.dislikes || 0}</span>
                 </div>
@@ -799,7 +965,7 @@
             </div>
             <div id="reply-box-${c.id}" class="reply-input-wrapper">
                 <input type="text" id="reply-input-${c.id}" class="reply-input" placeholder="Yanıt yaz...">
-                <button class="reply-send-btn" onclick="postReply('${c.id}', '${c.docId}', '${c.userName}')">
+                <button class="reply-send-btn" onclick="postReply('${c.id}', '${c.docId}', '${c.userName}', '${c.userId}')">
                     <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                 </button>
             </div>
@@ -812,7 +978,7 @@
         else box.style.display = 'flex';
     }
 
-    function postReply(parentId, docId, replyToUser) {
+    function postReply(parentId, docId, replyToUser, replyToUserId) {
         const input = document.getElementById(`reply-input-${parentId}`);
         const text = input.value.trim();
         if(!text) return;
@@ -822,23 +988,25 @@
             likes: 0, dislikes: 0, votes: {}, parentId: parentId, replyTo: replyToUser,
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         });
+        
+        if(replyToUserId) sendNotification(replyToUserId, 'reply', docId, parentId);
+
         input.value = '';
         toggleReplyBox(parentId); 
     }
 
-    async function deleteComment(commentId) {
+    async function deleteComment(commentId, docId) {
         if(!confirm("Silmek istiyor musun?")) return;
-        
-        // ZİNCİRLEME SİLME
+
         const docSnapshot = await db.collection('comments').doc(commentId).get();
         const docData = docSnapshot.data();
-        const docId = docData.docId;
+        // const docId = docData.docId; 
 
+        const idsToDelete = [commentId];
         const snapshot = await db.collection('comments').where('docId', '==', docId).get();
         let allComments = [];
         snapshot.forEach(doc => allComments.push({ id: doc.id, ...doc.data() }));
 
-        const idsToDelete = [commentId];
         const findChildren = (pId) => {
             const children = allComments.filter(c => c.parentId === pId);
             children.forEach(child => {
@@ -850,13 +1018,14 @@
 
         const batch = db.batch();
         idsToDelete.forEach(id => {
-            batch.delete(db.collection('comments').doc(id));
+            const ref = db.collection('comments').doc(id);
+            batch.delete(ref);
         });
 
         await batch.commit();
     }
 
-    function handleCommentVote(commentId, type) {
+    function handleCommentVote(commentId, type, ownerId) {
         if(!currentUser) return alert("Lütfen giriş yapın.");
         const ref = db.collection('comments').doc(commentId);
         
@@ -870,6 +1039,7 @@
             
             let likes = data.likes || 0;
             let dislikes = data.dislikes || 0;
+            let shouldNotify = false;
 
             if(current === type) { 
                 if(type === 'like') likes--; else dislikes--;
@@ -877,11 +1047,12 @@
             } else {
                 if(current === 'like') likes--;
                 if(current === 'dislike') dislikes--;
-                if(type === 'like') likes++; else dislikes++;
+                if(type === 'like') { likes++; shouldNotify = true; } else dislikes++;
                 votes[currentUser.uid] = type;
             }
             
             t.update(ref, { likes, dislikes, votes });
+            if(shouldNotify && ownerId) sendNotification(ownerId, 'like', data.docId, commentId);
         });
     }
 
@@ -898,7 +1069,6 @@
         input.value = '';
     }
 
-    // SWIPE NAVIGASYON
     let touchStartX = 0;
     let touchEndX = 0;
     const carousel = document.getElementById('carouselTouchArea');
