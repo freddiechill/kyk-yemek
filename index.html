@@ -76,13 +76,10 @@
         li:last-child { border-bottom: none; }
 
         /* SOSYAL FOOTER */
-        .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 15px 10px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
+        .social-footer { display: flex; justify-content: space-around; align-items: center; padding: 12px; background: #151515; border-top: 1px solid #333; flex-shrink: 0; }
         .social-action { display: flex; flex-direction: column; align-items: center; color: #888; cursor: pointer; transition: color 0.2s; position: relative; width: 60px; flex-shrink: 0; }
         .social-action:active { transform: scale(0.9); }
-        .social-action svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
-        
-        .flip-icon { transform: scaleY(-1); }
-
+        .social-action svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; display: block; }
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
         .liked { color: #a5d6a7 !important; } .disliked { color: #ef9a9a !important; }
 
@@ -98,7 +95,6 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -116,17 +112,32 @@
         .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; flex-direction: column; }
         .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
-        
-        /* Modal Header */
         .modal-header { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; position: relative; min-height: 32px; }
         .close-modal-btn { position: absolute; right: 0; top: 0; font-size: 24px; color: #fff; cursor: pointer; width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
         
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
-        .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; gap: 10px; }
-        .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
+        
+        /* Yorum Kartı - Güncellendi */
+        .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; }
+        
+        .c-top { display: flex; gap: 10px; width: 100%; }
+        .c-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; }
-        .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
-        .c-text { font-size: 0.95rem; color: #fff; }
+        .c-user { font-size: 0.8rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
+        .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
+
+        /* Yorum Altı Butonlar (Like/Dislike) */
+        .c-actions { display: flex; gap: 15px; margin-left: 42px; } /* Avatar hizasından başla */
+        .c-action-btn { display: flex; align-items: center; gap: 4px; color: #777; cursor: pointer; font-size: 0.75rem; font-weight: bold; transition: color 0.2s; }
+        .c-action-btn svg { width: 16px; height: 16px; fill: currentColor; }
+        .c-action-btn:hover { color: #fff; }
+        .c-action-btn.c-liked { color: #a5d6a7; }
+        .c-action-btn.c-disliked { color: #ef9a9a; }
+        
+        /* Silme Butonu */
+        .delete-comment-btn { position: absolute; top: 10px; right: 10px; color: #ef5350; cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.2s; }
+        .delete-comment-btn:hover { opacity: 1; }
+
         .comment-input-area { display: flex; gap: 10px; }
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif;}
@@ -151,7 +162,7 @@
         <button class="icon-btn" onclick="toggleModal()" title="Tüm Liste">
             <svg id="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
             <svg id="icon-eye-off" viewBox="0 0 24 24" style="display: none;">
-                <path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l3.06 3.06c1.39-1.23 2.49-2.77 3.18-4.53C21.27 7.11 17 4 12 4c-1.27 0-2.49.2-3.64.57l2.17 2.17c.47-.14.96-.24 1.47-.24zM2.71 3.16a.996.996 0 0 0 0 1.41l2.27 2.27C3.34 8.5 2.18 10.12 1.5 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.27 2.27c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L4.13 3.16c-.39-.39-1.03-.39-1.42 0zM12 16.5c-2.48 0-4.5-2.02-4.5-4.5 0-.55.1-1.06.28-1.53l5.75 5.75c-.47.18-.98.28-1.53.28z" fill="currentColor"/>
+                <path d="M11.83 9L15 12.17V12a3 3 0 0 0-3-3h-.17zm-4.3.8 1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm-2.53-1.1L4.27 8A11.9 11.9 0 0 0 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.9 2.9 1.41-1.41L6.41 7.29 5 5.88zM12 17c-2.15 0-4.04-1.36-4.76-3.28l6.04 6.04c-.41.15-.83.24-1.28.24zM2 4.27l2.28 2.28.46.46A11.8 11.8 0 0 1 12 4.5c5 0 9.27 3.11 11 7.5-.53 1.34-1.44 2.51-2.56 3.4l2.26 2.26-1.41 1.41L2 4.27zM12 7c.31 0 .62.03.92.09l2.36 2.36C14.78 8.1 13.5 7 12 7z"/>
             </svg>
         </button>
     </div>
@@ -292,12 +303,7 @@
         if(currentUser) {
             const name = currentUser.displayName || "Üye";
             const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar" style="background:#ccc;color:#333;display:flex;align-items:center;justify-content:center;">${name.charAt(0).toUpperCase()}</div>`;
-            
-            container.innerHTML = `
-                <div class="login-btn" onclick="openProfileModal()">
-                    ${imgHtml}
-                    <span>${name}</span>
-                </div>`;
+            container.innerHTML = `<div class="login-btn" onclick="openProfileModal()">${imgHtml}<span>${name}</span></div>`;
         } else {
             container.innerHTML = `<button class="login-btn" onclick="openAuthModal()">Giriş / Kayıt</button>`;
         }
@@ -354,22 +360,12 @@
     async function registerUser() {
         const nick = document.getElementById('regNick').value.trim(); const email = document.getElementById('regEmail').value.trim(); const pass = document.getElementById('regPass').value;
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
-
         try {
             const snapshot = await db.collection('users').where('nick', '==', nick).get();
             if(!snapshot.empty) return alert("Bu kullanıcı adı zaten alınmış.");
-
             const userCred = await auth.createUserWithEmailAndPassword(email, pass);
-            const user = userCred.user;
-
-            await user.updateProfile({ displayName: nick });
-            
-            await db.collection('users').doc(user.uid).set({
-                nick: nick,
-                email: email,
-                photoBase64: selectedAvatarBase64 || null
-            });
-
+            await userCred.user.updateProfile({ displayName: nick });
+            await db.collection('users').doc(userCred.user.uid).set({ nick: nick, email: email, photoBase64: selectedAvatarBase64 || null });
             alert("Kayıt başarılı!");
         } catch (error) { alert("Hata: " + error.message); }
     }
@@ -434,6 +430,7 @@
         29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
         30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
     };
+
     for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
 
     let currentMeal = 'dinner', currentDayIndex = new Date().getDate(), cardPositions = [0, 1, 2, 3, 4];
@@ -446,7 +443,6 @@
         renderAllCards(currentDayIndex);
         applyClasses();
         
-        // Göz İkonu Başlangıç
         const eyeIcon = document.getElementById('icon-eye');
         const eyeOffIcon = document.getElementById('icon-eye-off');
         if(eyeIcon && eyeOffIcon) {
@@ -521,7 +517,6 @@
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
-    // Göz İkonu ve Liste Mantığı (DÜZELTİLDİ)
     function toggleModal() {
         const modal = document.getElementById('fullListModal'); 
         const eyeIcon = document.getElementById('icon-eye'); 
@@ -536,27 +531,19 @@
             modal.style.display = 'flex'; 
             eyeIcon.style.display = 'none'; 
             eyeOffIcon.style.display = 'block'; 
-            // GECİKME YOK
             renderFullList(currentMeal); 
         }
     }
 
     function renderFullList(mealType) {
         const container = document.getElementById('fullListContainer'); const btnBreakfast = document.getElementById('modalBtnBreakfast'); const btnDinner = document.getElementById('modalBtnDinner');
+        container.innerHTML = ''; btnBreakfast.className = 'modal-toggle'; btnDinner.className = 'modal-toggle';
+        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); else btnDinner.classList.add('active-red');
         
-        container.innerHTML = '';
-        btnBreakfast.className = 'modal-toggle';
-        btnDinner.className = 'modal-toggle';
-        
-        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); 
-        else btnDinner.classList.add('active-red');
-
-        // Veriyi doğrudan bas
         for (let i = 1; i <= 30; i++) {
             const dayData = menuData[i];
             if (dayData) {
-                const div = document.createElement('div'); 
-                div.className = 'day-row';
+                const div = document.createElement('div'); div.className = 'day-row';
                 div.innerHTML = `<div class="day-header">${dayData.date}</div><div class="day-content">${dayData[mealType].join('<br>')}</div>`;
                 container.appendChild(div);
             }
@@ -625,13 +612,14 @@
     let activeCommentDay = 0;
     function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
     function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
+    
     function loadComments(dayIdx) {
         const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
         const docId = `${currentMeal}_nov_${dayIdx}`;
         db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => {
             list.innerHTML = ''; if(snapshot.empty) { list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; return; }
-            let comments = []; snapshot.forEach(doc => comments.push(doc.data()));
+            let comments = []; snapshot.forEach(doc => { comments.push({ id: doc.id, ...doc.data() }); });
             comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             
             db.collection('daily_stats').doc(docId).set({ commentCount: snapshot.size }, { merge: true });
@@ -641,16 +629,79 @@
                 
                 let crownHtml = '';
                 if(c.userName === 'freddie') crownHtml = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>';
+                
+                // Silme Butonu (Kullanıcı kendi yorumunu veya Admin herkesi silebilir)
+                let deleteBtn = '';
+                if(currentUser && (currentUser.uid === c.userId || currentUser.displayName === 'freddie')) {
+                    deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}', '${docId}')">🗑️</span>`;
+                }
 
+                // Yorum Beğeni Butonları
+                // Not: Yorum beğenileri için ayrı bir logic gerekir, şimdilik basit tutuyoruz.
+                // İstersen buraya da 'handleCommentVote' ekleyebiliriz.
+                
                 list.innerHTML += `
-                <div class="single-comment">
-                    ${avatarHtml}
-                    <div class="c-content">
-                        <div class="c-user">${c.userName}${crownHtml}</div>
-                        <div class="c-text">${c.text}</div>
+                <div class="single-comment" id="comment-${c.id}">
+                    ${deleteBtn}
+                    <div class="c-top">
+                        ${avatarHtml}
+                        <div class="c-content">
+                            <div class="c-user">${c.userName}${crownHtml}</div>
+                            <div class="c-text">${c.text}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="c-actions">
+                        <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like')">
+                           <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
+                           <span id="clike-${c.id}">${c.likes || 0}</span>
+                        </div>
+                        <div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike')">
+                           <svg viewBox="0 0 24 24" style="transform: scaleY(-1);"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg>
+                           <span id="cdislike-${c.id}">${c.dislikes || 0}</span>
+                        </div>
                     </div>
                 </div>`; 
             });
+        });
+    }
+
+    function deleteComment(commentId, docId) {
+        if(!confirm("Silmek istiyor musun?")) return;
+        db.collection('comments').doc(commentId).delete().then(() => {
+             // Sayacı azalt
+             db.collection('daily_stats').doc(docId).update({
+                commentCount: firebase.firestore.FieldValue.increment(-1)
+             });
+        });
+    }
+
+    function handleCommentVote(commentId, type) {
+        if(!currentUser) return alert("Lütfen giriş yapın.");
+        const ref = db.collection('comments').doc(commentId);
+        
+        db.runTransaction(async (t) => {
+            const doc = await t.get(ref);
+            if(!doc.exists) return;
+            
+            const data = doc.data();
+            const votes = data.votes || {};
+            const current = votes[currentUser.uid];
+            
+            let likes = data.likes || 0;
+            let dislikes = data.dislikes || 0;
+
+            if(current === type) { // Geri al
+                if(type === 'like') likes--; else dislikes--;
+                delete votes[currentUser.uid];
+            } else {
+                if(current === 'like') likes--;
+                if(current === 'dislike') dislikes--;
+                if(type === 'like') likes++; else dislikes++;
+                votes[currentUser.uid] = type;
+            }
+            
+            t.update(ref, { likes, dislikes, votes });
         });
     }
 
@@ -659,11 +710,18 @@
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
         
-        db.collection('comments').add({ 
+        const batch = db.batch();
+        const commentRef = db.collection('comments').doc();
+        batch.set(commentRef, { 
             docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar,
+            likes: 0, dislikes: 0, votes: {},
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         });
-        input.value = '';
+        
+        const statsRef = db.collection('daily_stats').doc(docId);
+        batch.set(statsRef, { commentCount: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+
+        batch.commit().then(() => { input.value = ''; });
     }
 </script>
 
