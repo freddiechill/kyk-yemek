@@ -22,16 +22,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* GENEL AYARLAR */
+        /* MAVİ TIKLAMA EFEKTİNİ KALDIRMA */
+        * { -webkit-tap-highlight-color: transparent; outline: none; }
+
         body {
             font-family: 'Satoshi', sans-serif; font-weight: 700; background-color: #121212; color: #e0e0e0;
             margin: 0; padding: 0; height: 100vh; overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: background-color 0.3s; -webkit-user-select: none; user-select: none;
         }
-        * { -webkit-tap-highlight-color: transparent; outline: none; }
 
-        /* AUTH & HEADER */
         #auth-container { position: absolute; top: 20px; right: 20px; z-index: 6000; }
         .login-btn {
             background: #fff; color: #333; border: none; padding: 5px 12px; border-radius: 20px;
@@ -54,8 +54,12 @@
         .icon-btn:active { transform: scale(0.9); background: #333; }
         .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; display: block; }
 
-        /* CAROUSEL & CARDS */
-        .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; }
+        /* TOUCH ACTION EKLENDİ: Tarayıcının varsayılan kaydırmasını engelleme (yatayda) */
+        .carousel-container { 
+            position: relative; width: 100%; height: 65vh; perspective: 1000px; 
+            display: flex; align-items: center; justify-content: center;
+            touch-action: pan-y; /* Sadece dikey kaydırmaya izin ver, yatayı biz yöneteceğiz */
+        }
         .menu-card {
             position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh;
             background: #1e1e1e; border-radius: 24px; border: 2px solid #333;
@@ -97,9 +101,8 @@
         body.theme-breakfast .menu-card { border-color: #fff59d; } body.theme-breakfast .meal-title { color: #fff59d; } body.theme-breakfast .switch-btn { background: #fff59d; color: #121212; }
         body.theme-dinner .menu-card { border-color: #ef9a9a; } body.theme-dinner .meal-title { color: #ef9a9a; } body.theme-dinner .switch-btn { background: #ef9a9a; color: #121212; }
 
-        /* MODALS */
+        /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
-        
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -115,7 +118,7 @@
         .avatar-upload span { font-size: 0.8rem; color: #888; }
         #fileInput, #profileFileInput { display: none; }
 
-        /* YORUM MODALI */
+        /* Yorum Modalı */
         .comment-modal, #fullListModal { display: none; position: fixed; background: #121212; box-sizing: border-box; flex-direction: column; }
         .comment-modal { bottom: 0; left: 0; width: 100%; height: 70vh; border-radius: 24px 24px 0 0; z-index: 7000; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
         #fullListModal { top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; padding: 20px; padding-top: 80px; }
@@ -143,12 +146,9 @@
             word-break: break-word;
         }
 
-        /* DÜZ YANIT STİLİ */
+        /* Düz Yanıt Stili */
         .reply-comment { 
-            margin-left: 35px; 
-            background: #1a1a1a; 
-            border-left: 2px solid #444;
-            width: calc(100% - 35px);
+            margin-left: 35px; background: #1a1a1a; border-left: 2px solid #444; width: calc(100% - 35px);
         }
         .reply-icon { position: absolute; left: -22px; top: 15px; width: 14px; height: 14px; fill: #777; }
 
@@ -179,9 +179,7 @@
         .single-comment.has-delete .time-ago { right: 32px; }
 
         .delete-comment-btn { 
-            position: absolute; top: 9px; right: 10px; 
-            color: #ef5350; cursor: pointer; font-size: 14px; 
-            opacity: 0.7; transition: opacity 0.2s; z-index: 5; display: flex; align-items: center; justify-content: center;
+            position: absolute; top: 9px; right: 10px; color: #ef5350; cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.2s; z-index: 5; display: flex; align-items: center; justify-content: center;
         }
         .delete-comment-btn:hover { opacity: 1; transform: scale(1.1); }
         .delete-comment-btn svg { width: 14px; height: 14px; fill: currentColor; }
@@ -224,7 +222,7 @@
         <div class="date-display" id="currentDate">Yükleniyor...</div>
     </div>
 
-    <div class="carousel-container">
+    <div class="carousel-container" id="carouselTouchArea">
         <button class="nav-btn nav-left" onclick="moveCarousel(-1)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
         <button class="nav-btn nav-right" onclick="moveCarousel(1)"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
         <div class="menu-card" id="c0"></div>
@@ -511,8 +509,6 @@
         30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
     };
 
-    for(let i=1; i<=30; i++) { if(!menuData[i]) menuData[i] = {date: i+" Kasım", breakfast:["Veri Yok"], dinner:["Veri Yok"]}; }
-
     let currentMeal = 'dinner', currentDayIndex = new Date().getDate(), cardPositions = [0, 1, 2, 3, 4];
     const cards = [document.getElementById('c0'), document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3'), document.getElementById('c4')];
 
@@ -634,12 +630,14 @@
     function fetchStats(dayIdx) {
         if(!db) return;
         const docId = `${currentMeal}_nov_${dayIdx}`;
+        
+        // Ana dinleyici (Sadece okuma)
         db.collection('daily_stats').doc(docId).onSnapshot(doc => {
             if(doc.exists) {
                 const data = doc.data();
                 const likeEl = document.getElementById(`like-count-${dayIdx}`);
                 const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`);
-                const commentEl = document.getElementById(`comment-count-${dayIdx}`); // Burası ana dinleyici
+                const commentEl = document.getElementById(`comment-count-${dayIdx}`);
                 
                 if(likeEl) likeEl.innerText = data.likes || 0;
                 if(dislikeEl) dislikeEl.innerText = data.dislikes || 0;
@@ -693,17 +691,23 @@
         const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
         const docId = `${currentMeal}_nov_${dayIdx}`;
+        
+        // Yorumları dinle ve sayacı OTOMATİK DÜZELT (Self-Healing)
         db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => {
-            list.innerHTML = ''; if(snapshot.empty) { list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; return; }
+            const realCount = snapshot.size;
             
+            // Veritabanındaki sayacı gerçeğe eşitle
+            db.collection('daily_stats').doc(docId).set({ commentCount: realCount }, { merge: true });
+            
+            list.innerHTML = ''; 
+            if(snapshot.empty) { 
+                list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; 
+                return; 
+            }
+
             let allComments = [];
             snapshot.forEach(doc => { allComments.push({ id: doc.id, ...doc.data() }); });
             
-            // KRİTİK NOKTA: GERÇEK SAYIYI HESAPLA VE DÜZELT
-            const realCount = snapshot.size;
-            db.collection('daily_stats').doc(docId).set({ commentCount: realCount }, { merge: true });
-            
-            // Düz Sıralama (Recursive)
             let rootComments = allComments.filter(c => !c.parentId).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             const getChildren = (parentId) => allComments.filter(c => c.parentId === parentId).sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
 
@@ -822,26 +826,19 @@
         toggleReplyBox(parentId); 
     }
 
-    // ZİNCİRLEME SİLME (CASCADE DELETE)
     async function deleteComment(commentId) {
         if(!confirm("Silmek istiyor musun?")) return;
-
-        // Önce tüm alt yorumları bul ve sil (Recursive)
-        // Not: Bu işlem client-side yapıldığı için büyük ağaçlarda yavaş olabilir ama bu proje için yeterli.
-        // Daha sağlam çözüm Cloud Functions ile yapılmalıdır ama backend yok.
         
+        // ZİNCİRLEME SİLME
         const docSnapshot = await db.collection('comments').doc(commentId).get();
         const docData = docSnapshot.data();
         const docId = docData.docId;
 
-        // Silinecekler Listesi
-        const idsToDelete = [commentId];
-        
-        // Tüm yorumları çekip child'ları bul
         const snapshot = await db.collection('comments').where('docId', '==', docId).get();
         let allComments = [];
         snapshot.forEach(doc => allComments.push({ id: doc.id, ...doc.data() }));
 
+        const idsToDelete = [commentId];
         const findChildren = (pId) => {
             const children = allComments.filter(c => c.parentId === pId);
             children.forEach(child => {
@@ -851,15 +848,12 @@
         };
         findChildren(commentId);
 
-        // Hepsini sil
         const batch = db.batch();
         idsToDelete.forEach(id => {
-            const ref = db.collection('comments').doc(id);
-            batch.delete(ref);
+            batch.delete(db.collection('comments').doc(id));
         });
 
         await batch.commit();
-        // Sayaç otomatik güncellenecek (loadComments'teki listener sayesinde)
     }
 
     function handleCommentVote(commentId, type) {
@@ -902,6 +896,25 @@
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         });
         input.value = '';
+    }
+
+    // SWIPE NAVIGASYON
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const carousel = document.getElementById('carouselTouchArea');
+
+    carousel.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    carousel.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) moveCarousel(1);
+        if (touchEndX > touchStartX + 50) moveCarousel(-1);
     }
 </script>
 
