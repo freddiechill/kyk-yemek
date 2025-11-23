@@ -22,7 +22,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        * { -webkit-tap-highlight-color: transparent; outline: none; }
+        /* TIKLAMA EFEKTİ VE SCROLLBAR GİZLEME (Global) */
+        * { 
+            -webkit-tap-highlight-color: transparent; 
+            outline: none; 
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        /* Chrome, Safari, Opera için scrollbar gizleme */
+        ::-webkit-scrollbar { 
+            display: none; 
+        }
 
         body {
             font-family: 'Satoshi', sans-serif; font-weight: 700; background-color: #121212; color: #e0e0e0;
@@ -62,15 +72,12 @@
         .login-btn:active { transform: scale(0.95); }
         .user-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
 
-        /* BİLDİRİM MODALI */
-        #notificationModal .auth-box { max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;}
+        /* BİLDİRİM & ADMİN MODALI ORTAK */
+        #notificationModal .auth-box, #adminModal .auth-box { max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;}
         .notif-header { padding: 15px; border-bottom: 1px solid #333; font-size: 1.1rem; font-weight: bold; text-align: center; background: #222; width: 100%; box-sizing: border-box;}
         .notif-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%; }
-        .notif-item { 
-            padding: 15px; border-bottom: 1px solid #333; cursor: pointer; 
-            display: flex; flex-direction: column; gap: 5px; background: #1e1e1e; transition: background 0.2s;
-            text-align: left;
-        }
+        
+        .notif-item { padding: 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1e1e1e; transition: background 0.2s; text-align: left; }
         .notif-item:hover { background: #252525; }
         .notif-item.unread { background: #2a1a1a; border-left: 4px solid #ef5350; }
         .notif-text { font-size: 0.9rem; color: #ddd; line-height: 1.4; }
@@ -78,6 +85,30 @@
         .notif-time { font-size: 0.75rem; color: #888; align-self: flex-end; }
         .notif-empty { padding: 20px; text-align: center; color: #888; }
 
+        /* ADMIN PANEL ÖZEL */
+        .admin-content { padding: 15px; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; overflow-y: auto; }
+        #adminMainActions { display: flex; gap: 15px; justify-content: center; margin-top: 10px; width: 100%; }
+        .admin-btn {
+            flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 900; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; color: #121212;
+            font-family: 'Satoshi', sans-serif; transition: transform 0.2s;
+        }
+        .admin-btn:active { transform: scale(0.95); }
+        .restrict-btn { background: #fff59d; }
+        .ban-btn { background: #ef9a9a; }
+        .unban-btn { background: #a5d6a7; width: 100%; } 
+        .admin-btn svg { width: 24px; height: 24px; fill: #121212; }
+
+        /* BAN GEÇMİŞİ LİSTESİ */
+        .history-title { width: 100%; text-align: left; color: #888; font-size: 0.8rem; margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
+        .history-item { width: 100%; display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #222; }
+        .h-action { font-weight: bold; }
+        .h-action.banned { color: #ef9a9a; }
+        .h-action.restricted { color: #fff59d; }
+        .h-action.unbanned { color: #a5d6a7; }
+        .h-date { color: #666; font-size: 0.75rem; }
+
+        /* DİĞER STİLLER */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
@@ -144,30 +175,19 @@
         .comment-list { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         
-        .single-comment { 
-            background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; word-break: break-word;
-            transition: background 0.5s ease, border-color 0.5s ease;
-        }
-        
-        /* VURGULAMA ANİMASYONU */
-        @keyframes flash {
-            0% { background-color: #4a2a2a; border-color: #ef5350; }
-            100% { background-color: #252525; border-color: #333; }
-        }
+        .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; word-break: break-word; transition: background 0.5s ease, border-color 0.5s ease; }
         .highlight-comment { animation: flash 2s ease-out forwards; }
-
+        @keyframes flash { 0% { background-color: #4a2a2a; border-color: #ef5350; } 100% { background-color: #252525; border-color: #333; } }
+        
         .reply-comment { margin-left: 35px; background: #1a1a1a; border-left: 2px solid #444; width: calc(100% - 35px); }
         .reply-icon { position: absolute; left: -22px; top: 15px; width: 14px; height: 14px; fill: #777; }
-
+        
         .c-top { display: flex; gap: 10px; width: 100%; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
         .c-content { flex: 1; min-width: 0; }
-        .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
+        .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; cursor: pointer; } 
         .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
-
-        /* İKON BOYUTU 10px */
         .badge-icon { width: auto; height: 10px; vertical-align: middle; margin-left: 2px; }
-
         .mention-text { color: #90caf9; font-weight: bold; margin-right: 5px; }
 
         .c-actions { display: flex; gap: 15px; margin-left: 46px; align-items: center; }
@@ -176,7 +196,6 @@
         .c-action-btn:hover { color: #fff; }
         .c-action-btn.c-liked { color: #a5d6a7; }
         .c-action-btn.c-disliked { color: #ef9a9a; }
-        
         .reply-trigger { color: #aaa; font-size: 0.75rem; cursor: pointer; margin-left: auto; margin-right: 5px; font-weight: bold; }
         .reply-trigger:hover { color: #fff; }
 
@@ -187,10 +206,7 @@
 
         .time-ago { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; color: #666; font-weight: 500; }
         .single-comment.has-delete .time-ago { right: 32px; }
-
-        .delete-comment-btn { 
-            position: absolute; top: 9px; right: 10px; color: #ef5350; cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.2s; z-index: 5; display: flex; align-items: center; justify-content: center;
-        }
+        .delete-comment-btn { position: absolute; top: 9px; right: 10px; color: #ef5350; cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.2s; z-index: 5; display: flex; align-items: center; justify-content: center; }
         .delete-comment-btn:hover { opacity: 1; transform: scale(1.1); }
         .delete-comment-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
@@ -294,6 +310,49 @@
             <span class="auth-close" onclick="document.getElementById('notificationModal').style.display='none'">Kapat</span>
         </div>
     </div>
+    
+    <div id="adminModal" class="modal-overlay">
+        <div class="auth-box">
+            <div class="notif-header">Kullanıcı Yönetimi</div>
+            <div class="admin-content">
+                <div class="avatar-upload" style="border-color: #ffd700; width:60px; height:60px; margin-bottom:10px; flex-shrink: 0;">
+                     <img id="adminUserImg" style="display:block;">
+                </div>
+                <h3 id="adminUserName" style="color:#fff; margin: 0 0 15px 0;"></h3>
+                
+                <div id="adminMainActions">
+                    <button class="admin-btn unban-btn" id="btnLiftBan" style="display:none;" onclick="liftBan()">
+                         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                         Yasağı Kaldır
+                    </button>
+                    <div id="btnGroupRestrict" style="display:flex; gap:15px; width:100%;">
+                        <button class="admin-btn restrict-btn" onclick="showDurationOptions()">
+                            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                            Kısıtla
+                        </button>
+                        <button class="admin-btn ban-btn" onclick="confirmBan()">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
+                            Banla
+                        </button>
+                    </div>
+                </div>
+
+                <div id="adminDurationOptions" style="display:none; flex-direction:column; gap:5px; margin-top:15px; width:100%;">
+                    <button class="auth-submit" onclick="applyRestriction(1, 'saat')">1 Saat</button>
+                    <button class="auth-submit" onclick="applyRestriction(24, 'saat')">1 Gün</button>
+                    <button class="auth-submit" onclick="applyRestriction(7, 'gün')">1 Hafta</button>
+                    <button class="auth-submit" onclick="applyRestriction(30, 'gün')">1 Ay</button>
+                    <button class="auth-submit" onclick="applyRestriction(365, 'gün')">1 Yıl</button>
+                    <span class="auth-close" onclick="hideDurationOptions()" style="margin-top:10px;">Geri</span>
+                </div>
+
+                <div class="history-title">İŞLEM GEÇMİŞİ</div>
+                <div id="adminBanHistory" style="width:100%; max-height:150px; overflow-y:auto;"></div>
+
+            </div>
+            <span class="auth-close" onclick="closeAdminModal()">Kapat</span>
+        </div>
+    </div>
 
     <div id="commentModal" class="comment-modal">
         <div class="modal-header">
@@ -347,21 +406,47 @@
     let currentUser = null, currentUserAvatar = null, selectedAvatarBase64 = null, profileAvatarBase64 = null;
     let tempUserData = {}, generatedVerificationCode = null;
     let scrollTargetId = null;
+    
+    // GLOBAL USER STATUS
+    let currentUserStatus = { banned: false, restrictedUntil: null };
 
     if(auth) {
         auth.onAuthStateChanged(async (user) => {
             if (user) { 
                 currentUser = user; 
                 await loadUserAvatar(user.uid); 
+                
+                // CANLI BAN TAKİBİ
+                db.collection('users').doc(user.uid).onSnapshot(doc => {
+                    if(doc.exists) {
+                        const d = doc.data();
+                        currentUserStatus.banned = d.isBanned || false;
+                        currentUserStatus.restrictedUntil = d.restrictedUntil ? d.restrictedUntil.toDate() : null;
+                    }
+                });
+
                 updateLoginButton(); 
                 closeAuthModal(); 
                 listenForNotifications();
             } else { 
                 currentUser = null; 
                 currentUserAvatar = null;
+                currentUserStatus = { banned: false, restrictedUntil: null };
                 updateLoginButton(); 
             }
         });
+    }
+
+    function checkPermission() {
+        if (currentUserStatus.banned) {
+            alert("Hesabınız süresiz olarak yasaklanmıştır.");
+            return false;
+        }
+        if (currentUserStatus.restrictedUntil && currentUserStatus.restrictedUntil > new Date()) {
+            alert("Hesabınız kısıtlanmıştır. Bitiş: " + currentUserStatus.restrictedUntil.toLocaleString());
+            return false;
+        }
+        return true;
     }
 
     async function loadUserAvatar(uid) {
@@ -390,8 +475,112 @@
             container.innerHTML = `<button class="login-btn" onclick="openAuthModal()">Giriş / Kayıt</button>`;
         }
     }
+    
+    // --- ADMIN PANEL LOGIC ---
+    let selectedTargetUser = null;
 
-    // BİLDİRİM SİSTEMİ
+    function handleUserClick(userId, userName, userPhoto) {
+        if (currentUser && currentUser.displayName === 'freddie' && userId !== currentUser.uid) {
+            selectedTargetUser = { id: userId, name: userName, photo: userPhoto };
+            document.getElementById('adminUserImg').src = userPhoto || '';
+            document.getElementById('adminUserName').innerText = userName;
+            
+            db.collection('users').doc(userId).get().then(doc => {
+                const d = doc.data();
+                const isBanned = d.isBanned || false;
+                const restricted = d.restrictedUntil ? d.restrictedUntil.toDate() > new Date() : false;
+                
+                if (isBanned || restricted) {
+                    document.getElementById('btnLiftBan').style.display = 'flex';
+                    document.getElementById('btnGroupRestrict').style.display = 'none';
+                } else {
+                    document.getElementById('btnLiftBan').style.display = 'none';
+                    document.getElementById('btnGroupRestrict').style.display = 'flex';
+                }
+                
+                loadBanHistory(userId);
+                document.getElementById('adminModal').style.display = 'flex';
+            });
+            
+            hideDurationOptions();
+        }
+    }
+
+    function loadBanHistory(userId) {
+        const list = document.getElementById('adminBanHistory');
+        list.innerHTML = 'Yükleniyor...';
+        
+        db.collection('users').doc(userId).collection('banHistory').orderBy('date', 'desc').get().then(snap => {
+            list.innerHTML = '';
+            if(snap.empty) { list.innerHTML = 'Kayıt yok.'; return; }
+            
+            snap.forEach(doc => {
+                const h = doc.data();
+                const dateStr = h.date ? h.date.toDate().toLocaleString() : '';
+                let actionClass = '';
+                let actionText = '';
+                
+                if(h.type === 'ban') { actionClass = 'banned'; actionText = 'BANLANDI'; }
+                else if(h.type === 'restrict') { actionClass = 'restricted'; actionText = `KISITLANDI (${h.amount} ${h.unit})`; }
+                else if(h.type === 'unban') { actionClass = 'unbanned'; actionText = 'KALDIRILDI'; }
+                
+                list.innerHTML += `
+                <div class="history-item">
+                    <div><span class="h-action ${actionClass}">${actionText}</span></div>
+                    <div class="h-date">${dateStr}</div>
+                </div>`;
+            });
+        });
+    }
+    
+    function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+    function showDurationOptions() { document.getElementById('adminMainActions').style.display = 'none'; document.getElementById('adminDurationOptions').style.display = 'flex'; }
+    function hideDurationOptions() { document.getElementById('adminMainActions').style.display = 'flex'; document.getElementById('adminDurationOptions').style.display = 'none'; }
+
+    function logBanHistory(userId, type, amount, unit) {
+        db.collection('users').doc(userId).collection('banHistory').add({
+            type: type,
+            amount: amount || null,
+            unit: unit || null,
+            admin: currentUser.displayName,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+
+    function applyRestriction(amount, unit) {
+        if(!selectedTargetUser) return;
+        let hoursToAdd = 0;
+        if (unit === 'saat') hoursToAdd = amount;
+        if (unit === 'gün') hoursToAdd = amount * 24;
+        const restrictedUntil = new Date(new Date().getTime() + hoursToAdd * 60 * 60 * 1000);
+        
+        db.collection('users').doc(selectedTargetUser.id).update({ isBanned: false, restrictedUntil: restrictedUntil }).then(() => {
+            logBanHistory(selectedTargetUser.id, 'restrict', amount, unit);
+            alert(selectedTargetUser.name + " " + amount + " " + unit + " kısıtlandı.");
+            closeAdminModal();
+        });
+    }
+
+    function confirmBan() {
+        if(!selectedTargetUser) return;
+        if(confirm("Süresiz banlamak istiyor musun?")) {
+            db.collection('users').doc(selectedTargetUser.id).update({ isBanned: true, restrictedUntil: null }).then(() => {
+                logBanHistory(selectedTargetUser.id, 'ban');
+                alert("Kullanıcı banlandı.");
+                closeAdminModal();
+            });
+        }
+    }
+    
+    function liftBan() {
+        if(!selectedTargetUser) return;
+        db.collection('users').doc(selectedTargetUser.id).update({ isBanned: false, restrictedUntil: null }).then(() => {
+            logBanHistory(selectedTargetUser.id, 'unban');
+            alert("Yasak kaldırıldı.");
+            closeAdminModal();
+        });
+    }
+
     function listenForNotifications() {
         if (!currentUser) return;
         db.collection('notifications')
@@ -405,9 +594,7 @@
                 });
                 const badge = document.getElementById('notifBadge');
                 if (badge) badge.style.display = hasUnread ? 'block' : 'none';
-            }, error => {
-                console.log("Bildirim Hatası:", error);
-            });
+            }, error => console.log(error));
     }
 
     function showNotifications() {
@@ -441,10 +628,8 @@
                 });
             })
             .catch(error => {
-                list.innerHTML = `<div class="notif-empty" style="color:#ef5350; font-size:0.8rem; padding:10px;">
-                    Hata: İndeks eksik.<br>Lütfen tarayıcı konsolundaki (F12) linke tıklayın.
-                </div>`;
-                console.error("BURAYA TIKLAYIP INDEX OLUŞTUR:", error);
+                 list.innerHTML = `<div class="notif-empty" style="color:#ef5350;">İndeks Hatası (Konsola Bak)</div>`;
+                 console.error(error);
             });
     }
 
@@ -482,7 +667,6 @@
         });
     }
 
-    // ... (Auth functions) ...
     function openAuthModal() { if(currentUser) return; document.getElementById('authModal').style.display = 'flex'; switchAuthTab('login'); }
     function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
     function switchAuthTab(tab) {
@@ -615,7 +799,6 @@
     }
     function logoutUser() { auth.signOut(); closeProfileModal(); }
 
-    // VERİLER
     const menuData = {
         1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
         2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
@@ -636,7 +819,11 @@
         17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
         18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
         19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
+        20: { 
+            date: "20 Kasım 2025 Perşembe", 
+            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
+            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
+        },
         21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
         22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
         23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
@@ -806,6 +993,8 @@
 
     function handleVote(dayIdx, type) {
         if(!currentUser) return alert("Lütfen giriş yapın.");
+        if(!checkPermission()) return;
+
         const ref = db.collection('daily_stats').doc(`${currentMeal}_nov_${dayIdx}`);
         
         db.runTransaction(async (t) => {
@@ -948,7 +1137,7 @@
             <div class="c-top">
                 ${avatarHtml}
                 <div class="c-content">
-                    <div class="c-user">${c.userName}${badgeHtml}</div>
+                    <div class="c-user" onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto}')">${c.userName}${badgeHtml}</div>
                     <div class="c-text">${mentionHtml}${c.text}</div>
                 </div>
             </div>
@@ -979,6 +1168,8 @@
     }
 
     function postReply(parentId, docId, replyToUser, replyToUserId) {
+        if(!checkPermission()) return;
+
         const input = document.getElementById(`reply-input-${parentId}`);
         const text = input.value.trim();
         if(!text) return;
@@ -1027,6 +1218,8 @@
 
     function handleCommentVote(commentId, type, ownerId) {
         if(!currentUser) return alert("Lütfen giriş yapın.");
+        if(!checkPermission()) return;
+
         const ref = db.collection('comments').doc(commentId);
         
         db.runTransaction(async (t) => {
@@ -1058,6 +1251,8 @@
 
     function postComment() {
         if(!currentUser) return alert("Giriş yapmalısınız.");
+        if(!checkPermission()) return;
+
         const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return;
         const docId = `${currentMeal}_nov_${activeCommentDay}`;
         
