@@ -16,10 +16,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         body {
@@ -85,9 +85,9 @@
             position: relative; width: 60px; flex-shrink: 0; 
         }
         .social-action:active { transform: scale(0.9); }
-        .social-action svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; display: block; }
+        .social-action svg { width: 28px; height: 28px; fill: currentColor; display: block; margin-bottom: 4px; }
         
-        /* DISLIKE İÇİN AYNALAMA (EN TEMİZ YÖNTEM) */
+        /* AYNALAMA (ESKİ YÖNTEM) */
         .flip-icon { transform: scaleY(-1); }
 
         .count-text { font-size: 0.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
@@ -105,7 +105,6 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
         
-        /* Auth Box */
         .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
@@ -115,7 +114,6 @@
         .auth-submit:active { transform: scale(0.95); }
         .auth-close { margin-top: 15px; color: #888; cursor: pointer; font-size: 0.9rem; display: block; }
         
-        /* Doğrulama Ekranı */
         #verifyForm { display: none; text-align: center; }
         .verify-info { color: #a5d6a7; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4; }
 
@@ -134,7 +132,6 @@
         
         .comment-list, .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; }
         
-        /* Yorum Kartı */
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; }
         .c-top { display: flex; gap: 10px; width: 100%; }
         .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
@@ -142,21 +139,20 @@
         .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
         .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
 
-        /* Yorum Reaksiyonları */
         .c-actions { display: flex; gap: 15px; margin-left: 46px; }
         .c-action-btn { display: flex; align-items: center; gap: 4px; color: #777; cursor: pointer; font-size: 0.75rem; font-weight: bold; transition: color 0.2s; }
         .c-action-btn svg { width: 18px; height: 18px; fill: currentColor; display: block; }
         .c-action-btn:hover { color: #fff; }
         .c-action-btn.c-liked { color: #a5d6a7; }
         .c-action-btn.c-disliked { color: #ef9a9a; }
-
-        /* SİLME BUTONU */
+        
+        /* SİLME İKONU */
         .delete-comment-btn { 
             position: absolute; top: 10px; right: 10px; 
-            color: #ef5350; cursor: pointer; font-size: 16px; 
+            color: #ef5350; cursor: pointer; font-size: 14px; 
             opacity: 0.7; transition: opacity 0.2s; 
         }
-        .delete-comment-btn:hover { opacity: 1; }
+        .delete-comment-btn:hover { opacity: 1; transform: scale(1.1); }
 
         .comment-input-area { display: flex; gap: 10px; }
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
@@ -275,7 +271,6 @@
     </div>
 
 <script>
-    // API ANAHTARLARI (Verdiğin Anahtarlar)
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -286,8 +281,6 @@
         measurementId: "G-EGGGN0B9J5"
     };
 
-    // EMAILJS AYARLARI
-    // Lütfen buraya kendi EmailJS Public Key, Service ID ve Template ID'ni yaz.
     const EMAILJS_PUBLIC_KEY = "UBBM2Qy3DAqVF3g8R";
     const EMAILJS_SERVICE_ID = "service_96g66uh";
     const EMAILJS_TEMPLATE_ID = "template_vbnr56v";
@@ -390,7 +383,6 @@
         const nick = document.getElementById('regNick').value.trim(); const email = document.getElementById('regEmail').value.trim(); const pass = document.getElementById('regPass').value;
         if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
         if(pass.length < 6) return alert("Şifre en az 6 karakter olmalı.");
-        
         try {
             const snapshot = await db.collection('users').where('nick', '==', nick).get();
             if(!snapshot.empty) return alert("Bu nick alınmış.");
@@ -579,7 +571,6 @@
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
-    // Göz İkonu ve Liste Mantığı (DÜZELTİLDİ)
     function toggleModal() {
         const modal = document.getElementById('fullListModal'); 
         const eyeIcon = document.getElementById('icon-eye'); 
@@ -686,9 +677,10 @@
                 let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar">` : `<div class="c-avatar" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;">${c.userName.charAt(0).toUpperCase()}</div>`;
                 let crownHtml = (c.userName === 'freddie') ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>' : '';
                 
+                // Silme Butonu (Kullanıcı kendi yorumunu veya Admin "freddie")
                 let deleteBtn = '';
                 if(currentUser && (currentUser.uid === c.userId || currentUser.displayName === 'freddie')) {
-                    deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}', '${docId}')">🗑️</span>`;
+                    deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}', '${docId}')"><i class="fas fa-trash"></i></span>`;
                 }
 
                 list.innerHTML += `
