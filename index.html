@@ -28,6 +28,7 @@
             outline: none; 
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE/Edge */
+            box-sizing: border-box; /* Global box-sizing eklendi */
         }
         /* Chrome, Safari, Opera için scrollbar gizleme */
         ::-webkit-scrollbar { 
@@ -248,8 +249,12 @@
         .c-action-btn.c-disliked { color: #ef9a9a; }
         .reply-trigger { color: #aaa; font-size: 0.75rem; cursor: pointer; margin-left: auto; margin-right: 5px; font-weight: bold; }
         .reply-trigger:hover { color: #fff; }
-        .reply-input-wrapper { display: none; margin-left: 46px; margin-top: 5px; gap: 5px; }
-        .reply-input { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; font-size: 0.9rem; outline: none; }
+
+        /* BURASI DÜZELTİLDİ: TAŞMAYI ENGELLEMEK İÇİN GENİŞLİK HESAPLAMASI */
+        .reply-input-wrapper { display: none; margin-left: 46px; margin-top: 5px; gap: 5px; width: calc(100% - 46px); box-sizing: border-box; }
+        /* ---------------------------------------------------------------- */
+
+        .reply-input { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; font-size: 0.9rem; outline: none; min-width: 0; /* min-width eklendi */ }
         .reply-send-btn { background: #ef9a9a; border: none; width: 40px; height: 36px; border-radius: 8px; cursor: pointer; color: #121212; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .reply-send-btn svg { width: 20px; height: 20px; fill: currentColor; }
         .time-ago { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; color: #666; font-weight: 500; }
