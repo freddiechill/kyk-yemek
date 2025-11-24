@@ -41,13 +41,54 @@
             transition: background-color 0.3s; -webkit-user-select: none; user-select: none;
         }
 
+        /* --- ANİMASYONLAR --- */
+        /* Aşağıdan Yukarı Giriş */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Yukarıdan Aşağı Çıkış */
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100%); opacity: 0; }
+        }
+        /* Büyüyerek Giriş (Zoom In) */
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        /* Küçülerek Çıkış (Zoom Out) */
+        @keyframes zoomOut {
+            from { transform: scale(1); opacity: 1; }
+            to { transform: scale(0.9); opacity: 0; }
+        }
+        /* Buton Tıklama Efekti (Pop) */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        /* Vurgulama (Flash) */
+        @keyframes flash {
+            0% { background-color: #4a2a2a; border-color: #ef5350; }
+            100% { background-color: #252525; border-color: #333; }
+        }
+
+        /* Animasyon Sınıfları (JS ile eklenip çıkarılacak) */
+        .anim-slide-up { animation: slideUp 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+        .anim-slide-down { animation: slideDown 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+        
+        .anim-zoom-in { animation: zoomIn 0.3s ease-out forwards; }
+        .anim-zoom-out { animation: zoomOut 0.3s ease-in forwards; }
+
+        .anim-pop { animation: pop 0.3s ease-out; }
+
         /* ÜST BAR */
         #auth-container { 
             position: absolute; top: 20px; right: 20px; z-index: 6000; 
             display: flex; align-items: center; gap: 12px;
         }
 
-        /* Bildirim Butonu */
         .notif-btn {
             position: relative; width: 36px; height: 36px; 
             background: rgba(255,255,255,0.1); border-radius: 50%; 
@@ -55,7 +96,9 @@
             align-items: center; justify-content: center; 
             cursor: pointer; color: #fff;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.2s;
         }
+        .notif-btn:active { transform: scale(0.9); }
         .notif-btn svg { width: 20px; height: 20px; fill: currentColor; }
         .notif-badge {
             position: absolute; top: -2px; right: -2px; 
@@ -73,7 +116,9 @@
         .user-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
 
         /* BİLDİRİM & ADMİN MODALI ORTAK */
-        #notificationModal .auth-box, #adminModal .auth-box { max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;}
+        #notificationModal .auth-box, #adminModal .auth-box { 
+            max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;
+        }
         .notif-header { padding: 15px; border-bottom: 1px solid #333; font-size: 1.1rem; font-weight: bold; text-align: center; background: #222; width: 100%; box-sizing: border-box;}
         .notif-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%; }
         
@@ -108,7 +153,7 @@
         .h-action.unbanned { color: #a5d6a7; }
         .h-date { color: #666; font-size: 0.75rem; }
 
-        /* DİĞER STİLLER */
+        /* HEADER */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 6000; }
@@ -148,8 +193,15 @@
         body.theme-breakfast .menu-card { border-color: #fff59d; } body.theme-breakfast .meal-title { color: #fff59d; } body.theme-breakfast .switch-btn { background: #fff59d; color: #121212; }
         body.theme-dinner .menu-card { border-color: #ef9a9a; } body.theme-dinner .meal-title { color: #ef9a9a; } body.theme-dinner .switch-btn { background: #ef9a9a; color: #121212; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center; }
-        .auth-box { background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; border: 1px solid #333; text-align: center; position: relative; }
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center;
+        }
+        .auth-box { 
+            background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; 
+            border: 1px solid #333; text-align: center; position: relative; 
+        }
+
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
         .auth-tab.active { color: #fff; border-bottom: 2px solid #fff; }
@@ -177,7 +229,6 @@
         
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; word-break: break-word; transition: background 0.5s ease, border-color 0.5s ease; }
         .highlight-comment { animation: flash 2s ease-out forwards; }
-        @keyframes flash { 0% { background-color: #4a2a2a; border-color: #ef5350; } 100% { background-color: #252525; border-color: #333; } }
         
         .reply-comment { margin-left: 35px; background: #1a1a1a; border-left: 2px solid #444; width: calc(100% - 35px); }
         .reply-icon { position: absolute; left: -22px; top: 15px; width: 14px; height: 14px; fill: #777; }
@@ -189,7 +240,6 @@
         .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
         .badge-icon { width: auto; height: 10px; vertical-align: middle; margin-left: 2px; }
         .mention-text { color: #90caf9; font-weight: bold; margin-right: 5px; }
-
         .c-actions { display: flex; gap: 15px; margin-left: 46px; align-items: center; }
         .c-action-btn { display: flex; align-items: center; gap: 4px; color: #777; cursor: pointer; font-size: 0.75rem; font-weight: bold; transition: color 0.2s; }
         .c-action-btn svg { width: 16px; height: 16px; fill: currentColor; display: block; }
@@ -198,23 +248,19 @@
         .c-action-btn.c-disliked { color: #ef9a9a; }
         .reply-trigger { color: #aaa; font-size: 0.75rem; cursor: pointer; margin-left: auto; margin-right: 5px; font-weight: bold; }
         .reply-trigger:hover { color: #fff; }
-
         .reply-input-wrapper { display: none; margin-left: 46px; margin-top: 5px; gap: 5px; }
         .reply-input { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; font-size: 0.9rem; outline: none; }
         .reply-send-btn { background: #ef9a9a; border: none; width: 40px; height: 36px; border-radius: 8px; cursor: pointer; color: #121212; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .reply-send-btn svg { width: 20px; height: 20px; fill: currentColor; }
-
         .time-ago { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; color: #666; font-weight: 500; }
         .single-comment.has-delete .time-ago { right: 32px; }
         .delete-comment-btn { position: absolute; top: 9px; right: 10px; color: #ef5350; cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.2s; z-index: 5; display: flex; align-items: center; justify-content: center; }
         .delete-comment-btn:hover { opacity: 1; transform: scale(1.1); }
         .delete-comment-btn svg { width: 14px; height: 14px; fill: currentColor; }
-
         .comment-input-area { display: flex; gap: 10px; }
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         .send-btn { background: #ef9a9a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #121212; font-family: 'Satoshi', sans-serif; display: flex; align-items: center; justify-content: center;}
         .send-btn svg { width: 24px; height: 24px; fill: currentColor; }
-
         .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
         .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
         .day-content { font-size: 1rem; line-height: 1.6; text-align: center; color: #e0e0e0; white-space: pre-line; }
@@ -227,6 +273,20 @@
             .menu-card { max-width: 400px; max-height: 60vh; }
             .nav-btn { width: 120px; }
         }
+
+        /* Animasyon Sınıfları */
+        .anim-slide-up { animation: slideUp 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+        .anim-slide-down { animation: slideDown 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+        .anim-zoom-in { animation: zoomIn 0.3s ease-out forwards; }
+        .anim-zoom-out { animation: zoomOut 0.3s ease-in forwards; }
+        .anim-pop { animation: pop 0.3s ease-out; }
+
+        /* Animasyonlar */
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes zoomOut { from { transform: scale(1); opacity: 1; } to { transform: scale(0.9); opacity: 0; } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body class="theme-dinner">
@@ -259,7 +319,7 @@
     </div>
 
     <div id="authModal" class="modal-overlay">
-        <div class="auth-box">
+        <div class="auth-box anim-zoom-in">
             <div class="auth-tabs" id="authTabs">
                 <div class="auth-tab active" onclick="switchAuthTab('login')">Giriş Yap</div>
                 <div class="auth-tab" onclick="switchAuthTab('register')">Kayıt Ol</div>
@@ -290,7 +350,7 @@
     </div>
 
     <div id="profileModal" class="modal-overlay">
-        <div class="auth-box">
+        <div class="auth-box anim-zoom-in">
             <div style="color:#fff; font-size:1.2rem; margin-bottom:20px;">Profil Ayarları</div>
             <div class="avatar-upload" onclick="document.getElementById('profileFileInput').click()">
                 <img id="profileAvatarPreview" style="display:block;">
@@ -304,19 +364,19 @@
     </div>
 
     <div id="notificationModal" class="modal-overlay">
-        <div class="auth-box">
+        <div class="auth-box anim-zoom-in">
             <div class="notif-header">Bildirimler</div>
             <div class="notif-list" id="notificationList"></div>
-            <span class="auth-close" onclick="document.getElementById('notificationModal').style.display='none'">Kapat</span>
+            <span class="auth-close" onclick="closeNotificationModal()">Kapat</span>
         </div>
     </div>
     
     <div id="adminModal" class="modal-overlay">
-        <div class="auth-box">
+        <div class="auth-box anim-zoom-in">
             <div class="notif-header">Kullanıcı Yönetimi</div>
             <div class="admin-content">
                 <div class="avatar-upload" style="border-color: #ffd700; width:60px; height:60px; margin-bottom:10px; flex-shrink: 0;">
-                     <img id="adminUserImg" style="display:block;">
+                     <img id="adminUserImg" style="display:block; width:100%; height:100%; object-fit:cover;">
                 </div>
                 <h3 id="adminUserName" style="color:#fff; margin: 0 0 15px 0;"></h3>
                 
@@ -354,7 +414,7 @@
         </div>
     </div>
 
-    <div id="commentModal" class="comment-modal">
+    <div id="commentModal" class="comment-modal anim-slide-up">
         <div class="modal-header">
             <span>Yorumlar</span>
             <div class="close-modal-btn" onclick="closeComments()">&times;</div>
@@ -368,7 +428,7 @@
         </div>
     </div>
 
-    <div id="fullListModal">
+    <div id="fullListModal" class="anim-slide-up">
         <div class="modal-header">
             <span>Tüm Ayın Listesi</span>
             <div class="close-modal-btn" onclick="toggleModal()">&times;</div>
@@ -406,8 +466,6 @@
     let currentUser = null, currentUserAvatar = null, selectedAvatarBase64 = null, profileAvatarBase64 = null;
     let tempUserData = {}, generatedVerificationCode = null;
     let scrollTargetId = null;
-    
-    // GLOBAL USER STATUS
     let currentUserStatus = { banned: false, restrictedUntil: null };
 
     if(auth) {
@@ -415,8 +473,6 @@
             if (user) { 
                 currentUser = user; 
                 await loadUserAvatar(user.uid); 
-                
-                // CANLI BAN TAKİBİ
                 db.collection('users').doc(user.uid).onSnapshot(doc => {
                     if(doc.exists) {
                         const d = doc.data();
@@ -424,7 +480,6 @@
                         currentUserStatus.restrictedUntil = d.restrictedUntil ? d.restrictedUntil.toDate() : null;
                     }
                 });
-
                 updateLoginButton(); 
                 closeAuthModal(); 
                 listenForNotifications();
@@ -438,10 +493,7 @@
     }
 
     function checkPermission() {
-        if (currentUserStatus.banned) {
-            alert("Hesabınız süresiz olarak yasaklanmıştır.");
-            return false;
-        }
+        if (currentUserStatus.banned) { alert("Hesabınız süresiz olarak yasaklanmıştır."); return false; }
         if (currentUserStatus.restrictedUntil && currentUserStatus.restrictedUntil > new Date()) {
             alert("Hesabınız kısıtlanmıştır. Bitiş: " + currentUserStatus.restrictedUntil.toLocaleString());
             return false;
@@ -461,22 +513,96 @@
         if(currentUser) {
             const name = currentUser.displayName || "Üye";
             const imgHtml = currentUserAvatar ? `<img src="${currentUserAvatar}" class="user-avatar">` : `<div class="user-avatar" style="background:#ccc;color:#333;display:flex;align-items:center;justify-content:center;">${name.charAt(0).toUpperCase()}</div>`;
-            
-            container.innerHTML = `
-                <div class="notif-btn" style="display:flex;" onclick="showNotifications()">
-                    <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
-                    <div id="notifBadge" class="notif-badge"></div>
-                </div>
-                <div class="login-btn" onclick="openProfileModal()">
-                    ${imgHtml}
-                    <span>${name}</span>
-                </div>`;
+            container.innerHTML = `<div class="notif-btn" style="display:flex;" onclick="showNotifications()"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg><div id="notifBadge" class="notif-badge"></div></div><div class="login-btn" onclick="openProfileModal()">${imgHtml}<span>${name}</span></div>`;
         } else {
             container.innerHTML = `<button class="login-btn" onclick="openAuthModal()">Giriş / Kayıt</button>`;
         }
     }
-    
-    // --- ADMIN PANEL LOGIC ---
+
+    // --- MODAL KAPATMA FONKSİYONLARI (ANİMASYONLU) ---
+    function closeAuthModal() {
+        const modal = document.getElementById('authModal');
+        const box = modal.querySelector('.auth-box');
+        box.classList.remove('anim-zoom-in');
+        box.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            box.classList.remove('anim-zoom-out');
+            box.classList.add('anim-zoom-in'); // Sonraki açılış için hazırla
+        }, 250);
+    }
+
+    function closeProfileModal() {
+        const modal = document.getElementById('profileModal');
+        const box = modal.querySelector('.auth-box');
+        box.classList.remove('anim-zoom-in');
+        box.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            box.classList.remove('anim-zoom-out');
+            box.classList.add('anim-zoom-in');
+        }, 250);
+    }
+
+    function closeNotificationModal() {
+        const modal = document.getElementById('notificationModal');
+        const box = modal.querySelector('.auth-box');
+        box.classList.remove('anim-zoom-in');
+        box.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            box.classList.remove('anim-zoom-out');
+            box.classList.add('anim-zoom-in');
+        }, 250);
+    }
+
+    function closeAdminModal() {
+        const modal = document.getElementById('adminModal');
+        const box = modal.querySelector('.auth-box');
+        box.classList.remove('anim-zoom-in');
+        box.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            box.classList.remove('anim-zoom-out');
+            box.classList.add('anim-zoom-in');
+        }, 250);
+    }
+
+    function closeComments() {
+        const modal = document.getElementById('commentModal');
+        modal.classList.remove('anim-slide-up');
+        modal.classList.add('anim-slide-down');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('anim-slide-down');
+            modal.classList.add('anim-slide-up');
+        }, 350);
+    }
+
+    function toggleModal() { // Full List
+        const modal = document.getElementById('fullListModal'); 
+        const eyeIcon = document.getElementById('icon-eye'); 
+        const eyeOffIcon = document.getElementById('icon-eye-off');
+        
+        if (modal.style.display === 'flex') { 
+            modal.classList.remove('anim-slide-up');
+            modal.classList.add('anim-slide-down');
+            setTimeout(() => {
+                modal.style.display = 'none'; 
+                modal.classList.remove('anim-slide-down');
+                modal.classList.add('anim-slide-up');
+                eyeIcon.style.display = 'block'; 
+                eyeOffIcon.style.display = 'none'; 
+            }, 350);
+        } else { 
+            modal.style.display = 'flex'; 
+            eyeIcon.style.display = 'none'; 
+            eyeOffIcon.style.display = 'block'; 
+            renderFullList(currentMeal); 
+        }
+    }
+
+    // --- ADMIN PANEL ---
     let selectedTargetUser = null;
 
     function handleUserClick(userId, userName, userPhoto) {
@@ -501,7 +627,6 @@
                 loadBanHistory(userId);
                 document.getElementById('adminModal').style.display = 'flex';
             });
-            
             hideDurationOptions();
         }
     }
@@ -509,41 +634,28 @@
     function loadBanHistory(userId) {
         const list = document.getElementById('adminBanHistory');
         list.innerHTML = 'Yükleniyor...';
-        
         db.collection('users').doc(userId).collection('banHistory').orderBy('date', 'desc').get().then(snap => {
             list.innerHTML = '';
             if(snap.empty) { list.innerHTML = 'Kayıt yok.'; return; }
-            
             snap.forEach(doc => {
                 const h = doc.data();
                 const dateStr = h.date ? h.date.toDate().toLocaleString() : '';
                 let actionClass = '';
                 let actionText = '';
-                
                 if(h.type === 'ban') { actionClass = 'banned'; actionText = 'BANLANDI'; }
                 else if(h.type === 'restrict') { actionClass = 'restricted'; actionText = `KISITLANDI (${h.amount} ${h.unit})`; }
                 else if(h.type === 'unban') { actionClass = 'unbanned'; actionText = 'KALDIRILDI'; }
-                
-                list.innerHTML += `
-                <div class="history-item">
-                    <div><span class="h-action ${actionClass}">${actionText}</span></div>
-                    <div class="h-date">${dateStr}</div>
-                </div>`;
+                list.innerHTML += `<div class="history-item"><div><span class="h-action ${actionClass}">${actionText}</span></div><div class="h-date">${dateStr}</div></div>`;
             });
         });
     }
     
-    function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
     function showDurationOptions() { document.getElementById('adminMainActions').style.display = 'none'; document.getElementById('adminDurationOptions').style.display = 'flex'; }
     function hideDurationOptions() { document.getElementById('adminMainActions').style.display = 'flex'; document.getElementById('adminDurationOptions').style.display = 'none'; }
 
     function logBanHistory(userId, type, amount, unit) {
         db.collection('users').doc(userId).collection('banHistory').add({
-            type: type,
-            amount: amount || null,
-            unit: unit || null,
-            admin: currentUser.displayName,
-            date: firebase.firestore.FieldValue.serverTimestamp()
+            type: type, amount: amount || null, unit: unit || null, admin: currentUser.displayName, date: firebase.firestore.FieldValue.serverTimestamp()
         });
     }
 
@@ -553,7 +665,6 @@
         if (unit === 'saat') hoursToAdd = amount;
         if (unit === 'gün') hoursToAdd = amount * 24;
         const restrictedUntil = new Date(new Date().getTime() + hoursToAdd * 60 * 60 * 1000);
-        
         db.collection('users').doc(selectedTargetUser.id).update({ isBanned: false, restrictedUntil: restrictedUntil }).then(() => {
             logBanHistory(selectedTargetUser.id, 'restrict', amount, unit);
             alert(selectedTargetUser.name + " " + amount + " " + unit + " kısıtlandı.");
@@ -581,20 +692,15 @@
         });
     }
 
+    // --- BİLDİRİMLER ---
     function listenForNotifications() {
         if (!currentUser) return;
-        db.collection('notifications')
-            .where('toUserId', '==', currentUser.uid)
-            .orderBy('createdAt', 'desc')
-            .limit(10)
-            .onSnapshot(snapshot => {
-                let hasUnread = false;
-                snapshot.forEach(doc => {
-                    if (!doc.data().read) hasUnread = true;
-                });
-                const badge = document.getElementById('notifBadge');
-                if (badge) badge.style.display = hasUnread ? 'block' : 'none';
-            }, error => console.log(error));
+        db.collection('notifications').where('toUserId', '==', currentUser.uid).orderBy('createdAt', 'desc').limit(10).onSnapshot(snapshot => {
+            let hasUnread = false;
+            snapshot.forEach(doc => { if (!doc.data().read) hasUnread = true; });
+            const badge = document.getElementById('notifBadge');
+            if (badge) badge.style.display = hasUnread ? 'block' : 'none';
+        }, error => console.log(error));
     }
 
     function showNotifications() {
@@ -603,51 +709,28 @@
         modal.style.display = 'flex';
         list.innerHTML = '<div class="notif-empty">Yükleniyor...</div>';
 
-        db.collection('notifications')
-            .where('toUserId', '==', currentUser.uid)
-            .orderBy('createdAt', 'desc')
-            .limit(20)
-            .get()
-            .then(snapshot => {
-                list.innerHTML = '';
-                if (snapshot.empty) {
-                    list.innerHTML = '<div class="notif-empty">Henüz bildirim yok.</div>';
-                    return;
-                }
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    const unreadClass = n.read ? '' : 'unread';
-                    const actionText = n.type === 'like' ? 'yorumunu beğendi.' : 'yorumuna yanıt verdi.';
-                    const timeStr = timeAgo(n.createdAt);
-                    
-                    list.innerHTML += `
-                    <div class="notif-item ${unreadClass}" onclick="handleNotificationClick('${doc.id}', '${n.docId}', '${n.commentId}')">
-                        <div class="notif-text"><b>${n.fromUserName}</b> ${actionText}</div>
-                        <div class="notif-time">${timeStr}</div>
-                    </div>`;
-                });
-            })
-            .catch(error => {
-                 list.innerHTML = `<div class="notif-empty" style="color:#ef5350;">İndeks Hatası (Konsola Bak)</div>`;
-                 console.error(error);
+        db.collection('notifications').where('toUserId', '==', currentUser.uid).orderBy('createdAt', 'desc').limit(20).get().then(snapshot => {
+            list.innerHTML = '';
+            if (snapshot.empty) { list.innerHTML = '<div class="notif-empty">Henüz bildirim yok.</div>'; return; }
+            snapshot.forEach(doc => {
+                const n = doc.data();
+                const unreadClass = n.read ? '' : 'unread';
+                const actionText = n.type === 'like' ? 'yorumunu beğendi.' : 'yorumuna yanıt verdi.';
+                const timeStr = timeAgo(n.createdAt);
+                list.innerHTML += `<div class="notif-item ${unreadClass}" onclick="handleNotificationClick('${doc.id}', '${n.docId}', '${n.commentId}')"><div class="notif-text"><b>${n.fromUserName}</b> ${actionText}</div><div class="notif-time">${timeStr}</div></div>`;
             });
+        }).catch(error => { list.innerHTML = `<div class="notif-empty" style="color:#ef5350;">İndeks Hatası (Konsol)</div>`; console.error(error); });
     }
 
     function handleNotificationClick(notifId, docId, commentId) {
         db.collection('notifications').doc(notifId).update({ read: true });
-        document.getElementById('notificationModal').style.display = 'none';
-
+        closeNotificationModal();
         if(docId) {
             const parts = docId.split('_');
             if(parts.length === 3) {
                 const mealType = parts[0];
                 const dayIdx = parseInt(parts[2]);
-
-                if (currentMeal !== mealType) {
-                    currentMeal = mealType;
-                    updateTheme();
-                    renderAllCards(currentDayIndex);
-                }
+                if (currentMeal !== mealType) { currentMeal = mealType; updateTheme(); renderAllCards(currentDayIndex); }
                 scrollTargetId = commentId;
                 openComments(dayIdx);
             }
@@ -657,18 +740,12 @@
     function sendNotification(toUserId, type, docId, commentId) {
         if (!currentUser || toUserId === currentUser.uid) return;
         db.collection('notifications').add({
-            toUserId: toUserId,
-            fromUserName: currentUser.displayName,
-            type: type,
-            docId: docId,
-            commentId: commentId,
-            read: false,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            toUserId: toUserId, fromUserName: currentUser.displayName, type: type, docId: docId, commentId: commentId, read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
     }
 
+    // --- AUTH ---
     function openAuthModal() { if(currentUser) return; document.getElementById('authModal').style.display = 'flex'; switchAuthTab('login'); }
-    function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
     function switchAuthTab(tab) {
         document.getElementById('verifyForm').style.display = 'none';
         document.getElementById('authTabs').style.display = 'flex';
@@ -722,9 +799,7 @@
         if(pass.length < 6) return alert("Şifre en az 6 karakter olmalı.");
         
         const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
-        if (!englishCharRegex.test(nick)) {
-           return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir.");
-        }
+        if (!englishCharRegex.test(nick)) { return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir."); }
         
         try {
             const nickLower = nick.toLowerCase();
@@ -733,7 +808,6 @@
             
             generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
             tempUserData = { nick, nickLower, email, pass, photo: selectedAvatarBase64 };
-
             const templateParams = { to_name: nick, to_email: email, code: generatedVerificationCode };
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
                 .then(() => {
@@ -742,7 +816,6 @@
                     document.getElementById('authTabs').style.display = 'none';
                     document.getElementById('verifyForm').style.display = 'block';
                 }, (error) => { alert("Mail hatası: " + JSON.stringify(error)); });
-
         } catch(e) { alert("Hata: " + e.message); }
     }
 
@@ -765,7 +838,6 @@
         document.getElementById('profileNick').value = currentUser.displayName;
         if(currentUserAvatar) document.getElementById('profileAvatarPreview').src = currentUserAvatar;
     }
-    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
     
     async function saveProfile() {
         const newNick = document.getElementById('profileNick').value.trim();
@@ -773,9 +845,7 @@
         if(!newNick) return alert("Nick boş olamaz");
         
         const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
-        if (!englishCharRegex.test(newNick)) {
-           return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir.");
-        }
+        if (!englishCharRegex.test(newNick)) { return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir."); }
 
         try {
             if(newNick !== currentUser.displayName) {
@@ -793,7 +863,6 @@
                 batch.update(doc.ref, { userName: newNick, userPhoto: (profileAvatarBase64 || currentUserAvatar) });
             });
             await batch.commit();
-            
             alert("Güncellendi!"); updateLoginButton(); closeProfileModal();
         } catch(e) { alert("Hata: " + e.message); }
     }
@@ -819,11 +888,7 @@
         17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
         18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
         19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { 
-            date: "20 Kasım 2025 Perşembe", 
-            breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], 
-            dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] 
-        },
+        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
         21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
         22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
         23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
@@ -883,7 +948,7 @@
                         <span class="count-text" id="dislike-count-${targetDateIdx}">0</span>
                     </div>
                     <div class="social-action" onclick="openComments(${targetDateIdx})">
-                        <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                        <button class="notif-btn anim-pop" style="display:none"></button> <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
                         <span class="count-text" id="comment-count-${targetDateIdx}">0</span>
                     </div>
                 </div>
@@ -920,17 +985,22 @@
     function toggleMealType() { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     function updateTheme() { document.body.className = currentMeal === 'breakfast' ? 'theme-breakfast' : 'theme-dinner'; }
     
-    function toggleModal() {
+    function toggleModal() { // Full List Toggle
         const modal = document.getElementById('fullListModal'); 
         const eyeIcon = document.getElementById('icon-eye'); 
         const eyeOffIcon = document.getElementById('icon-eye-off');
         
         if (modal.style.display === 'flex') { 
-            modal.style.display = 'none'; 
-            eyeIcon.style.display = 'block'; 
-            eyeOffIcon.style.display = 'none'; 
-        } 
-        else { 
+            modal.classList.remove('anim-slide-up');
+            modal.classList.add('anim-slide-down');
+            setTimeout(() => {
+                modal.style.display = 'none'; 
+                modal.classList.remove('anim-slide-down');
+                modal.classList.add('anim-slide-up');
+                eyeIcon.style.display = 'block'; 
+                eyeOffIcon.style.display = 'none'; 
+            }, 350);
+        } else { 
             modal.style.display = 'flex'; 
             eyeIcon.style.display = 'none'; 
             eyeOffIcon.style.display = 'block'; 
@@ -958,7 +1028,6 @@
         if(!db) return;
         const docId = `${currentMeal}_nov_${dayIdx}`;
         
-        // Ana dinleyici (Sadece okuma)
         db.collection('daily_stats').doc(docId).onSnapshot(doc => {
             if(doc.exists) {
                 const data = doc.data();
@@ -982,7 +1051,6 @@
             }
         });
         
-        // Sayacı zorla düzelt
         db.collection('comments').where('docId', '==', docId).onSnapshot(snap => {
             const count = snap.size;
             const el = document.getElementById(`comment-count-${dayIdx}`);
@@ -994,6 +1062,11 @@
     function handleVote(dayIdx, type) {
         if(!currentUser) return alert("Lütfen giriş yapın.");
         if(!checkPermission()) return;
+
+        // Animasyon tetikleme (Pop Efekti)
+        const eventTarget = event.currentTarget;
+        eventTarget.classList.add('anim-pop');
+        setTimeout(() => eventTarget.classList.remove('anim-pop'), 300);
 
         const ref = db.collection('daily_stats').doc(`${currentMeal}_nov_${dayIdx}`);
         
@@ -1022,18 +1095,15 @@
 
     let activeCommentDay = 0;
     function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
-    function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
-    
+    // closeComments fonksiyonu yukarıda tanımlı (animasyonlu)
+
     function loadComments(dayIdx) {
         const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>';
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; }
         const docId = `${currentMeal}_nov_${dayIdx}`;
         
-        // Yorumları dinle ve sayacı OTOMATİK DÜZELT (Self-Healing)
         db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => {
             const realCount = snapshot.size;
-            
-            // Veritabanındaki sayacı gerçeğe eşitle
             db.collection('daily_stats').doc(docId).set({ commentCount: realCount }, { merge: true });
             
             list.innerHTML = ''; 
@@ -1191,8 +1261,7 @@
 
         const docSnapshot = await db.collection('comments').doc(commentId).get();
         const docData = docSnapshot.data();
-        // const docId = docData.docId; 
-
+        
         const idsToDelete = [commentId];
         const snapshot = await db.collection('comments').where('docId', '==', docId).get();
         let allComments = [];
@@ -1219,6 +1288,11 @@
     function handleCommentVote(commentId, type, ownerId) {
         if(!currentUser) return alert("Lütfen giriş yapın.");
         if(!checkPermission()) return;
+
+        // Animasyon (Pop)
+        const eventTarget = event.currentTarget;
+        eventTarget.classList.add('anim-pop');
+        setTimeout(() => eventTarget.classList.remove('anim-pop'), 300);
 
         const ref = db.collection('comments').doc(commentId);
         
