@@ -90,12 +90,28 @@
             background: rgba(0,0,0,0.85); z-index: 7000; align-items: center; justify-content: center;
         }
         
-        #notificationModal .auth-box, #adminModal .auth-box { 
-            max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;
-        }
+        /* ÖNEMLİ DEĞİŞİKLİK: Admin Modal (Kullanıcı Bilgileri) z-index artırıldı */
+        #adminModal { z-index: 8000; } 
+
         .auth-box { 
             background: #1e1e1e; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; 
             border: 1px solid #333; text-align: center; position: relative; 
+        }
+
+        /* Bildirim Modalı (Listeleme olduğu için sabit yükseklik korundu) */
+        #notificationModal .auth-box { 
+            max-width: 380px; height: 60vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;
+        }
+
+        /* --- KULLANICI KARTI (Admin Modal) ÖZEL AYARI --- */
+        /* Yükseklik içeriğe göre (auto) ayarlandı */
+        #adminModal .auth-box {
+            max-width: 380px;
+            height: auto; 
+            max-height: 80vh; /* Çok uzarsa taşmasın */
+            display: flex; flex-direction: column; 
+            padding: 20px;
+            overflow: hidden;
         }
 
         /* Full List Modal Özel */
@@ -110,6 +126,12 @@
         }
 
         .notif-header { padding: 15px; border-bottom: 1px solid #333; font-size: 1.1rem; font-weight: bold; text-align: center; background: #222; width: 100%; box-sizing: border-box;}
+        
+        /* Admin/Info Header - Margin ayarı */
+        #adminModal .notif-header {
+            background: transparent; border-bottom: 1px solid #333; margin-bottom: 10px; padding: 5px 0 15px 0;
+        }
+
         .notif-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%; }
         
         .notif-item { padding: 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1e1e1e; transition: background 0.2s; text-align: left; }
@@ -120,8 +142,13 @@
         .notif-time { font-size: 0.75rem; color: #888; align-self: flex-end; }
         .notif-empty { padding: 20px; text-align: center; color: #888; }
 
-        /* --- ADMIN PANEL --- */
-        .admin-content { padding: 15px; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; overflow-y: auto; }
+        /* --- ADMIN / USER INFO PANEL --- */
+        .admin-content { 
+            padding: 5px; 
+            display: flex; flex-direction: column; align-items: center; 
+            width: 100%; box-sizing: border-box; 
+            overflow-y: auto; /* İçerik taşarsa scroll */
+        }
         #adminMainActions { display: flex; gap: 15px; justify-content: center; margin-top: 10px; width: 100%; }
         .admin-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; color: #121212; font-family: 'Satoshi', sans-serif; transition: transform 0.2s; }
         .admin-btn:active { transform: scale(0.95); }
@@ -136,12 +163,14 @@
         .h-action.restricted { color: #fff59d; }
         .h-action.unbanned { color: #a5d6a7; }
         .h-date { color: #666; font-size: 0.75rem; }
+        
+        .user-info-text { color: #888; font-size: 0.8rem; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+        .user-info-val { color: #fff; font-size: 1rem; font-weight: bold; margin-bottom: 15px; text-align: center; line-height: 1.3; }
 
         /* --- CARD & CAROUSEL --- */
         .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
         .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
         
-        /* DÜZELTME: z-index artırıldı (9000'den büyük) ki modal açılınca üstte kalsın */
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 9500; }
         
         .icon-btn { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s; }
@@ -184,7 +213,9 @@
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
         .auth-tab { flex: 1; padding: 10px; cursor: pointer; color: #888; font-weight: bold; transition: 0.3s; }
         .auth-tab.active { color: #fff; border-bottom: 2px solid #fff; }
-        .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #252525; color: #fff; box-sizing: border-box; font-family: 'Satoshi', sans-serif; outline: none; }
+        .auth-input, .auth-select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #252525; color: #fff; box-sizing: border-box; font-family: 'Satoshi', sans-serif; outline: none; }
+        .auth-select { appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto; }
+        
         .auth-submit { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #fff; color: #000; font-weight: 900; cursor: pointer; font-family: 'Satoshi', sans-serif; transition: transform 0.2s; }
         .auth-submit:active { transform: scale(0.95); }
         .auth-close { margin-top: 15px; color: #888; cursor: pointer; font-size: 0.9rem; display: block; }
@@ -209,7 +240,7 @@
         .reply-icon { position: absolute; left: -22px; top: 15px; width: 14px; height: 14px; fill: #777; }
         
         .c-top { display: flex; gap: 10px; width: 100%; }
-        .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px;}
+        .c-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #444; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 14px; cursor: pointer;}
         .c-content { flex: 1; min-width: 0; }
         .c-user { font-size: 0.85rem; color: #ccc; font-weight: bold; margin-bottom: 2px; display: flex; align-items: center; gap: 5px; cursor: pointer; } 
         .c-text { font-size: 0.95rem; color: #fff; line-height: 1.4; }
@@ -302,6 +333,15 @@
                 <input type="file" id="fileInput" accept="image/*" onchange="handleAvatarSelect(this)">
                 <input type="text" id="regNick" class="auth-input" placeholder="Kullanıcı Adı (Nick)">
                 <input type="email" id="regEmail" class="auth-input" placeholder="E-posta">
+                
+                <select id="regUni" class="auth-select" onchange="updateDeptOptions('regUni', 'regDept')">
+                    <option value="">Üniversite Seç</option>
+                    <option value="SAÜ">Sakarya Üniversitesi</option>
+                    <option value="SUBÜ">Sakarya Uygulamalı Bilimler Üniversitesi</option>
+                </select>
+                <select id="regDept" class="auth-select">
+                    <option value="">Önce Üniversite Seçin</option>
+                </select>
                 <input type="password" id="regPass" class="auth-input" placeholder="Şifre (En az 6 karakter)">
                 <button class="auth-submit" onclick="startRegistration()">KAYIT OL</button>
             </div>
@@ -317,6 +357,15 @@
             </div>
             <input type="file" id="profileFileInput" accept="image/*" onchange="handleProfileAvatarSelect(this)">
             <input type="text" id="profileNick" class="auth-input" placeholder="Yeni Nick">
+
+            <select id="profileUni" class="auth-select" onchange="updateDeptOptions('profileUni', 'profileDept')">
+                <option value="">Üniversite Seç</option>
+                <option value="SAÜ">Sakarya Üniversitesi</option>
+                <option value="SUBÜ">Sakarya Uygulamalı Bilimler Üniversitesi</option>
+            </select>
+            <select id="profileDept" class="auth-select">
+                <option value="">Önce Üniversite Seçin</option>
+            </select>
             <button class="auth-submit" onclick="saveProfile()" style="margin-bottom:10px;">KAYDET</button>
             <button class="auth-submit" onclick="logoutUser()" style="background:#ef5350; color:#fff;">ÇIKIŞ YAP</button>
             <span class="auth-close" onclick="closeProfileModal()">Kapat</span>
@@ -333,41 +382,47 @@
     
     <div id="adminModal" class="modal-overlay">
         <div class="auth-box anim-zoom-in">
-            <div class="notif-header">Kullanıcı Yönetimi</div>
+            <div class="notif-header">Kullanıcı Bilgileri</div>
             <div class="admin-content">
                 <div class="avatar-upload" style="border-color: #ffd700; width:60px; height:60px; margin-bottom:10px; flex-shrink: 0;">
                      <img id="adminUserImg" style="display:block; width:100%; height:100%; object-fit:cover;">
                 </div>
-                <h3 id="adminUserName" style="color:#fff; margin: 0 0 15px 0;"></h3>
+                <h3 id="adminUserName" style="color:#fff; margin: 0 0 10px 0;"></h3>
                 
-                <div id="adminMainActions">
-                    <button class="admin-btn unban-btn" id="btnLiftBan" style="display:none;" onclick="liftBan()">
-                         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                         Yasağı Kaldır
-                    </button>
-                    <div id="btnGroupRestrict" style="display:flex; gap:15px; width:100%;">
-                        <button class="admin-btn restrict-btn" onclick="showDurationOptions()">
-                            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-                            Kısıtla
+                <div class="user-info-text">Üniversite</div>
+                <div class="user-info-val" id="adminUserUni">...</div>
+                <div class="user-info-text">Bölüm</div>
+                <div class="user-info-val" id="adminUserDept">...</div>
+                <div id="adminToolsArea" style="display:none; width:100%;">
+                    <div id="adminMainActions">
+                        <button class="admin-btn unban-btn" id="btnLiftBan" style="display:none;" onclick="liftBan()">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            Yasağı Kaldır
                         </button>
-                        <button class="admin-btn ban-btn" onclick="confirmBan()">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
-                            Banla
-                        </button>
+                        <div id="btnGroupRestrict" style="display:flex; gap:15px; width:100%;">
+                            <button class="admin-btn restrict-btn" onclick="showDurationOptions()">
+                                <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                                Kısıtla
+                            </button>
+                            <button class="admin-btn ban-btn" onclick="confirmBan()">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
+                                Banla
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div id="adminDurationOptions" style="display:none; flex-direction:column; gap:5px; margin-top:15px; width:100%;">
-                    <button class="auth-submit" onclick="applyRestriction(1, 'saat')">1 Saat</button>
-                    <button class="auth-submit" onclick="applyRestriction(24, 'saat')">1 Gün</button>
-                    <button class="auth-submit" onclick="applyRestriction(7, 'gün')">1 Hafta</button>
-                    <button class="auth-submit" onclick="applyRestriction(30, 'gün')">1 Ay</button>
-                    <button class="auth-submit" onclick="applyRestriction(365, 'gün')">1 Yıl</button>
-                    <span class="auth-close" onclick="hideDurationOptions()" style="margin-top:10px;">Geri</span>
-                </div>
+                    <div id="adminDurationOptions" style="display:none; flex-direction:column; gap:5px; margin-top:15px; width:100%;">
+                        <button class="auth-submit" onclick="applyRestriction(1, 'saat')">1 Saat</button>
+                        <button class="auth-submit" onclick="applyRestriction(24, 'saat')">1 Gün</button>
+                        <button class="auth-submit" onclick="applyRestriction(7, 'gün')">1 Hafta</button>
+                        <button class="auth-submit" onclick="applyRestriction(30, 'gün')">1 Ay</button>
+                        <button class="auth-submit" onclick="applyRestriction(365, 'gün')">1 Yıl</button>
+                        <span class="auth-close" onclick="hideDurationOptions()" style="margin-top:10px;">Geri</span>
+                    </div>
 
-                <div class="history-title">İŞLEM GEÇMİŞİ</div>
-                <div id="adminBanHistory" style="width:100%; max-height:150px; overflow-y:auto;"></div>
+                    <div class="history-title">İŞLEM GEÇMİŞİ</div>
+                    <div id="adminBanHistory" style="width:100%; max-height:150px; overflow-y:auto;"></div>
+                </div>
 
             </div>
             <span class="auth-close" onclick="closeAdminModal()">Kapat</span>
@@ -391,7 +446,7 @@
     <div id="fullListModal" class="anim-slide-up">
         <div class="modal-header">
             <span>Tüm Ayın Listesi</span>
-            </div>
+        </div>
         <div class="modal-toggle-container">
             <button class="modal-toggle" id="modalBtnBreakfast" onclick="renderFullList('breakfast')">Kahvaltı</button>
             <button class="modal-toggle" id="modalBtnDinner" onclick="renderFullList('dinner')">Akşam</button>
@@ -421,17 +476,60 @@
     let scrollTargetId = null;
     let currentUserStatus = { banned: false, restrictedUntil: null };
 
-    // Eski kullanıcılar için kritik tarih: 25 Kasım 2025 (Bundan önce açılan hesaplar doğrulamadan muaf)
+    // --- YENİ VERİ: Üniversite ve Bölümler ---
+    const uniData = {
+        "SAÜ": [
+            "Alman Dili ve Edebiyatı", "Almanca Mütercim ve Tercümanlık", "Bilgisayar Mühendisliği", "Bilişim Sistemleri Mühendisliği", 
+            "Bilişim Sistemleri ve Teknolojileri", "Biyoloji", "Coğrafya", "Çalışma Ekonomisi ve Endüstri İlişkileri", "Çevre Mühendisliği", 
+            "Diş Hekimliği", "Ebelik", "Ekonometri", "Elektrik-Elektronik Mühendisliği", "Endüstri Mühendisliği", "Felsefe", 
+            "Fen Bilgisi Öğretmenliği", "Fizik", "Gazetecilik", "Gıda Mühendisliği", "Görsel İletişim Tasarımı", "Halkla İlişkiler ve Reklamcılık", 
+            "Hemşirelik", "Hukuk", "İktisat", "İlahiyat", "İlahiyat (M.T.O.K.)", "İlköğretim Matematik Öğretmenliği", "İngilizce Mütercim ve Tercümanlık", 
+            "İngilizce Öğretmenliği (İngilizce)", "İnsan Kaynakları Yönetimi", "İnşaat Mühendisliği", "İslam İktisadı ve Finans", "İşletme", 
+            "İşletme (İngilizce)", "Kimya", "Makine Mühendisliği", "Maliye", "Matematik", "Metalurji ve Malzeme Mühendisliği", 
+            "Metalurji ve Malzeme Mühendisliği (İngilizce)", "Mimarlık", "Okul Öncesi Öğretmenliği", "Özel Eğitim Öğretmenliği", "Psikoloji", 
+            "Radyo, Televizyon ve Sinema", "Rehberlik ve Psikolojik Danışmanlık", "Sağlık Yönetimi", "Sanat Tarihi", "Sınıf Öğretmenliği", 
+            "Siber Güvenlik Mühendisliği", "Siyaset Bilimi ve Kamu Yönetimi", "Sosyal Bilgiler Öğretmenliği", "Sosyal Hizmet", "Sosyoloji", 
+            "Tarih", "Tıp", "Türk Dili ve Edebiyatı", "Türkçe Öğretmenliği", "Uluslararası İlişkiler", "Uluslararası Ticaret ve Lojistik", 
+            "Veri Bilimi ve Analitiği", "Yazılım Mühendisliği (İngilizce)", "Yazılım Mühendisliği (İngilizce) (KKTC Uyruklu)", 
+            "Yeni Medya ve İletişim", "Yönetim Bilişim Sistemleri"
+        ],
+        "SUBÜ": [
+            "Bahçe Bitkileri", "Bilgisayar Mühendisliği", "Bilgisayar Mühendisliği (M.T.O.K.)", "Bitki Koruma", "Elektrik-Elektronik Mühendisliği", 
+            "Elektrik-Elektronik Mühendisliği (M.T.O.K.)", "Finans ve Bankacılık", "Fizyoterapi ve Rehabilitasyon", "Gastronomi ve Mutfak Sanatları", 
+            "Hemşirelik", "İnşaat Mühendisliği", "Makine Mühendisliği", "Makine Mühendisliği (M.T.O.K.)", "Mekatronik Mühendisliği", 
+            "Mekatronik Mühendisliği (KKTC Uyruklu)", "Mekatronik Mühendisliği (M.T.O.K.)", "Metalurji ve Malzeme Mühendisliği", 
+            "Peyzaj Mimarlığı", "Rekreasyon Yönetimi", "Sağlık Yönetimi", "Spor Yöneticiliği", "Tarla Bitkileri", "Turizm İşletmeciliği", 
+            "Turizm Rehberliği", "Uluslararası Ticaret ve Finansman", "Uluslararası Ticaret ve Lojistik"
+        ]
+    };
+
+    function updateDeptOptions(uniSelectId, deptSelectId) {
+        const uniSelect = document.getElementById(uniSelectId);
+        const deptSelect = document.getElementById(deptSelectId);
+        const selectedUni = uniSelect.value;
+        
+        deptSelect.innerHTML = '<option value="">Bölüm Seç</option>';
+        
+        if(selectedUni && uniData[selectedUni]) {
+            uniData[selectedUni].forEach(dept => {
+                const opt = document.createElement('option');
+                opt.value = dept;
+                opt.innerText = dept;
+                deptSelect.appendChild(opt);
+            });
+        } else {
+            deptSelect.innerHTML = '<option value="">Önce Üniversite Seçin</option>';
+        }
+    }
+
     const CHECK_VERIFICATION_DATE = new Date("2025-11-25T00:00:00").getTime();
 
     if(auth) {
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                // Eski kullanıcı mı?
                 const createdTime = new Date(user.metadata.creationTime).getTime();
                 const isLegacyUser = createdTime < CHECK_VERIFICATION_DATE;
 
-                // Eski kullanıcıysa VEYA e-postası onaylıysa içeri al
                 if (isLegacyUser || user.emailVerified) {
                     currentUser = user; 
                     await loadUserAvatar(user.uid); 
@@ -446,7 +544,6 @@
                     closeAuthModal(); 
                     listenForNotifications();
                 } else {
-                    // Yeni kullanıcı ve onaylamamış, çıkış yaptır.
                     currentUser = null;
                     currentUserAvatar = null;
                     currentUserStatus = { banned: false, restrictedUntil: null };
@@ -489,14 +586,12 @@
         }
     }
 
-    // --- MODAL YÖNETİMİ ---
     function closeAuthModal() {
         const modal = document.getElementById('authModal');
         const box = modal.querySelector('.auth-box');
         box.classList.remove('anim-zoom-in'); box.classList.add('anim-zoom-out');
         setTimeout(() => { modal.style.display = 'none'; box.classList.remove('anim-zoom-out'); box.classList.add('anim-zoom-in'); }, 250);
     }
-    
     function closeProfileModal() {
         const modal = document.getElementById('profileModal');
         const box = modal.querySelector('.auth-box');
@@ -525,7 +620,6 @@
         const modal = document.getElementById('fullListModal'); 
         const eyeIcon = document.getElementById('icon-eye'); 
         const eyeOffIcon = document.getElementById('icon-eye-off');
-        
         if (modal.style.display === 'flex') { 
             modal.classList.remove('anim-slide-up'); modal.classList.add('anim-slide-down');
             setTimeout(() => { 
@@ -540,7 +634,6 @@
         }
     }
 
-    // --- AUTH ---
     function openAuthModal() { if(currentUser) return; document.getElementById('authModal').style.display = 'flex'; switchAuthTab('login'); }
     function switchAuthTab(tab) {
         document.getElementById('authTabs').style.display = 'flex';
@@ -590,17 +683,11 @@
         auth.signInWithEmailAndPassword(email, pass)
             .then((userCredential) => {
                 const user = userCredential.user;
-                
-                // Tarih kontrolü (Legacy User Check)
                 const createdTime = new Date(user.metadata.creationTime).getTime();
                 const isLegacyUser = createdTime < CHECK_VERIFICATION_DATE;
-
                 if (!isLegacyUser && !user.emailVerified) {
-                    // Sadece yeni kullanıcıysa ve onaysızsa engelle
                     alert("Giriş başarısız! Yeni hesaplar için doğrulama şarttır. Lütfen e-posta kutunuzu kontrol edin.");
                     auth.signOut(); 
-                } else {
-                    // Eski kullanıcı veya onaylı kullanıcı -> Giriş başarılı (Listener yakalayacak)
                 }
             })
             .catch(e => alert("Giriş Hatası: " + e.message));
@@ -610,8 +697,10 @@
         const nick = document.getElementById('regNick').value.trim(); 
         const email = document.getElementById('regEmail').value.trim(); 
         const pass = document.getElementById('regPass').value;
+        const uni = document.getElementById('regUni').value;
+        const dept = document.getElementById('regDept').value;
         
-        if(!nick || !email || !pass) return alert("Tüm alanları doldurun.");
+        if(!nick || !email || !pass || !uni || !dept) return alert("Tüm alanları ve okul bilgilerinizi doldurun.");
         if(pass.length < 6) return alert("Şifre en az 6 karakter olmalı.");
         
         const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
@@ -622,43 +711,59 @@
             const snapshot = await db.collection('users').where('nickLower', '==', nickLower).get();
             if(!snapshot.empty) return alert("Bu nick alınmış.");
             
-            // Kullanıcı oluştur
             const userCred = await auth.createUserWithEmailAndPassword(email, pass);
             const user = userCred.user;
 
-            // Bilgileri kaydet
             await user.updateProfile({ displayName: nick });
             await db.collection('users').doc(user.uid).set({ 
                 nick: nick, 
                 nickLower: nickLower, 
                 email: email, 
+                university: uni,
+                department: dept,
                 photoBase64: selectedAvatarBase64 || null 
             });
 
-            // Link gönder
             const actionCodeSettings = {
                 url: 'https://freddiechill.github.io/kyk-yemek/',
-                handleCodeInApp: true
+                handleCodeInApp: false,
+                linkDomain: 'kyk-yemek-app.firebaseapp.com' 
             };
             await user.sendEmailVerification(actionCodeSettings);
 
             alert("Kayıt başarılı! Lütfen e-posta kutunuza gönderilen doğrulama linkine tıklayın.");
-            auth.signOut(); // Doğrulama yapmadan giriş yapılmasın
+            auth.signOut();
             closeAuthModal();
 
         } catch(e) { alert("Kayıt Hata: " + e.message); }
     }
 
     function openProfileModal() {
+        if(!currentUser) return;
         document.getElementById('profileModal').style.display = 'flex';
         document.getElementById('profileNick').value = currentUser.displayName;
         if(currentUserAvatar) document.getElementById('profileAvatarPreview').src = currentUserAvatar;
+        
+        // Mevcut uni ve bölüm bilgisini çek ve doldur
+        db.collection('users').doc(currentUser.uid).get().then(doc => {
+            if(doc.exists) {
+                const data = doc.data();
+                if(data.university) {
+                    document.getElementById('profileUni').value = data.university;
+                    updateDeptOptions('profileUni', 'profileDept'); // Bölüm listesini yükle
+                    if(data.department) document.getElementById('profileDept').value = data.department;
+                }
+            }
+        });
     }
     
     async function saveProfile() {
         const newNick = document.getElementById('profileNick').value.trim();
+        const uni = document.getElementById('profileUni').value;
+        const dept = document.getElementById('profileDept').value;
         const newNickLower = newNick.toLowerCase();
-        if(!newNick) return alert("Nick boş olamaz");
+        
+        if(!newNick || !uni || !dept) return alert("Nick, Üniversite ve Bölüm boş olamaz");
         const englishCharRegex = /^[a-zA-Z0-9_.]+$/;
         if (!englishCharRegex.test(newNick)) { return alert("Kullanıcı adı sadece İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir."); }
 
@@ -668,7 +773,7 @@
                 if(!snapshot.empty) return alert("Bu nick alınmış.");
             }
             await currentUser.updateProfile({ displayName: newNick });
-            let updateData = { nick: newNick, nickLower: newNickLower };
+            let updateData = { nick: newNick, nickLower: newNickLower, university: uni, department: dept };
             if(profileAvatarBase64) { updateData.photoBase64 = profileAvatarBase64; currentUserAvatar = profileAvatarBase64; }
             await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
             
@@ -683,23 +788,55 @@
     }
     function logoutUser() { auth.signOut(); closeProfileModal(); }
 
-    // --- ADMIN ---
+    // --- KULLANICI BİLGİ & ADMIN ---
     function handleUserClick(userId, userName, userPhoto) {
-        if (currentUser && currentUser.displayName === 'freddie' && userId !== currentUser.uid) {
-            selectedTargetUser = { id: userId, name: userName, photo: userPhoto };
-            document.getElementById('adminUserImg').src = userPhoto || '';
-            document.getElementById('adminUserName').innerText = userName;
-            db.collection('users').doc(userId).get().then(doc => {
+        // ARTIK HERKES TIKLAYIP GÖREBİLİR
+        selectedTargetUser = { id: userId, name: userName, photo: userPhoto };
+        document.getElementById('adminUserImg').src = userPhoto || '';
+        document.getElementById('adminUserName').innerText = userName;
+        document.getElementById('adminUserUni').innerText = 'Yükleniyor...';
+        document.getElementById('adminUserDept').innerText = 'Yükleniyor...';
+
+        // Kullanıcının bilgilerini çek
+        db.collection('users').doc(userId).get().then(doc => {
+            if(doc.exists) {
                 const d = doc.data();
-                const isBanned = d.isBanned || false;
-                const restricted = d.restrictedUntil ? d.restrictedUntil.toDate() > new Date() : false;
-                if (isBanned || restricted) { document.getElementById('btnLiftBan').style.display = 'flex'; document.getElementById('btnGroupRestrict').style.display = 'none'; } else { document.getElementById('btnLiftBan').style.display = 'none'; document.getElementById('btnGroupRestrict').style.display = 'flex'; }
-                loadBanHistory(userId);
-                document.getElementById('adminModal').style.display = 'flex';
-            });
-            hideDurationOptions();
-        }
+                
+                // ÜNİVERSİTE İSMİNİ UZUN HALİYLE GÖSTER
+                let uniDisplay = d.university || 'Belirtilmemiş';
+                if (uniDisplay === 'SAÜ') uniDisplay = 'Sakarya Üniversitesi';
+                if (uniDisplay === 'SUBÜ') uniDisplay = 'Sakarya Uygulamalı Bilimler Üniversitesi';
+                
+                document.getElementById('adminUserUni').innerText = uniDisplay;
+                document.getElementById('adminUserDept').innerText = d.department || 'Belirtilmemiş';
+
+                // EĞER ADMIN İSE BUTONLARI GÖSTER
+                const isAdmin = (currentUser && currentUser.displayName === 'freddie');
+                const toolsArea = document.getElementById('adminToolsArea');
+                
+                if (isAdmin) {
+                    toolsArea.style.display = 'block';
+                    const isBanned = d.isBanned || false;
+                    const restricted = d.restrictedUntil ? d.restrictedUntil.toDate() > new Date() : false;
+                    
+                    if (isBanned || restricted) { 
+                        document.getElementById('btnLiftBan').style.display = 'flex'; 
+                        document.getElementById('btnGroupRestrict').style.display = 'none'; 
+                    } else { 
+                        document.getElementById('btnLiftBan').style.display = 'none'; 
+                        document.getElementById('btnGroupRestrict').style.display = 'flex'; 
+                    }
+                    loadBanHistory(userId);
+                } else {
+                    toolsArea.style.display = 'none';
+                }
+            }
+        });
+
+        hideDurationOptions();
+        document.getElementById('adminModal').style.display = 'flex';
     }
+
     function loadBanHistory(userId) {
         const list = document.getElementById('adminBanHistory'); list.innerHTML = 'Yükleniyor...';
         db.collection('users').doc(userId).collection('banHistory').orderBy('date', 'desc').get().then(snap => {
@@ -893,6 +1030,17 @@
         let replyBtn = ''; if(currentUser) { replyBtn = `<div class="reply-trigger" onclick="toggleReplyBox('${c.id}')">YANITLA</div>`; }
         let replyClass = isReply ? 'reply-comment' : ''; let replyIcon = isReply ? '<svg class="reply-icon" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/></svg>' : '';
         let mentionHtml = c.replyTo ? `<span class="mention-text">@${c.replyTo}</span>` : ''; let timeString = timeAgo(c.createdAt); let hasDelete = (deleteBtn !== '') ? 'has-delete' : '';
+        
+        // YENİ EKLENEN KISIM: Avatar ve DIV click olayı
+        const clickAttr = `onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto || ''}')"`;
+        
+        // Avatar HTML'i yeniden yapılandırıyoruz (Click eklemek için)
+        if(c.userPhoto) {
+             avatarHtml = `<img src="${c.userPhoto}" class="c-avatar" ${clickAttr}>`;
+        } else {
+             avatarHtml = `<div class="c-avatar" ${clickAttr} style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;cursor:pointer;">${c.userName.charAt(0).toUpperCase()}</div>`;
+        }
+
         return `<div class="single-comment ${replyClass} ${hasDelete}" id="comment-${c.id}">${replyIcon}<div class="time-ago">${timeString}</div>${deleteBtn}<div class="c-top">${avatarHtml}<div class="c-content"><div class="c-user" onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto}')">${c.userName}${badgeHtml}</div><div class="c-text">${mentionHtml}${c.text}</div></div></div><div class="c-actions"><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="clike-${c.id}">${c.likes || 0}</span></div><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike', '${c.userId}')"><svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="cdislike-${c.id}">${c.dislikes || 0}</span></div>${replyBtn}</div><div id="reply-box-${c.id}" class="reply-input-wrapper"><input type="text" id="reply-input-${c.id}" class="reply-input" placeholder="Yanıt yaz..."><button class="reply-send-btn" onclick="postReply('${c.id}', '${c.docId}', '${c.userName}', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div></div>`;
     }
 
