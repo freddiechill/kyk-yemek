@@ -445,7 +445,7 @@
         <div class="auth-box anim-zoom-in">
             <div class="notif-header">Yorum Geçmişi</div>
             <div class="notif-list" id="historyList">Yükleniyor...</div>
-            <span class="auth-close" onclick="document.getElementById('historyModal').style.display='none'">Kapat</span>
+            <span class="auth-close" onclick="closeHistoryModal()">Kapat</span>
         </div>
     </div>
 
@@ -461,7 +461,7 @@
         <div class="auth-box anim-zoom-in">
             <div class="notif-header">En Çok Beğenilenler</div>
             <div class="notif-list" id="leaderboardList">Yükleniyor...</div>
-            <span class="auth-close" onclick="document.getElementById('leaderboardModal').style.display='none'">Kapat</span>
+            <span class="auth-close" onclick="closeLeaderboardModal()">Kapat</span>
         </div>
     </div>
     
@@ -574,6 +574,7 @@
     let scrollTargetId = null;
     let currentUserStatus = { banned: false, restrictedUntil: null };
     let selectedTargetUser = null; 
+    let notificationUnsubscribe = null; // Bildirim dinleyicisini tutan değişken
 
     const uniData = {
         "SAÜ": [
@@ -632,11 +633,20 @@
                     });
                     updateLoginButton(); 
                     closeAuthModal(); 
-                    listenForNotifications(); // Bildirimleri dinle
+                    listenForNotifications(); // YENİ KULLANICI İÇİN DİNLEMEYE BAŞLA
                 } else {
                     currentUser = null; currentUserAvatar = null; currentUserStatus = { banned: false, restrictedUntil: null }; updateLoginButton();
                 }
             } else { 
+                // ÇIKIŞ YAPILDIĞINDA
+                if (notificationUnsubscribe) {
+                    notificationUnsubscribe(); // ESKİ DİNLEYİCİYİ DURDUR
+                    notificationUnsubscribe = null;
+                }
+                // LİSTEYİ TEMİZLE (KARIŞIKLIĞI ÖNLEMEK İÇİN)
+                document.getElementById('notificationList').innerHTML = '';
+                document.getElementById('notifBadge').style.display = 'none';
+
                 currentUser = null; currentUserAvatar = null; currentUserStatus = { banned: false, restrictedUntil: null }; updateLoginButton(); 
             }
         });
@@ -684,6 +694,31 @@
     function closeAdminModal() { const m = document.getElementById('adminModal'); const b = m.querySelector('.auth-box'); b.classList.remove('anim-zoom-in'); b.classList.add('anim-zoom-out'); setTimeout(() => { m.style.display = 'none'; b.classList.remove('anim-zoom-out'); b.classList.add('anim-zoom-in'); }, 250); }
     function closeComments() { const m = document.getElementById('commentModal'); m.classList.remove('anim-slide-up'); m.classList.add('anim-slide-down'); setTimeout(() => { m.style.display = 'none'; m.classList.remove('anim-slide-down'); m.classList.add('anim-slide-up'); }, 350); }
     
+    // YENİ EKLENEN ANIMASYONLU KAPATMA FONKSİYONLARI
+    function closeLeaderboardModal() {
+        const m = document.getElementById('leaderboardModal');
+        const b = m.querySelector('.auth-box');
+        b.classList.remove('anim-zoom-in');
+        b.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            m.style.display = 'none';
+            b.classList.remove('anim-zoom-out');
+            b.classList.add('anim-zoom-in');
+        }, 250);
+    }
+
+    function closeHistoryModal() {
+        const m = document.getElementById('historyModal');
+        const b = m.querySelector('.auth-box');
+        b.classList.remove('anim-zoom-in');
+        b.classList.add('anim-zoom-out');
+        setTimeout(() => {
+            m.style.display = 'none';
+            b.classList.remove('anim-zoom-out');
+            b.classList.add('anim-zoom-in');
+        }, 250);
+    }
+
     function toggleModal() {
         const modal = document.getElementById('fullListModal'); const eyeIcon = document.getElementById('icon-eye'); const eyeOffIcon = document.getElementById('icon-eye-off');
         if (modal.style.display === 'flex') { 
@@ -694,11 +729,17 @@
 
     // --- BİLDİRİM SİSTEMİ (DÜZELTİLDİ) ---
     function listenForNotifications() {
+        // Varsa eski dinleyiciyi kapat
+        if (notificationUnsubscribe) {
+            notificationUnsubscribe();
+            notificationUnsubscribe = null;
+        }
+
         if(!currentUser) return;
-        // orderBy SİLİNDİ (INDEX HATASINI ÖNLEMEK İÇİN)
-        // SIRALAMAYI JAVASCRIPT İLE YAPACAĞIZ
-        db.collection('notifications').where('receiverId', '==', currentUser.uid)
-          .limit(50) // Son 50 bildirimi çek
+
+        // Yeni dinleyici başlat
+        notificationUnsubscribe = db.collection('notifications').where('receiverId', '==', currentUser.uid)
+          .limit(50)
           .onSnapshot(snap => {
             const list = document.getElementById('notificationList');
             const badge = document.getElementById('notifBadge');
@@ -710,12 +751,12 @@
                 return;
             }
 
-            // Gelen veriyi diziye çevirip TARİHE GÖRE TERS SIRALA (YENİDEN ESKİYE)
             let notifs = [];
             snap.forEach(doc => {
                 notifs.push({ id: doc.id, ...doc.data() });
             });
             
+            // JavaScript ile sıralama (Index hatasını önlemek için)
             notifs.sort((a, b) => {
                 const timeA = a.createdAt ? a.createdAt.seconds : 0;
                 const timeB = b.createdAt ? b.createdAt.seconds : 0;
@@ -750,12 +791,12 @@
     }
 
     function sendNotification(receiverId, type, docId, commentId) {
-        if (!currentUser || receiverId === currentUser.uid) return; // Kendine bildirim gönderme
+        if (!currentUser || receiverId === currentUser.uid) return; 
         db.collection('notifications').add({
             receiverId: receiverId,
             senderId: currentUser.uid,
             senderName: currentUser.displayName,
-            type: type, // 'like', 'reply', 'profile_like'
+            type: type, 
             docId: docId || null,
             commentId: commentId || null,
             read: false,
