@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek</title>
+    <title>KYK Yemek - Aralık Menüsü</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -275,7 +275,23 @@
         .auth-submit:active { transform: scale(0.95); }
         .auth-close { margin-top: 15px; color: #888; cursor: pointer; font-size: 0.9rem; display: block; }
 
-        .avatar-upload { width: 90px; height: 90px; border-radius: 50%; background: #333; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; border: 2px dashed #555; position: relative; }
+        .avatar-upload { 
+            width: 90px; 
+            height: 90px;
+            min-width: 90px;
+            min-height: 90px;
+            border-radius: 50%; 
+            background: #333; 
+            margin: 0 auto 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            overflow: hidden; 
+            border: 2px dashed #555; 
+            position: relative; 
+            flex-shrink: 0;
+        }
         .avatar-upload img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .avatar-upload span { font-size: 0.8rem; color: #888; }
         #fileInput, #profileFileInput { display: none; }
@@ -553,6 +569,8 @@
     </div>
 
 <script>
+    const CURRENT_MONTH_TAG = "dec"; // Aralık ayı etiketi. Gelecek ay burayı 'jan' yapman yeterli.
+
     const firebaseConfig = {
         apiKey: "AIzaSyDhYvJ6v8F9e7PsdkY7VXGjQW2iTUbVHQY",
         authDomain: "kyk-yemek-app.firebaseapp.com",
@@ -574,7 +592,7 @@
     let scrollTargetId = null;
     let currentUserStatus = { banned: false, restrictedUntil: null };
     let selectedTargetUser = null; 
-    let notificationUnsubscribe = null; // Bildirim dinleyicisini tutan değişken
+    let notificationUnsubscribe = null;
 
     const uniData = {
         "SAÜ": [
@@ -633,17 +651,15 @@
                     });
                     updateLoginButton(); 
                     closeAuthModal(); 
-                    listenForNotifications(); // YENİ KULLANICI İÇİN DİNLEMEYE BAŞLA
+                    listenForNotifications();
                 } else {
                     currentUser = null; currentUserAvatar = null; currentUserStatus = { banned: false, restrictedUntil: null }; updateLoginButton();
                 }
             } else { 
-                // ÇIKIŞ YAPILDIĞINDA
                 if (notificationUnsubscribe) {
-                    notificationUnsubscribe(); // ESKİ DİNLEYİCİYİ DURDUR
+                    notificationUnsubscribe();
                     notificationUnsubscribe = null;
                 }
-                // LİSTEYİ TEMİZLE (KARIŞIKLIĞI ÖNLEMEK İÇİN)
                 document.getElementById('notificationList').innerHTML = '';
                 document.getElementById('notifBadge').style.display = 'none';
 
@@ -694,7 +710,6 @@
     function closeAdminModal() { const m = document.getElementById('adminModal'); const b = m.querySelector('.auth-box'); b.classList.remove('anim-zoom-in'); b.classList.add('anim-zoom-out'); setTimeout(() => { m.style.display = 'none'; b.classList.remove('anim-zoom-out'); b.classList.add('anim-zoom-in'); }, 250); }
     function closeComments() { const m = document.getElementById('commentModal'); m.classList.remove('anim-slide-up'); m.classList.add('anim-slide-down'); setTimeout(() => { m.style.display = 'none'; m.classList.remove('anim-slide-down'); m.classList.add('anim-slide-up'); }, 350); }
     
-    // YENİ EKLENEN ANIMASYONLU KAPATMA FONKSİYONLARI
     function closeLeaderboardModal() {
         const m = document.getElementById('leaderboardModal');
         const b = m.querySelector('.auth-box');
@@ -727,9 +742,8 @@
         } else { modal.style.display = 'flex'; eyeIcon.style.display = 'none'; eyeOffIcon.style.display = 'block'; renderFullList(currentMeal); }
     }
 
-    // --- BİLDİRİM SİSTEMİ (DÜZELTİLDİ) ---
+    // --- BİLDİRİM SİSTEMİ ---
     function listenForNotifications() {
-        // Varsa eski dinleyiciyi kapat
         if (notificationUnsubscribe) {
             notificationUnsubscribe();
             notificationUnsubscribe = null;
@@ -737,7 +751,6 @@
 
         if(!currentUser) return;
 
-        // Yeni dinleyici başlat
         notificationUnsubscribe = db.collection('notifications').where('receiverId', '==', currentUser.uid)
           .limit(50)
           .onSnapshot(snap => {
@@ -756,7 +769,6 @@
                 notifs.push({ id: doc.id, ...doc.data() });
             });
             
-            // JavaScript ile sıralama (Index hatasını önlemek için)
             notifs.sort((a, b) => {
                 const timeA = a.createdAt ? a.createdAt.seconds : 0;
                 const timeB = b.createdAt ? b.createdAt.seconds : 0;
@@ -1069,49 +1081,52 @@
 
     // --- DATA & RENDER & CAROUSEL ---
     const menuData = {
-        1: { date: "1 Kasım 2025 Cumartesi", breakfast: ["Menemen", "Sade Poğaça", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorba", "Tavuk Külbastı Fırın Sebze / Taze Fasulye", "Bulgur Pilavı", "Bahçe Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        2: { date: "2 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Ezogelin Çorba", "Kuru Fasulye Yemeği / Karışık Sebze Kızartma", "Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
-        3: { date: "3 Kasım 2025 Pazartesi", breakfast: ["Sucuklu Yumurta", "Kakaolu Kek", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Düğün Çorba", "Şinitzel + Elma Dilim Patates / Karışık Dolma", "Soslu Spagetti", "Havuç Tarator", "500 ml Su", "Çeyrek Ekmek"] },
-        4: { date: "4 Kasım 2025 Salı", breakfast: ["Karışık Kızartma", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Yüksük Çorba", "Çiftlik Köfte / Karışık Sebze Graten", "Tel Şehriyeli Pirinç Pilavı", "Kakaolu Puding", "500 ml Su", "Çeyrek Ekmek"] },
-        5: { date: "5 Kasım 2025 Çarşamba", breakfast: ["Sade Omlet", "Simit", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Tel Şehriye Çorba", "Tavuk Fajita / Bezelye Yemeği", "Sebzeli Bulgur Pilavı", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        6: { date: "6 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl (Salçalı/Kızartma)", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sebze Çorba / Ezogelin Çorba", "Izgara Köfte + Fırın Patates / Karnabahar Kızartması", "Peynirli Boru Makarna", "Pembe Sultan", "500 ml Su", "Çeyrek Ekmek"] },
-        7: { date: "7 Kasım 2025 Cuma", breakfast: ["Peynirli Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Yoğurt Çorba", "Nohut Yemeği / Patates Yemeği", "Pirinç Pilavı", "Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] },
-        8: { date: "8 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Domates Çorba", "Çiftlik Kebabı / Mücver", "Bulgur Pilavı", "Ege Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        9: { date: "9 Kasım 2025 Pazar", breakfast: ["Kaşarlı Omlet", "Dere Otlu Poğaça", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mandalina", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Mısır Çorba", "Köri Soslu Tavuk + Patates / Barbunya Yemeği", "Mantı", "Islak Kek", "500 ml Su", "Çeyrek Ekmek"] },
-        10: { date: "10 Kasım 2025 Pazartesi", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Tavuk Çorba", "Patlıcan Musakka / Ispanak Yemeği", "Garnitürlü Pirinç Pilavı", "Haydari", "500 ml Su", "Çeyrek Ekmek"] },
-        11: { date: "11 Kasım 2025 Salı", breakfast: ["Patatesli Yumurta", "Sade Açma", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Yayla Çorba", "Şinitzel + Fırın Patates / Taze Fasulye", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        12: { date: "12 Kasım 2025 Çarşamba", breakfast: ["Sade Omlet", "Peynirli Börek", "Krem Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Tel Şehriye Çorba", "Izgara Köfte Sandviç / İmam Bayıldı", "Soslu Spagetti", "Ayran", "500 ml Su", "Çeyrek Ekmek"] },
-        13: { date: "13 Kasım 2025 Perşembe", breakfast: ["Menemen", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Düğün Çorba / Ezogelin Çorba", "Tavuk Şiş Fırın Sebze / Mantar Sote", "Pirinç Pilavı", "Kemalpaşa Tatlısı", "500 ml Su", "Çeyrek Ekmek"] },
-        14: { date: "14 Kasım 2025 Cuma", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba / Yüksük Çorba", "Adana Kebap Lavaş / Patates Yemeği", "Sebzeli Bulgur Pilavı", "Yoğurtlu Köz Patlıcan", "500 ml Su", "Çeyrek Ekmek"] },
-        15: { date: "15 Kasım 2025 Cumartesi", breakfast: ["Sucuklu Yumurta", "Patates Kroket", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Domates Çorba", "Tavuk Fajita / Lahana Dolma", "Köri Soslu Kalem Makarna", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
-        16: { date: "16 Kasım 2025 Pazar", breakfast: ["Zeytinli/Peynirli Açma", "Kaşarlı Omlet", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba / Tel Şehriye Çorba", "Kuru Fasulye / Ratatuy", "Şehriyeli Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
-        17: { date: "17 Kasım 2025 Pazartesi", breakfast: ["Haşlanmış Yumurta", "Sade Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba / Düğün Çorba", "Çıtır Tavuk + Patates / Taze Fasulye", "Domatesli Kelebek Makarna", "Yoğurtlu Biber Kızartma", "500 ml Su", "Çeyrek Ekmek"] },
-        18: { date: "18 Kasım 2025 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Mercimek Çorba", "Et Sote + Patates Püresi / Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
-        19: { date: "19 Kasım 2025 Çarşamba", breakfast: ["Menemen", "Sigara Böreği", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Tavuk Tantuni + Patates / Kaşarlı Mantar", "Nohutlu Pirinç Pilavı", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        20: { date: "20 Kasım 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mısır Çorba / Düğün Çorba", "İzmir Köfte / Bezelye Yemeği", "Bulgur Pilavı", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
-        21: { date: "21 Kasım 2025 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal-Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mercimek Çorba / Tel Şehriye Çorba", "Tavuk Köfte + Patates / Karışık Fırın Sebze", "Soslu Mantı", "Şekerpare", "500 ml Su", "Çeyrek Ekmek"] },
-        22: { date: "22 Kasım 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Ezogelin Çorba", "Nohut Yemeği / İmam Bayıldı", "Pirinç Pilavı", "Ege Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
-        23: { date: "23 Kasım 2025 Pazar", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Çeşmi Nigar Çorba / Yayla Çorba", "Çökertme Kebabı / Biber Dolma", "Salçalı Spagetti", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
-        24: { date: "24 Kasım 2025 Pazartesi", breakfast: ["Patatesli Börek", "Haşlanmış Yumurta", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Toyga Çorba / Mercimek Çorba", "Patlıcan Musakka / Barbunya Yemeği", "Pirinç Pilavı", "Çikolatalı Yaş Pasta", "500 ml Su", "Çeyrek Ekmek"] },
-        25: { date: "25 Kasım 2025 Salı", breakfast: ["Sucuklu Yumurta", "Sade Açma", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Şehriye Çorba / Düğün Çorba", "Tavuk Kalamar + Patates / Karışık Kızartma", "Soslu Mantı", "Cacık", "500 ml Su", "Çeyrek Ekmek"] },
-        26: { date: "26 Kasım 2025 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Krem Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sebze Çorba / Çeşmi Nigar Çorba", "Et Tantuni + Patates / Taze Fasulye", "Sebzeli Bulgur Pilavı", "Şakşuka", "500 ml Su", "Çeyrek Ekmek"] },
-        27: { date: "27 Kasım 2025 Perşembe", breakfast: ["Peynirli Omlet", "Simit", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba / Yoğurt Çorba", "Fırında Uskumru / Karışık Dolma", "İrmik Helvası", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        28: { date: "28 Kasım 2025 Cuma", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba / Yüksük Çorba", "Kaşarlı Köfte / Karnabahar Kızartması", "Salçalı Burgu Makarna", "Portakal", "500 ml Su", "Çeyrek Ekmek"] },
-        29: { date: "29 Kasım 2025 Cumartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba / Mercimek Çorba", "Tavuk Çökertme / Kabak Mücver", "Bulgur Pilavı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
-        30: { date: "30 Kasım 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Domates Çorba / Tavuk Çorba", "Kuru Fasulye / Patates Yemeği", "Pirinç Pilavı", "Haşhaşlı Revani", "Turşu", "500 ml Su", "Çeyrek Ekmek"] }
+        1: { date: "1 Aralık 2025 Pazartesi", breakfast: ["Kaşarlı Omlet", "Kakaolu Kek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Yayla Çorba", "Tavuk Şiş+Fırın Sebze/Yeşil Mercimek Yemeği", "Şehriyeli Bulgur Pilavı", "Cacık", "500 ml Su", "Çeyrek Ekmek"] },
+        2: { date: "2 Aralık 2025 Salı", breakfast: ["Zeytinli/Peynirli Açma", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Bal+Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba/Çeşmi Nigar Çorba", "Izgara Köfte+Sandviç Ekmeği+Söğüş Sebze/Karnabahar Kızartma", "Domatesli Spagetti", "Sütlaç", "500 ml Su", "Çeyrek Ekmek"] },
+        3: { date: "3 Aralık 2025 Çarşamba", breakfast: ["Sucuklu Yumurta", "Peynirli Poğaça", "Labne Peynir", "Siyah/Yeşil Zeytin", "Mandalina", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Mısır Çorba", "Tavuk Tantuni+Lavaş/Taze Fasulye Yemeği", "Sebzeli Bulgur Pilavı", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        4: { date: "4 Aralık 2025 Perşembe", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tel Şehriye Çorba/Tarhana Çorba", "Orman Kebabı/Ispanak Yemeği", "Pirinç Pilavı", "Pembe Sultan", "500 ml Su", "Çeyrek Ekmek"] },
+        5: { date: "5 Aralık 2025 Cuma", breakfast: ["Menemen", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Mantar Çorba/Kırmızı Mercimek Çorba", "Beşamel Soslu Tavuk/Mücver", "Soslu Mantı", "Kaşık Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        6: { date: "6 Aralık 2025 Cumartesi", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kavurması", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba/Domates Çorba", "Nohut Yemeği/İmam Bayıldı", "Tel Şehriyeli Pirinç Pilavı", "Cevizli Baklava", "500 ml Su", "Çeyrek Ekmek"] },
+        7: { date: "7 Aralık 2025 Pazar", breakfast: ["Peynirli Omlet", "Çikolatalı Milföy Börek", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Yüksük Çorba", "Tavuk Fajita/Bezelye Yemeği", "Sebzeli Bulgur Pilavı", "Haydari", "500 ml Su", "Çeyrek Ekmek"] },
+        8: { date: "8 Aralık 2025 Pazartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Sebze Çorba", "Et Tantuni+Lavaş/Pırasa Yemeği", "Arpa Şehriyeli Pirinç Pilavı", "Revani", "500 ml Su", "Çeyrek Ekmek"] },
+        9: { date: "9 Aralık 2025 Salı", breakfast: ["Sade Omlet", "Dere Otlu Poğaça", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Yayla Çorba", "Tavuk Kalamar+Fırında Patates/Karışık Kızartma", "Soslu Mantı", "Akdeniz Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        10: { date: "10 Aralık 2025 Çarşamba", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yoğurt Çorba/Domates Çorba", "Adana Kebap+Lavaş+Domates+Biber/İmam Bayıldı", "Sebzeli Bulgur Pilavı", "Kabak Tatlısı", "500 ml Su", "Çeyrek Ekmek"] },
+        11: { date: "11 Aralık 2025 Perşembe", breakfast: ["Patatesli Yumurta", "Simit", "Krem Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Düğün Çorba", "Tavuk Çökertme/Kabak Mücver", "Lor Peynirli Burgu Makarna", "Çiğ Köfte", "500 ml Su", "Çeyrek Ekmek"] },
+        12: { date: "12 Aralık 2025 Cuma", breakfast: ["Peynirli Omlet", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Tel Şehriye Çorba", "Kuru Fasulye Yemeği/Patates Yemeği", "Garnitürlü Pirinç Pilavı", "Gavurdağı Salata", "Yoğurt", "500 ml Su", "Çeyrek Ekmek"] },
+        13: { date: "13 Aralık 2025 Cumartesi", breakfast: ["Sucuklu Yumurta", "Zeytinli/Peynirli Açma", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yoğurt Çorba/Tarhana Çorba", "İzmir Köfte/Biber Dolma", "Erişte", "Babagannuş", "500 ml Su", "Çeyrek Ekmek"] },
+        14: { date: "14 Aralık 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Sebze Çorba", "Çıtır Tavuk+Patates Püresi/Karışık Sebze Graten", "Tel Şehriyeli Pirinç Pilavı", "Islak Kek", "500 ml Su", "Çeyrek Ekmek"] },
+        15: { date: "15 Aralık 2025 Pazartesi", breakfast: ["Kaşarlı Omlet", "Sade Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal+Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sarı Mercimek Çorba/Tutmaç Çorba", "Çökertme Kebabı/Taze Fasulye Yemeği", "Domatesli Bulgur Pilavı", "Muz", "500 ml Su", "Çeyrek Ekmek"] },
+        16: { date: "16 Aralık 2025 Salı", breakfast: ["Karışık Kızartma", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Sebze Çorba", "Tavuk Külbastı+Fırında Patates/Ispanak Graten", "Arpa Şehriyeli Pirinç Pilavı", "Aysberg Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        17: { date: "17 Aralık 2025 Çarşamba", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Domates Çorba", "Hamburger/Karışık Dolma", "Soslu Mantı", "Kısır", "500 ml Su", "Çeyrek Ekmek"] },
+        18: { date: "18 Aralık 2025 Perşembe", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)/Patates Kroket", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Portakal", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Sarı Mercimek Çorba/Tel Şehriye Çorba", "Tavuk Tantuni+Lavaş/Mantar Graten", "Bahar Pilavı", "Supangle", "500 ml Su", "Çeyrek Ekmek"] },
+        19: { date: "19 Aralık 2025 Cuma", breakfast: ["Peynirli Omlet", "Sade Kek", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Yayla Çorba/Kırmızı Mercimek Çorba", "Orman Kebap/Karışık Sebze Graten", "Salçalı Bulgur Pilavı", "Çoban Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        20: { date: "20 Aralık 2025 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Mısır Çorba", "Çıtır Tavuk+Fırında Elma Dilim Patates/Biber Dolma", "Soslu Mantı", "Çiğ Köfte", "500 ml Su", "Çeyrek Ekmek"] },
+        21: { date: "21 Aralık 2025 Pazar", breakfast: ["Menemen", "Simit", "Labne Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tarhana Çorba/Tavuk Çorba", "Nohut Yemeği/Karışık Kızartma", "Arpa Şehriyeli Pirinç Pilavı", "Cevizli Kadayıf", "500 ml Su", "Çeyrek Ekmek"] },
+        22: { date: "22 Aralık 2025 Pazartesi", breakfast: ["Zeytinli/Peynirli Açma", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Bal+Tereyağ", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Yayla Çorba", "Tavuk Baby+Fırında Elma Dilim Patates/Lahana Dolma", "Spagetti Napoliten", "Mevsim Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        23: { date: "23 Aralık 2025 Salı", breakfast: ["Sucuklu Yumurta", "Dere Otlu Poğaça", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tavuk Çorba/Kırmızı Mercimek Çorba", "Et Tantuni+Lavaş/Taze Fasulye Yemeği", "Arpa Şehriyeli Pirinç Pilavı", "Ayran", "500 ml Su", "Çeyrek Ekmek"] },
+        24: { date: "24 Aralık 2025 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tel Şehriye Çorba/Sarı Mercimek Çorba", "Tavuk Köfte+Elma Dilim Patates/Bezelye Yemeği", "Bulgur Pilavı", "Browni", "500 ml Su", "Çeyrek Ekmek"] },
+        25: { date: "25 Aralık 2025 Perşembe", breakfast: ["Kaşarlı Omlet", "Sade Açma", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Helva", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Domates Çorba", "Çiftlik Köfte/Barbunya Yemeği", "Tel Şehriyeli Pirinç Pilavı", "Kuru Cacık", "500 ml Su", "Çeyrek Ekmek"] },
+        26: { date: "26 Aralık 2025 Cuma", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Labne Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Mısır Çorba", "Çıtır Tavuk+Fırında Elma Dilim Patates/Kuru Patlıcan Dolma", "Burgu Makarna", "Karışık Salata", "500 ml Su", "Çeyrek Ekmek"] },
+        27: { date: "27 Aralık 2025 Cumartesi", breakfast: ["Peynirli Omlet", "Simit", "Kaşar Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Tel Şehriye Çorba/Tarhana Çorba", "Kuru Fasulye Yemeği/Karışık Sebze Graten", "Pirinç Pilavı", "Kemalpaşa", "Karışık Turşu", "500 ml Su", "Çeyrek Ekmek"] },
+        28: { date: "28 Aralık 2025 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Tavuk Çorba", "Izgara Köfte+Domates+Biber/Patates Yemeği", "Bulgur Pilavı", "Ayran", "500 ml Su", "Çeyrek Ekmek"] },
+        29: { date: "29 Aralık 2025 Pazartesi", breakfast: ["Sade Omlet", "Çikolatalı Milföy Börek", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Muz", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Yayla Çorba", "Tavuk Şinitzel+Elma Dilim Patates+Mevsim Salata/Karnabahar Kızartması", "Soslu Penne Makarna", "Trileçe", "500 ml Su", "Çeyrek Ekmek"] },
+        30: { date: "30 Aralık 2025 Salı", breakfast: ["Peynirli Börek", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Kırmızı Mercimek Çorba/Tavuk Çorba", "Çökertme Kebabı/Taze Fasulye Yemeği", "Tel Şehriyeli Pirinç Pilavı", "Çiğ Köfte", "500 ml Su", "Çeyrek Ekmek"] },
+        31: { date: "31 Aralık 2025 Çarşamba", breakfast: ["Patatesli Yumurta", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş", "500 ml Su", "Çeyrek Ekmek"], dinner: ["Ezogelin Çorba/Soğan Çorba", "Fırında Uskumru+Sebze/Lahana Dolması", "İrmik Helvası", "Yeşil Salata", "500 ml Su", "Çeyrek Ekmek"] }
     };
 
     let currentMeal = 'dinner', currentDayIndex = new Date().getDate(), cardPositions = [0, 1, 2, 3, 4];
     const cards = [document.getElementById('c0'), document.getElementById('c1'), document.getElementById('c2'), document.getElementById('c3'), document.getElementById('c4')];
 
     document.addEventListener('DOMContentLoaded', () => {
-        const today = new Date(); if(today.getMonth() !== 10 || currentDayIndex > 30) currentDayIndex = 1;
+        const today = new Date(); 
+        // Aralık ayında değilsek 1. güne eşitle (Test amaçlı)
+        if(today.getMonth() !== 11 || currentDayIndex > 31) currentDayIndex = 1; 
         updateTheme(); renderAllCards(currentDayIndex); applyClasses();
         const eyeIcon = document.getElementById('icon-eye'), eyeOffIcon = document.getElementById('icon-eye-off');
         if(eyeIcon && eyeOffIcon) { eyeIcon.style.display = 'block'; eyeOffIcon.style.display = 'none'; }
     });
 
-    function getLoopedIndex(idx) { let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; }
+    function getLoopedIndex(idx) { let val = idx; while(val<1) val+=31; while(val>31) val-=31; return val; }
     function renderAllCards(centerDateIdx) {
         for (let i = 0; i < 5; i++) {
             const domIndex = cardPositions[i]; const dateOffset = i - 2; const targetDateIdx = getLoopedIndex(centerDateIdx + dateOffset); const card = cards[domIndex];
@@ -1141,7 +1156,7 @@
         btnDinner.className = 'modal-toggle';
         if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); 
         else btnDinner.classList.add('active-red');
-        for (let i = 1; i <= 30; i++) { 
+        for (let i = 1; i <= 31; i++) { 
             const dayData = menuData[i]; 
             if (dayData) { 
                 const div = document.createElement('div'); 
@@ -1152,13 +1167,13 @@
         }
     }
 
-    function fetchStats(dayIdx) { if(!db) return; const docId = `${currentMeal}_nov_${dayIdx}`; db.collection('daily_stats').doc(docId).onSnapshot(doc => { if(doc.exists) { const data = doc.data(); const likeEl = document.getElementById(`like-count-${dayIdx}`); const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`); const commentEl = document.getElementById(`comment-count-${dayIdx}`); if(likeEl) likeEl.innerText = data.likes || 0; if(dislikeEl) dislikeEl.innerText = data.dislikes || 0; if(commentEl) commentEl.innerText = data.commentCount || 0; if(currentUser && data.votes && data.votes[currentUser.uid]) { if(data.votes[currentUser.uid] === 'like') { document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked'); document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked'); } else { document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked'); document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked'); } } } }); db.collection('comments').where('docId', '==', docId).onSnapshot(snap => { const count = snap.size; const el = document.getElementById(`comment-count-${dayIdx}`); if(el) el.innerText = count; db.collection('daily_stats').doc(docId).set({ commentCount: count }, { merge: true }); }); }
-    function handleVote(dayIdx, type) { if(!currentUser) return alert("Lütfen giriş yapın."); if(!checkPermission()) return; const eventTarget = event.currentTarget; eventTarget.classList.add('anim-pop'); setTimeout(() => eventTarget.classList.remove('anim-pop'), 300); const ref = db.collection('daily_stats').doc(`${currentMeal}_nov_${dayIdx}`); db.runTransaction(async (t) => { const doc = await t.get(ref); if(!doc.exists) { t.set(ref, { likes: 0, dislikes: 0, commentCount: 0, votes: {} }); } const data = doc.data() || { likes: 0, dislikes: 0, commentCount: 0, votes: {} }; const votes = data.votes || {}; const current = votes[currentUser.uid]; let likes = data.likes || 0; let dislikes = data.dislikes || 0; if(current === type) { if(type === 'like') likes--; else dislikes--; delete votes[currentUser.uid]; } else { if(current === 'like') likes--; if(current === 'dislike') dislikes--; if(type === 'like') likes++; else dislikes++; votes[currentUser.uid] = type; } t.update(ref, { likes, dislikes, votes }); }); }
+    function fetchStats(dayIdx) { if(!db) return; const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${dayIdx}`; db.collection('daily_stats').doc(docId).onSnapshot(doc => { if(doc.exists) { const data = doc.data(); const likeEl = document.getElementById(`like-count-${dayIdx}`); const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`); const commentEl = document.getElementById(`comment-count-${dayIdx}`); if(likeEl) likeEl.innerText = data.likes || 0; if(dislikeEl) dislikeEl.innerText = data.dislikes || 0; if(commentEl) commentEl.innerText = data.commentCount || 0; if(currentUser && data.votes && data.votes[currentUser.uid]) { if(data.votes[currentUser.uid] === 'like') { document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked'); document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked'); } else { document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked'); document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked'); } } } }); db.collection('comments').where('docId', '==', docId).onSnapshot(snap => { const count = snap.size; const el = document.getElementById(`comment-count-${dayIdx}`); if(el) el.innerText = count; db.collection('daily_stats').doc(docId).set({ commentCount: count }, { merge: true }); }); }
+    function handleVote(dayIdx, type) { if(!currentUser) return alert("Lütfen giriş yapın."); if(!checkPermission()) return; const eventTarget = event.currentTarget; eventTarget.classList.add('anim-pop'); setTimeout(() => eventTarget.classList.remove('anim-pop'), 300); const ref = db.collection('daily_stats').doc(`${currentMeal}_${CURRENT_MONTH_TAG}_${dayIdx}`); db.runTransaction(async (t) => { const doc = await t.get(ref); if(!doc.exists) { t.set(ref, { likes: 0, dislikes: 0, commentCount: 0, votes: {} }); } const data = doc.data() || { likes: 0, dislikes: 0, commentCount: 0, votes: {} }; const votes = data.votes || {}; const current = votes[currentUser.uid]; let likes = data.likes || 0; let dislikes = data.dislikes || 0; if(current === type) { if(type === 'like') likes--; else dislikes--; delete votes[currentUser.uid]; } else { if(current === 'like') likes--; if(current === 'dislike') dislikes--; if(type === 'like') likes++; else dislikes++; votes[currentUser.uid] = type; } t.update(ref, { likes, dislikes, votes }); }); }
     
     let activeCommentDay = 0;
     function openComments(dayIdx) { activeCommentDay = dayIdx; document.getElementById('commentModal').style.display = 'flex'; loadComments(dayIdx); }
     
-    function loadComments(dayIdx) { const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>'; if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; } const docId = `${currentMeal}_nov_${dayIdx}`; db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => { const realCount = snapshot.size; db.collection('daily_stats').doc(docId).set({ commentCount: realCount }, { merge: true }); list.innerHTML = ''; if(snapshot.empty) { list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; return; } let allComments = []; snapshot.forEach(doc => { allComments.push({ id: doc.id, ...doc.data() }); }); let rootComments = allComments.filter(c => !c.parentId).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)); const getChildren = (parentId) => allComments.filter(c => c.parentId === parentId).sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0)); const renderTree = (comment) => { let html = createCommentHTML(comment, false); let children = getChildren(comment.id); children.forEach(child => { html += createCommentHTML(child, true); html += renderChildrenOf(child); }); return html; }; const renderChildrenOf = (parent) => { let html = ''; let children = getChildren(parent.id); children.forEach(child => { html += createCommentHTML(child, true); html += renderChildrenOf(child); }); return html; }; rootComments.forEach(root => { list.innerHTML += renderTree(root); }); if(scrollTargetId) { setTimeout(() => { const el = document.getElementById('comment-'+scrollTargetId); if(el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('highlight-comment'); setTimeout(() => el.classList.remove('highlight-comment'), 2000); } scrollTargetId = null; }, 500); } }); }
+    function loadComments(dayIdx) { const list = document.getElementById('commentList'); list.innerHTML = '<div style="text-align:center; color:#888; margin-top:20px;">Yükleniyor...</div>'; if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Bağlantı yok.</div>'; return; } const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${dayIdx}`; db.collection('comments').where('docId', '==', docId).onSnapshot(snapshot => { const realCount = snapshot.size; db.collection('daily_stats').doc(docId).set({ commentCount: realCount }, { merge: true }); list.innerHTML = ''; if(snapshot.empty) { list.innerHTML = '<div style="text-align:center; color:#888;">Henüz yorum yok.</div>'; return; } let allComments = []; snapshot.forEach(doc => { allComments.push({ id: doc.id, ...doc.data() }); }); let rootComments = allComments.filter(c => !c.parentId).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)); const getChildren = (parentId) => allComments.filter(c => c.parentId === parentId).sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0)); const renderTree = (comment) => { let html = createCommentHTML(comment, false); let children = getChildren(comment.id); children.forEach(child => { html += createCommentHTML(child, true); html += renderChildrenOf(child); }); return html; }; const renderChildrenOf = (parent) => { let html = ''; let children = getChildren(parent.id); children.forEach(child => { html += createCommentHTML(child, true); html += renderChildrenOf(child); }); return html; }; rootComments.forEach(root => { list.innerHTML += renderTree(root); }); if(scrollTargetId) { setTimeout(() => { const el = document.getElementById('comment-'+scrollTargetId); if(el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('highlight-comment'); setTimeout(() => el.classList.remove('highlight-comment'), 2000); } scrollTargetId = null; }, 500); } }); }
     function timeAgo(date) { if (!date) return ''; const seconds = Math.floor((new Date() - date.toDate()) / 1000); let interval = seconds / 31536000; if (interval > 1) return Math.floor(interval) + "y"; interval = seconds / 2592000; if (interval > 1) return Math.floor(interval) + "ay"; interval = seconds / 86400; if (interval > 1) return Math.floor(interval) + "g"; interval = seconds / 3600; if (interval > 1) return Math.floor(interval) + "sa"; interval = seconds / 60; if (interval > 1) return Math.floor(interval) + "dk"; return "Şimdi"; }
     function createCommentHTML(c, isReply) { let avatarHtml = c.userPhoto ? `<img src="${c.userPhoto}" class="c-avatar" onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto}')">` : `<div class="c-avatar" onclick="handleUserClick('${c.userId}', '${c.userName}', '')" style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;cursor:pointer;">${c.userName.charAt(0).toUpperCase()}</div>`; let badgeHtml = ''; if(c.userName === 'freddie') { badgeHtml = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#FFD700;margin-left:4px;vertical-align:text-bottom;"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>'; } else if(c.userName === 'Saya' || c.userName === 'saya') { badgeHtml = '<img src="https://raw.githubusercontent.com/freddiechill/gorsel-depom/59349c4a1cbc0e97cc30e17192a4f1bf024fa852/seytan-boynuz.svg" class="badge-icon" alt="badge">'; } let deleteBtn = ''; if(currentUser && (currentUser.uid === c.userId || currentUser.displayName === 'freddie')) { deleteBtn = `<span class="delete-comment-btn" onclick="deleteComment('${c.id}', '${c.docId}')"><i class="fas fa-trash"></i></span>`; } let replyBtn = ''; if(currentUser) { replyBtn = `<div class="reply-trigger" onclick="toggleReplyBox('${c.id}')">YANITLA</div>`; } let replyClass = isReply ? 'reply-comment' : ''; let replyIcon = isReply ? '<svg class="reply-icon" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/></svg>' : ''; let mentionHtml = c.replyTo ? `<span class="mention-text">@${c.replyTo}</span>` : ''; let timeString = timeAgo(c.createdAt); let hasDelete = (deleteBtn !== '') ? 'has-delete' : ''; const clickAttr = `onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto || ''}')"`; if(c.userPhoto) { avatarHtml = `<img src="${c.userPhoto}" class="c-avatar" ${clickAttr}>`; } else { avatarHtml = `<div class="c-avatar" ${clickAttr} style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;cursor:pointer;">${c.userName.charAt(0).toUpperCase()}</div>`; } return `<div class="single-comment ${replyClass} ${hasDelete}" id="comment-${c.id}">${replyIcon}<div class="time-ago">${timeString}</div>${deleteBtn}<div class="c-top">${avatarHtml}<div class="c-content"><div class="c-user" onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto}')">${c.userName}${badgeHtml}</div><div class="c-text">${mentionHtml}${c.text}</div></div></div><div class="c-actions"><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="clike-${c.id}">${c.likes || 0}</span></div><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike', '${c.userId}')"><svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="cdislike-${c.id}">${c.dislikes || 0}</span></div>${replyBtn}</div><div id="reply-box-${c.id}" class="reply-input-wrapper"><input type="text" id="reply-input-${c.id}" class="reply-input" placeholder="Yanıt yaz..."><button class="reply-send-btn" onclick="postReply('${c.id}', '${c.docId}', '${c.userName}', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div></div>`; }
     function toggleReplyBox(commentId) { const box = document.getElementById(`reply-box-${commentId}`); if(box.style.display === 'flex') box.style.display = 'none'; else box.style.display = 'flex'; }
@@ -1215,8 +1230,8 @@
         }); 
     }
 
-    function postComment() { if(!currentUser) return alert("Giriş yapmalısınız."); if(!checkPermission()) return; const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return; const docId = `${currentMeal}_nov_${activeCommentDay}`; db.collection('comments').add({ docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar, likes: 0, dislikes: 0, votes: {}, createdAt: firebase.firestore.FieldValue.serverTimestamp() }); input.value = ''; }
-    function getLoopedIndex(idx) { let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; }
+    function postComment() { if(!currentUser) return alert("Giriş yapmalısınız."); if(!checkPermission()) return; const input = document.getElementById('commentInput'); const text = input.value.trim(); if(!text) return; const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${activeCommentDay}`; db.collection('comments').add({ docId: docId, text: text, userId: currentUser.uid, userName: currentUser.displayName, userPhoto: currentUserAvatar, likes: 0, dislikes: 0, votes: {}, createdAt: firebase.firestore.FieldValue.serverTimestamp() }); input.value = ''; }
+    function getLoopedIndex(idx) { let val = idx; while(val<1) val+=31; while(val>31) val-=31; return val; }
 
     let touchStartX = 0; let touchEndX = 0; const carousel = document.getElementById('carouselTouchArea'); carousel.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }); carousel.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }); function handleSwipe() { if (touchEndX < touchStartX - 50) moveCarousel(1); if (touchEndX > touchStartX + 50) moveCarousel(-1); }
 </script>
