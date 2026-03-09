@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYK Yemek</title>
+    <title>KYK Yemek - Mart Menüsü</title>
     
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -117,8 +117,12 @@
             display: flex; flex-direction: column; padding: 20px; overflow: hidden;
         }
         
+        /* KAYDIRILABİLİR ALANLAR (Sihirli Dokunuşlar Eklendi) */
         .scrollable-form {
             overflow-y: auto; width: 100%; padding-right: 5px;
+            min-height: 0; /* Flex taşmasını önler */
+            -webkit-overflow-scrolling: touch; /* iOS pürüzsüz kaydırma */
+            overscroll-behavior-y: contain;
         }
 
         #fullListModal { 
@@ -140,7 +144,10 @@
         .header-icon-right { position: absolute; right: 0; top: 0; color: #888; cursor: pointer; padding: 5px; transition: color 0.2s; }
         .header-icon-right:hover { color: #fff; }
 
-        .notif-list { flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%; }
+        .notif-list { 
+            flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none; width: 100%;
+            min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;
+        }
         .notif-item { padding: 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1e1e1e; transition: background 0.2s; text-align: left; }
         .notif-item:hover { background: #252525; }
         .notif-item.unread { background: #2a1a1a; border-left: 4px solid #ef5350; }
@@ -156,22 +163,7 @@
         .hist-meta { font-size: 0.75rem; color: #888; display: flex; justify-content: space-between; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
 
         /* --- ADMIN / USER INFO PANEL --- */
-        .admin-content { padding: 5px; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; overflow-y: auto; position: relative; }
-        #adminMainActions { display: flex; gap: 15px; justify-content: center; margin-top: 10px; width: 100%; }
-        .admin-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; color: #121212; font-family: 'Satoshi', sans-serif; transition: transform 0.2s; }
-        .admin-btn:active { transform: scale(0.95); }
-        .restrict-btn { background: #fff59d; }
-        .ban-btn { background: #ef9a9a; }
-        .unban-btn { background: #a5d6a7; width: 100%; } 
-        .admin-btn svg { width: 24px; height: 24px; fill: #121212; }
-        .history-title { width: 100%; text-align: left; color: #888; font-size: 0.8rem; margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
-        .history-item { width: 100%; display: flex; justify-content: space-between; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #222; }
-        .h-action { font-weight: bold; }
-        .h-action.banned { color: #ef9a9a; }
-        .h-action.restricted { color: #fff59d; }
-        .h-action.unbanned { color: #a5d6a7; }
-        .h-date { color: #666; font-size: 0.75rem; }
-        
+        .admin-content { padding: 5px; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; overflow-y: auto; position: relative; min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
         .user-info-text { color: #888; font-size: 0.8rem; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
         .user-info-val { color: #fff; font-size: 1rem; font-weight: bold; margin-bottom: 15px; text-align: center; line-height: 1.3; }
 
@@ -254,7 +246,9 @@
         .modal-header { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; color:#fff; font-size:1.2rem; font-weight: bold; position: relative; min-height: 32px; flex-shrink:0; }
         .close-modal-btn { position: absolute; right: 0; top: 0; font-size: 24px; color: #fff; cursor: pointer; width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
         
-        .comment-list { flex: 1; overflow-y: auto; margin-bottom: 10px; }
+        /* Flexbox Scroll Taşma Çözümü */
+        .comment-list { flex: 1; overflow-y: auto; margin-bottom: 10px; min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 10px;}
+        .modal-scroll-area { flex: 1; overflow-y: auto; margin-bottom: 10px; min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 20px;}
         
         .single-comment { background: #252525; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; display: flex; flex-direction: column; gap: 8px; position: relative; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; word-break: break-word; transition: background 0.5s ease, border-color 0.5s ease; }
         .highlight-comment { animation: flashRed 2s ease-out forwards; }
@@ -294,7 +288,6 @@
         .comment-input-area { display: flex; gap: 8px; align-items: center;}
         .comment-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #121212; color: #fff; font-family: 'Satoshi', sans-serif; outline: none;}
         
-        /* Fotoğraf Yükleme Butonu */
         .image-btn { background: transparent; border: 1px solid #444; border-radius: 10px; width: 44px; height: 44px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#888; transition: color 0.2s; flex-shrink:0;}
         .image-btn:hover { color: #fff; border-color: #888; }
         .image-btn svg { width: 22px; height: 22px; fill: currentColor; }
@@ -372,14 +365,12 @@
             </div>
             
             <div class="scrollable-form">
-                <!-- GİRİŞ FORMU -->
                 <div id="loginForm">
                     <input type="email" id="loginEmail" class="auth-input" placeholder="E-posta Adresi">
                     <input type="password" id="loginPass" class="auth-input" placeholder="Şifre">
                     <button class="auth-submit" onclick="loginUser()">GİRİŞ YAP</button>
                 </div>
                 
-                <!-- KAYIT FORMU -->
                 <div id="registerForm" style="display:none;">
                     <div class="avatar-upload" onclick="document.getElementById('regFileInput').click()">
                         <img id="regAvatarPreview" style="display:none;">
@@ -1235,7 +1226,6 @@
             avatarHtml = `<div class="c-avatar" ${clickAttr} style="display:flex;align-items:center;justify-content:center;color:#555;background:#ccc;font-weight:bold;font-size:14px;cursor:pointer;">${c.userName.charAt(0).toUpperCase()}</div>`; 
         } 
 
-        // Eklenen Fotoğrafı Yorumda Gösterme
         let cImageHtml = c.image ? `<img src="${c.image}" class="c-image">` : '';
 
         return `<div class="single-comment ${replyClass} ${hasDelete}" id="comment-${c.id}">${replyIcon}<div class="time-ago">${timeString}</div>${deleteBtn}<div class="c-top">${avatarHtml}<div class="c-content"><div class="c-user" onclick="handleUserClick('${c.userId}', '${c.userName}', '${c.userPhoto}')">${c.userName}${badgeHtml}</div><div class="c-text">${mentionHtml}${c.text}${cImageHtml}</div></div></div><div class="c-actions"><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'like', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="clike-${c.id}">${c.likes || 0}</span></div><div class="c-action-btn" onclick="handleCommentVote('${c.id}', 'dislike', '${c.userId}')"><svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span id="cdislike-${c.id}">${c.dislikes || 0}</span></div>${replyBtn}</div><div id="reply-box-${c.id}" class="reply-input-wrapper"><input type="text" id="reply-input-${c.id}" class="reply-input" placeholder="Yanıt yaz..."><button class="reply-send-btn" onclick="postReply('${c.id}', '${c.docId}', '${c.userName}', '${c.userId}')"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div></div>`; 
@@ -1294,7 +1284,6 @@
         }).catch(e => console.error(e)); 
     }
 
-    // --- YORUMA FOTOĞRAF EKLEME İŞLEMLERİ ---
     let tempCommentImageBase64 = null;
 
     window.handleCommentImage = (input) => {
@@ -1305,7 +1294,7 @@
                 img.onload = function() {
                     const canvas = document.createElement('canvas'); 
                     const ctx = canvas.getContext('2d'); 
-                    const maxSize = 800; // Firebase kotalarını aşmamak için boyutu 800px ile sınırlandırıyoruz
+                    const maxSize = 800; 
                     let width = img.width; let height = img.height;
                     
                     if (width > height) { 
@@ -1316,7 +1305,7 @@
                     canvas.width = width; canvas.height = height; 
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    tempCommentImageBase64 = canvas.toDataURL('image/jpeg', 0.6); // Fotoğraf %60 kalitede sıkıştırılır
+                    tempCommentImageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
                     
                     document.getElementById('commentImagePreview').src = tempCommentImageBase64;
                     document.getElementById('commentImagePreviewContainer').style.display = 'inline-block';
@@ -1341,7 +1330,6 @@
         const input = document.getElementById('commentInput'); 
         const text = input.value.trim(); 
         
-        // Hem metin hem de fotoğraf boşsa işlemi iptal et. Sadece fotoğraf bile atılabilir.
         if(!text && !tempCommentImageBase64) return; 
 
         const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${activeCommentDay}`; 
@@ -1349,7 +1337,7 @@
             await addDoc(collection(db, 'comments'), { 
                 docId: docId, 
                 text: text, 
-                image: tempCommentImageBase64, // Sıkıştırılmış fotoğraf verisi eklendi
+                image: tempCommentImageBase64, 
                 userId: currentUserProfile.id, 
                 userName: currentUserProfile.nick, 
                 userPhoto: currentUserProfile.photoBase64 || null, 
@@ -1359,7 +1347,7 @@
                 createdAt: serverTimestamp() 
             });
             input.value = ''; 
-            removeCommentImage(); // Yorum gidince önizlemeyi temizle
+            removeCommentImage(); 
         } catch(e) { console.error(e); }
     }
 
@@ -1375,4 +1363,3 @@
 
 </body>
 </html>
-
