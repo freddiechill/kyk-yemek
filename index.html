@@ -548,6 +548,8 @@
     let scrollTargetId = null;
     let selectedTargetUser = null; 
     let notificationUnsubscribe = null;
+    let currentStatUnsubscribe = null;
+    let currentCommentsUnsubscribe = null;
 
     const uniData = {
         "SAÜ": [
@@ -1104,7 +1106,13 @@
     function fetchStats(dayIdx) { 
         if(!db) return;
         const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${dayIdx}`; 
-        onSnapshot(doc(db, 'daily_stats', docId), (docSnap) => { 
+        
+        // Zombi dinleyicileri (memory leak) temizle
+        if (currentStatUnsubscribe) {
+            currentStatUnsubscribe();
+        }
+
+        currentStatUnsubscribe = onSnapshot(doc(db, 'daily_stats', docId), (docSnap) => { 
             if(docSnap.exists()) { 
                 const data = docSnap.data(); 
                 const likeEl = document.getElementById(`like-count-${dayIdx}`); 
@@ -1115,17 +1123,26 @@
                 if(commentEl) commentEl.innerText = data.commentCount || 0; 
                 
                 if(currentUserProfile && data.votes && data.votes[currentUserProfile.id]) { 
-                    if(data.votes[currentUserProfile.id] === 'like') { document.getElementById(`like-count-${dayIdx}`).parentElement.classList.add('liked'); document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.remove('disliked'); } else { document.getElementById(`dislike-count-${dayIdx}`).parentElement.classList.add('disliked'); document.getElementById(`like-count-${dayIdx}`).parentElement.classList.remove('liked'); } 
-                } 
-            } 
+                    if(data.votes[currentUserProfile.id] === 'like') { 
+                        if(likeEl) likeEl.parentElement.classList.add('liked'); 
+                        if(dislikeEl) dislikeEl.parentElement.classList.remove('disliked'); 
+                    } else { 
+                        if(dislikeEl) dislikeEl.parentElement.classList.add('disliked'); 
+                        if(likeEl) likeEl.parentElement.classList.remove('liked'); 
+                    } 
+                } else {
+                    if(likeEl) likeEl.parentElement.classList.remove('liked');
+                    if(dislikeEl) dislikeEl.parentElement.classList.remove('disliked');
+                }
+            } else {
+                const likeEl = document.getElementById(`like-count-${dayIdx}`); 
+                const dislikeEl = document.getElementById(`dislike-count-${dayIdx}`); 
+                const commentEl = document.getElementById(`comment-count-${dayIdx}`); 
+                if(likeEl) { likeEl.innerText = 0; likeEl.parentElement.classList.remove('liked'); }
+                if(dislikeEl) { dislikeEl.innerText = 0; dislikeEl.parentElement.classList.remove('disliked'); }
+                if(commentEl) commentEl.innerText = 0;
+            }
         }); 
-        
-        onSnapshot(collection(db, 'comments'), (snap) => {
-            let count = 0;
-            snap.forEach(d => { if(d.data().docId === docId) count++; });
-            const el = document.getElementById(`comment-count-${dayIdx}`); 
-            if(el) el.innerText = count; 
-        });
     }
 
     window.handleVote = (dayIdx, type) => { 
@@ -1160,7 +1177,13 @@
         if(!db) { list.innerHTML = '<div style="text-align:center; color:#888;">Veritabanı bağlantısı kurulamadı.</div>'; return; }
 
         const docId = `${currentMeal}_${CURRENT_MONTH_TAG}_${dayIdx}`; 
-        onSnapshot(collection(db, 'comments'), (snapshot) => { 
+        
+        // Zombi dinleyicileri (memory leak) temizle
+        if (currentCommentsUnsubscribe) {
+            currentCommentsUnsubscribe();
+        }
+
+        currentCommentsUnsubscribe = onSnapshot(collection(db, 'comments'), (snapshot) => { 
             let allComments = []; 
             snapshot.forEach(document => { 
                 const d = document.data();
@@ -1233,6 +1256,21 @@
     
     window.toggleReplyBox = (commentId) => { const box = document.getElementById(`reply-box-${commentId}`); if(box.style.display === 'flex') box.style.display = 'none'; else box.style.display = 'flex'; }
     
+    const updateCommentCount = async (docId, change) => {
+        const statRef = doc(db, 'daily_stats', docId);
+        try {
+            await runTransaction(db, async (t) => {
+                const docSnap = await t.get(statRef);
+                if (!docSnap.exists()) {
+                    if (change > 0) t.set(statRef, { likes: 0, dislikes: 0, commentCount: change, votes: {} });
+                } else {
+                    let newCount = Math.max(0, (docSnap.data().commentCount || 0) + change);
+                    t.update(statRef, { commentCount: newCount });
+                }
+            });
+        } catch(e) { console.error("Sayac guncellenemedi", e); }
+    };
+
     window.postReply = async (parentId, docId, replyToUser, replyToUserId) => { 
         if(!checkPermission()) return; 
         if(!db) return showToast("Bağlantı hatası", true);
@@ -1245,6 +1283,7 @@
             await addDoc(collection(db, 'comments'), { 
                 docId: docId, text: text, userId: currentUserProfile.id, userName: currentUserProfile.nick, userPhoto: currentUserProfile.photoBase64 || null, likes: 0, dislikes: 0, votes: {}, parentId: parentId, replyTo: replyToUser, createdAt: serverTimestamp() 
             });
+            await updateCommentCount(docId, 1);
             if(replyToUserId) sendNotification(replyToUserId, 'reply', docId, parentId);
             input.value = ''; toggleReplyBox(parentId); 
         } catch(e) { console.error(e); }
@@ -1254,6 +1293,7 @@
         if(!db) return;
         try {
             await deleteDoc(doc(db, 'comments', commentId));
+            await updateCommentCount(docId, -1);
             showToast("Yorum silindi.");
         } catch(e) { console.error(e); }
     }
@@ -1346,6 +1386,7 @@
                 votes: {}, 
                 createdAt: serverTimestamp() 
             });
+            await updateCommentCount(docId, 1);
             input.value = ''; 
             removeCommentImage(); 
         } catch(e) { console.error(e); }
@@ -1363,4 +1404,3 @@
 
 </body>
 </html>
-
