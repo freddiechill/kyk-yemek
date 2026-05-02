@@ -539,7 +539,7 @@
         console.error("Firebase kurulumunda hata", err);
     }
 
-    const CURRENT_MONTH_TAG = "apr2026"; 
+    const CURRENT_MONTH_TAG = "may2026"; 
     
     window.currentUser = null;
     window.currentUserProfile = null; 
@@ -979,43 +979,44 @@
     };
 
     const menuData = {
-        1: { date: "1 Nisan 2026 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Kırmızı Mercimek Çorba / Yoğurt Çorba", "Şehzade Kebabı / Patates Yemeği", "Bulgur Pilavı", "Çoban Salata"] },
-        2: { date: "2 Nisan 2026 Perşembe", breakfast: ["Kaşarlı Omlet", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Mantar Çorba / Tarhana Çorba", "Tavuk Tantuni + Lavaş + Patates Kızartması + Turşu + Söğüş / Kuru Patlıcan Dolma", "Salçalı Kalem Makarna", "Cacık"] },
-        3: { date: "3 Nisan 2026 Cuma", breakfast: ["Karışık Kızartma", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Kırmızı Mercimek Çorba / Düğün Çorba", "Nohut Yemeği / Mevsim Türlü", "Arpa Şehriyeli Pirinç Pilavı", "Cevizli Baklava"] },
-        4: { date: "4 Nisan 2026 Cumartesi", breakfast: ["Patatesli Yumurta", "Çikolatalı Milföy Börek", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Tel Şehriye Çorba / Yeşil Mercimek Çorba", "Tavuk Külbastı ve Fırında Elma Dilim Patates / Taze Fasulye Yemeği", "Domatesli Bulgur Pilavı", "Havuç Tarator"] },
-        5: { date: "5 Nisan 2026 Pazar", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)Veya Menemen", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal veTereyağ"], dinner: ["Ezogelin Çorba / Mantar Çorba", "Izgara Köfte + Közlenmiş Biber + Domates / Karışık Kızartma", "Salçalı Spagetti", "Ayran"] },
-        6: { date: "6 Nisan 2026 Pazartesi", breakfast: ["Peynirli Omlet", "Sade Poğaça", "Krem Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Kırmızı Mercimek Çorba / Yayla Çorbası", "Et Tantuni + Sandviç Ekmeği + Patates Kızartması + Turşu + Söğüş / İmam Bayıldı", "Tel Şehriyeli Pirinç Pilavı", "Muzlu Yaş Pasta"] },
-        7: { date: "7 Nisan 2026 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Domates Çorba / Mantar Çorba", "Tavuk Çökertme / Biber Dolma", "Tereyağlı Erişte", "Karışık Salata"] },
-        8: { date: "8 Nisan 2026 Çarşamba", breakfast: ["Sade Omlet", "Mozaik Kek", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Kırmızı Mercimek Çorba / Tavuk Çorba", "Adana Kebap + Lavaş + Közlenmiş Domates Biber / Karışık Kızartma", "Pirinç Pilavı", "Cacık"] },
-        9: { date: "9 Nisan 2026 Perşembe", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Ezogelin Çorba / Sebze Çorbası", "Çıtır Tavuk ve Fırında Elma Dilim Patates / Karnabahar Kızartması", "Soslu Mantı", "Trileçe"] },
-        10: { date: "10 Nisan 2026 Cuma", breakfast: ["Menemen", "Simit", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Muz"], dinner: ["Sarı Mercimek Çorba / Yayla Çorbası", "Tas Kebabı / Barbunya Yemeği", "Bulgur Pilavı", "Haydari"] },
-        11: { date: "11 Nisan 2026 Cumartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Tarhana Çorba / Düğün Çorba", "Kuru Fasulye / Bezelye Yemeği", "Arpa Şehriyeli Pirinç Pilavı", "Çoban Salata", "Yoğurt"] },
-        12: { date: "12 Nisan 2026 Pazar", breakfast: ["Sucuklu Yumurta", "Dere Otlu Poğaça", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Ezogelin Çorba / Mantar Çorba", "Tavuk Şinitzel ve Karışık Kızartma / Biber Dolma", "Köri Soslu Penne Makarna", "Mercimek Köftesi"] },
-        13: { date: "13 Nisan 2026 Pazartesi", breakfast: ["Patates Salatası", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Kırmızı Mercimek Çorba / Sebze Çorbası", "İzmir Köfte / Nohut Yemeği", "Tel Şehriyeli Pirinç Pilavı", "Revani"] },
-        14: { date: "14 Nisan 2026 Salı", breakfast: ["Kaşarlı Omlet", "Zeytinli/Peynirli Açma", "Labne Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Domates Çorba / Yoğurt Çorba", "Orman Kebabı / Patates Köftesi", "Bulgur Pilavı", "Akdeniz Salata"] },
-        15: { date: "15 Nisan 2026 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Mantar Çorba", "Tavuk Taco / Ispanak Graten", "Soslu Mantı", "Muz"] },
-        16: { date: "16 Nisan 2026 Perşembe", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Domates Çorba / Tavuk Çorba", "Kadınbudu Köfte / Biber Dolma", "Tereyağlı Kalem Makarna", "Ayran"] },
-        17: { date: "17 Nisan 2026 Cuma", breakfast: ["Patates Kavurması", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Kırmızı Mercimek Çorba / Yayla Çorbası", "Tavuk Fajita / Kuru Fasulye", "Domatesli Bulgur Pilavı", "Pembe Sultan"] },
-        18: { date: "18 Nisan 2026 Cumartesi", breakfast: ["Peynirli Omlet", "Patates Kroket", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Tarhana Çorba / Düğün Çorba", "Nohut Yemeği / Taze Fasulye Yemeği", "Pirinç Pilavı", "Bisküvili Pasta"] },
-        19: { date: "19 Nisan 2026 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Ezogelin Çorba / Yoğurt Çorba", "Tavuk Külbastı ve Közlenmiş Domates Biber / Patates Köftesi", "Garnitürlü Pirinç Pilavı", "Kakaolu Puding"] },
-        20: { date: "20 Nisan 2026 Pazartesi", breakfast: ["Menemen", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Tel Şehriye Çorba / Yüksük Çorbası", "Ali Nazik Kebabı / Karnabahar Kızartması", "Domatesli Bulgur Pilavı", "Mercimek Köftesi"] },
-        21: { date: "21 Nisan 2026 Salı", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Çilek"], dinner: ["Sarı Mercimek Çorba / Pirinç Çorba", "Tavuk Hamburger ve Patates Kızartması / Kuru Dolma", "Soslu Mantı", "Akdeniz Salata"] },
-        22: { date: "22 Nisan 2026 Çarşamba", breakfast: ["Sade Omlet", "Dere Otlu Poğaça", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Kırmızı Mercimek Çorba / Tavuk Çorba", "Islama Köfte / İmam Bayıldı", "Pirinç Pilavı", "Cevizli Baklava"] },
-        23: { date: "23 Nisan 2026 Perşembe", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Domates Çorba / Mantar Çorba", "Tavuk Şinitzel ve Patates Kızartması / Taze Fasulye Yemeği", "Fırın Makarna", "Cacık"] },
-        24: { date: "24 Nisan 2026 Cuma", breakfast: ["Kaşarlı Omlet", "Kakaolu Kek", "Krem Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Tarhana Çorba / Düğün Çorba", "Kuru Fasulye / Patates Yemeği", "Tel Şehriyeli Pirinç Pilavı", "Çoban Salata", "Turşu"] },
-        25: { date: "25 Nisan 2026 Cumartesi", breakfast: ["Sosis Kokteyl(Salçalı Veya Kızartma)Veya Pişi", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Kırmızı Mercimek Çorba / Mısır Çorba", "Çıtır Tavuk ve Fırında Elma Dilim Patates / Kuru Patlıcan Dolma", "Salçalı Spagetti", "Çiğ Köfte"] },
-        26: { date: "26 Nisan 2026 Pazar", breakfast: ["Peynirli Omlet", "Zeytinli/Peynirli Açma", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Tavuk Çorba / Tel Şehriye Çorba", "Çökertme Kebabı / Kabak Mücver", "Arpa Şehriyeli Pirinç Pilavı", "Kemalpaşa Tatlısı"] },
-        27: { date: "27 Nisan 2026 Pazartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Ezogelin Çorba / Mantar Çorba", "Dana Hamburger ve Patates Kızartması / Karnabahar Kızartması", "Salçalı Spagetti", "Ayran"] },
-        28: { date: "28 Nisan 2026 Salı", breakfast: ["Sucuklu Yumurta", "Sade Poğaça", "Labne Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Tarhana Çorba / Mısır Çorba", "Beşamel Soslu Sebzeli Tavuk / Taze Fasulye Yemeği", "Nohutlu Pirinç Pilavı", "Yoğurtlu Biber Kızartma"] },
-        29: { date: "29 Nisan 2026 Çarşamba", breakfast: ["Patates Salatası", "Haşlanmış Yumurta", "Çeçil-Dil-Tel Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Ezogelin Çorba / Sebze Çorbası", "Hasanpaşa Köfte / Karışık Sebze Graten", "Körili Penne Makarna", "Yoğurt"] },
-        30: { date: "30 Nisan 2026 Perşembe", breakfast: ["Sade Omlet", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Helva"], dinner: ["Kırmızı Mercimek Çorba / Tavuk Çorba", "Et Tantuni + Lavaş + Turşu + Söğüş / Patates Köftesi", "Pirinç Pilavı", "Tavuk Göğsü"] }
+        1: { date: "1 Mayıs 2026 Cuma", breakfast: ["Karışık Kızartma", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Mercimek Çorbası / Kaşarlı Domates Çorbası", "Şinitzel ve Elma Dilim Patates / Karışık Kızartma", "Peynirli Makarna", "Karışık Salata"] },
+        2: { date: "2 Mayıs 2026 Cumartesi", breakfast: ["Kaşarlı Omlet", "Çikolatalı Milföy Börek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Şehriyeli Tavuk Çorbası", "Etsiz Kuru Fasulye / Zeytinyağlı Enginar", "Pirinç Pilavı", "Cevizli Baklava"] },
+        3: { date: "3 Mayıs 2026 Pazar", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Örgü/Çeçil Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Mercimek Çorbası / Havuç Çorba", "Tavuk Şiş + Lavaş + Köz Domates-Biber / Bezelye Yemeği", "Spagetti Napoliten", "Çiğ Köfte + Marul + Limon"] },
+        4: { date: "4 Mayıs 2026 Pazartesi", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Krem Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Düğün Çorba", "Kuşbaşılı Patlıcan Kebabı / Zeytinyağlı Barbunya", "Pirinç Pilavı", "Ayran"] },
+        5: { date: "5 Mayıs 2026 Salı", breakfast: ["Pişi", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Mercimek Çorbası / Şehriye Çorbası", "Tavuk Külbastı ve Köz Biber Domates / Ispanak Graten", "Bulgur Pilavı", "Supangle"] },
+        6: { date: "6 Mayıs 2026 Çarşamba", breakfast: ["Sade Omlet", "Zeytinli/Peynirli Açma", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Çilek"], dinner: ["Ezogelin Çorba / Mısır Çorba", "Izgara Köfte ve Piyaz / Mücver Kızartma ve Yoğurt", "Soslu Makarna", "Acılı Ezme"] },
+        7: { date: "7 Mayıs 2026 Perşembe", breakfast: ["Patates Kızartması", "Menemen", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Mercimek Çorbası / Tarhana Çorba", "Tavuk Pilav / Karışık Dolma ve Yoğurt", "Karışık Salata", "Cacık"] },
+        8: { date: "8 Mayıs 2026 Cuma", breakfast: ["Sucuklu Yumurta", "Simit", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Etsiz Nohut Yemeği / Karışık Kızartma", "Şehriyeli Pirinç Pilavı", "Turşu", "Mozaik Pasta"] },
+        9: { date: "9 Mayıs 2026 Cumartesi", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Mercimek Çorbası / Kaşarlı Domates Çorbası", "Beğendili Tavuk Julyen / Patates Köfte ve Yoğurt", "Soslu Makarna", "Çoban Salata"] },
+        10: { date: "10 Mayıs 2026 Pazar", breakfast: ["Kaşarlı Omlet", "Sade Poğaça", "Örgü/Çeçil Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Ayran Aşı Çorba", "Et Tantuni Dürüm / Mevsim Türlü", "Sebzeli Pirinç Pilavı", "Ayran"] },
+        11: { date: "11 Mayıs 2026 Pazartesi", breakfast: ["Patates Kavurması veya Patates Salatası", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Mercimek Çorbası / Tarhan Çorba", "Sulu Köfte / Zeytinyağlı Brokoli Yemeği ve Yoğurt", "Mısırlı Bulgur Pilavı", "Browni"] },
+        12: { date: "12 Mayıs 2026 Salı", breakfast: ["Sade Omlet", "Zeytinli/Peynirli Açma", "Labne Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Ezogelin Çorba / Ayran Aşı Çorba", "Tavuk Fajita / Zeytinyağlı Bezelye Yemeği", "Şehriyeli Pirinç Pilavı", "Havuç Aysberg Salata"] },
+        13: { date: "13 Mayıs 2026 Çarşamba", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Mercimek Çorbası / Havuç Çorba", "Çiftlik Kebabı / Ispanak Graten", "Peynirli Makarna", "Haydari"] },
+        14: { date: "14 Mayıs 2026 Perşembe", breakfast: ["Peynirli Omlet", "Çikolatalı Milföy Börek", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Ezogelin Çorba / Düğün Çorba", "Beşamel Soslu tavuk / Karışık Kızartma", "Bulgur Pilavı", "Sütlaç"] },
+        15: { date: "15 Mayıs 2026 Cuma", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Örgü/Çeçil Peynir", "Siyah/Yeşil Zeytin", "Helva"], dinner: ["Mercimek Çorbası / Köz Biber Çorba", "Pideli Soslu Tire Köfte ve Köz Domates Biber / İmam Bayıldı", "Garnitürlü Pirinç Pilavı", "Ayran"] },
+        16: { date: "16 Mayıs 2026 Cumartesi", breakfast: ["Menemen", "Simit", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Ezogelin Çorba / Yayla Çorbası", "Şinitzel ve Elma Dilim Patates / Karışık Dolma ve Yoğurt", "Fesleğen Soslu Makarna", "Muz"] },
+        17: { date: "17 Mayıs 2026 Pazar", breakfast: ["Sosisli Patates Kızartması", "Haşlanmış Yumurta", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Mercimek Çorbası / Tarhana Çorba", "Etsiz Kuru Fasulye / Karnabahar Kızartma ve Yoğurt", "Şehriyeli Pirinç Pilavı", "Kemalpaşa Tatlısı"] },
+        18: { date: "18 Mayıs 2026 Pazartesi", breakfast: ["Kaşarlı Omlet", "Dere Otlu Poğaça", "Krem Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Ezogelin Çorba / Mısır Çorba", "Et Tantuni Dürüm / Zeytinyağlı Enginar", "Peynirli Makarna", "Ayran"] },
+        19: { date: "19 Mayıs 2026 Salı", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Çikolatalı Milföy Börek"], dinner: ["Mercimek Çorbası / Şehriye Çorbası", "Tavuk Pilav / Karışık Dolma ve Yoğurt", "Çoban Salata", "Çikolatalı Çilekli Yaş Pasta", "Limonata"] },
+        20: { date: "20 Mayıs 2026 Çarşamba", breakfast: ["Sucuklu Yumurta", "Zeytinli/Peynirli Açma", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Tarhana Çorba", "İnegöl Köfte + Köz Biber + Köz Domates / Karışık Sebze Graten", "Spagetti Napoliten", "Piyaz"] },
+        21: { date: "21 Mayıs 2026 Perşembe", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Mercimek Çorbası / Mısır Çorba", "Tavuk Külbastı ve Köz Biber Domates / Zeytinyağlı Taze Fasulye", "Bulgur Pilavı", "Havuç Tarator"] },
+        22: { date: "22 Mayıs 2026 Cuma", breakfast: ["Sade Omlet", "Peynirli Milföy Böreği", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Ezogelin Çorba / Brokoli Çorba", "Etsiz Nohut Yemeği / Mücver", "Şehriyeli Pirinç Pilavı", "Karışık Salata", "Yoğurt"] },
+        23: { date: "23 Mayıs 2026 Cumartesi", breakfast: ["Pişi", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Mercimek Çorbası / Kaşarlı Domates Çorbası", "Sebzeli Tavuk Kavurma / Patates Köftesi ve Yoğurt", "Köri Soslu Makarna", "Çilekli Magnolya"] },
+        24: { date: "24 Mayıs 2026 Pazar", breakfast: ["Peynirli Omlet", "Sade Poğaça", "Örgü/Çeçil Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Tutmaç Çorba", "Hünkar Beğendi / Nohut Tava", "Pirinç Pilavı", "Haydari"] },
+        25: { date: "25 Mayıs 2026 Pazartesi", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Reçel Çeşitleri"], dinner: ["Mercimek Çorbası / Köz Biber Çorba", "Köri Soslu Tavuk / Kumpir(Dilim Siyah-Yeşil Zeytin, Mısır, Turşu, Kısır, Ketçap, Mayonez)", "Soslu Makarna", "Ayran"] },
+        26: { date: "26 Mayıs 2026 Salı", breakfast: ["Menemen", "Simit", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Sürülebilir Çikolata"], dinner: ["Ezogelin Çorba / Çeşmi Nigar Çorba", "Çıtır Tavuk ve Elma Dilim Patates / Karışık Sebze Graten", "Bezelyeli Pirinç Pilavı", "Bahçe Salata"] },
+        27: { date: "27 Mayıs 2026 Çarşamba", breakfast: ["Çikolatalı Pankek", "Patates Kroket", "Pişi", "Sigara Böreği", "Biber Kızartma", "1 Parmak Sucuk Tava", "Söğüş Sebze(2 Dilim Domates, 2 Dilim Salatalık)", "Muz", "Haşlanmış Yumurta", "Peynir Mix(Burgu, Top, Çeçil, Örgü)", "Labne", "Siyah/Yeşil Zeytin", "1 Paket Süt ve 40 Gram Cornflakes", "Bal ve Tereyağı", "Sürülebilir Çikolata"], dinner: ["Mercimek Çorbası / Tarhana Çorba", "Pilav Üstü Kavurma / Karışık Dolma ve Yoğurt", "Ayran", "Cevizli Baklava"] },
+        28: { date: "28 Mayıs 2026 Perşembe", breakfast: ["Kaşarlı Omlet", "Çikolatalı Milföy Börek", "Yöresel Peynir", "Siyah/Yeşil Zeytin", "Helva"], dinner: ["Ezogelin Çorba / Yayla Çorbası", "Izgara Tavuk + Haşlanmış Havuç ve Brokoli / Fellah Köfte ve Yoğurt", "Soslu Makarna", "Karışık Salata"] },
+        29: { date: "29 Mayıs 2026 Cuma", breakfast: ["Sosisli Patates Kızartması", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Mercimek Çorbası / Kaşarlı Domates Çorbası", "Orman Kebabı / Şakşuka", "Pirinç Pilavı", "Kıbrıs Tatlısı"] },
+        30: { date: "30 Mayıs 2026 Cumartesi", breakfast: ["Sade Omlet", "Patates Kroket", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Ayran Aşı Çorba", "Hamburger (Domates, Göbek Marul, Kornişon Turşu, Ketçap-Mayonez) ve Patates Kızartması / Zeytinyağlı Barbunya", "Soslu Makarna", "Ayran"] },
+        31: { date: "31 Mayıs 2026 Pazar", breakfast: ["Karışık Pizza", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Mercimek Çorbası / Şehriyeli Tavuk Çorba", "Etsiz Kuru Fasulye / Mücver Kızartma ve Yoğurt", "Şehriyeli Pirinç Pilavı", "Trileçe"] }
     };
 
     let currentMeal = 'dinner', currentDayIndex = new Date().getDate(), cardPositions = [0, 1, 2, 3, 4];
     let cards = []; 
 
     function getLoopedIndex(idx) { 
-        let val = idx; while(val<1) val+=30; while(val>30) val-=30; return val; 
+        let val = idx; while(val<1) val+=31; while(val>31) val-=31; return val; 
     }
     
     function getMenuHtml(idx) { 
@@ -1063,7 +1064,7 @@
         ];
 
         const today = new Date(); 
-        if(today.getMonth() !== 3 || today.getFullYear() !== 2026) currentDayIndex = 1; 
+        if(today.getMonth() !== 4 || today.getFullYear() !== 2026) currentDayIndex = 1; 
         
         updateTheme(); 
         renderAllCards(currentDayIndex); 
@@ -1090,7 +1091,7 @@
         btnBreakfast.className = 'modal-toggle'; 
         btnDinner.className = 'modal-toggle';
         if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); else btnDinner.classList.add('active-red');
-        for (let i = 1; i <= 30; i++) { 
+        for (let i = 1; i <= 31; i++) { 
             const dayData = menuData[i]; 
             if (dayData) { 
                 const div = document.createElement('div'); div.className = 'day-row'; 
