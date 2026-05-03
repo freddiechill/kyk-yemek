@@ -168,9 +168,6 @@
         .user-info-val { color: #fff; font-size: 1rem; font-weight: bold; margin-bottom: 15px; text-align: center; line-height: 1.3; }
 
         /* --- CARD & CAROUSEL --- */
-        .header-container { position: relative; width: 100%; text-align: center; z-index: 10; pointer-events: none; margin-top: 60px; margin-bottom: 10px;}
-        .date-display { font-size: 1.4rem; color: #fff; margin-top: 5px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: opacity 0.2s; }
-        
         .left-controls { position: absolute; top: 20px; left: 20px; z-index: 9500; }
         
         .icon-btn { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s; }
@@ -178,14 +175,18 @@
         .icon-btn svg { width: 24px; height: 24px; fill: currentColor; pointer-events: none; display: block; }
 
         .carousel-container { position: relative; width: 100%; height: 65vh; perspective: 1000px; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
-        .menu-card { position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh; background: #1e1e1e; border-radius: 24px; border: 2px solid #333; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 10px; }
+        .menu-card { position: absolute; top: 50%; left: 50%; width: 85%; max-width: 380px; height: auto; max-height: 60vh; background: #1e1e1e; border-radius: 24px; border: 2px solid #333; box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: visible; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s, border-color 0.3s; padding-bottom: 10px; }
+        
+        .menu-card-date { position: absolute; bottom: 100%; left: 0; width: 100%; text-align: center; margin-bottom: 15px; font-size: 1.15rem; color: #fff; font-weight: 700; text-shadow: 0 4px 12px rgba(0,0,0,0.5); pointer-events: none; opacity: 0; transition: opacity 0.4s; }
+        .pos-2 .menu-card-date { opacity: 1; }
+
         .pos-2 { z-index: 30; transform: translate(-50%, -50%) scale(1); opacity: 1; }
         .pos-1 { z-index: 20; transform: translate(-85%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
         .pos-3 { z-index: 20; transform: translate(-15%, -50%) scale(0.85); opacity: 0.5; pointer-events: none; }
         .pos-0 { z-index: 10; transform: translate(-150%, -50%) scale(0.7); opacity: 0; }
         .pos-4 { z-index: 10; transform: translate(50%, -50%) scale(0.7); opacity: 0; }
 
-        .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid #333; min-height: 50px; flex-shrink: 0; }
+        .card-header { border-radius: 22px 22px 0 0; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid #333; min-height: 50px; flex-shrink: 0; }
         .meal-title { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
         .switch-btn { background: #333; color: #fff; border: none; padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Satoshi', sans-serif; font-size: 0.8rem; }
         .pos-2 .switch-btn { opacity: 1; pointer-events: auto; }
@@ -340,10 +341,6 @@
             <div id="notifBadge" class="notif-badge"></div>
         </div>
         <div id="loginBtnArea"><button class="login-btn text-mode" onclick="openAuthModal()">Giriş Yap</button></div>
-    </div>
-
-    <div class="header-container">
-        <div class="date-display" id="currentDate">Yükleniyor...</div>
     </div>
 
     <div class="carousel-container" id="carouselTouchArea">
@@ -983,7 +980,7 @@
         2: { date: "2 Mayıs 2026 Cumartesi", breakfast: ["Kaşarlı Omlet", "Çikolatalı Milföy Börek", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Tarhana Çorba / Düğün Çorba", "Nohut Yemeği / Yoğurtlu Karnabahar Kızartma", "Tel Şehriyeli Pirinç Pilavı", "Cevizli Baklava"] },
         3: { date: "3 Mayıs 2026 Pazar", breakfast: ["Patates Kızartması", "Haşlanmış Yumurta", "Çeçil/Dil/Tel Peyniri", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Kırmızı Mercimek Çorba / Yayla Çorbası", "Çıtır Tavuk ve Fırında Elma Dilim Patates / Kabak Mücver", "Soslu Mantı", "Çiğ Köfte"] },
         4: { date: "4 Mayıs 2026 Pazartesi", breakfast: ["Peynirli Omlet", "Dere Otlu Poğaça", "Krem Peynir", "Siyah/Yeşil Zeytin", "Mevsim Sebzeleri Söğüş"], dinner: ["Ezogelin Çorba / Tavuk Çorba", "Püreli Çoban Kavurma / Patates Yemeği", "Pirinç Pilavı", "Ayran"] },
-        5: { date: "5 Mayıs 2026 Salı", breakfast: ["Sosis Kokteyl(Salçalı)", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Sarı Mercimek Çorba / Mantar Çorba", "Tavuk Çökertme / İmam Bayıldı", "Domatesli Bulgur Pilavı", "Sütlaç"] },
+        5: { date: "5 Mayıs 2026 Salı", breakfast: ["Sosis Kokteyl (Salçalı)", "Haşlanmış Yumurta", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Sarı Mercimek Çorba / Mantar Çorba", "Tavuk Çökertme / İmam Bayıldı", "Domatesli Bulgur Pilavı", "Sütlaç"] },
         6: { date: "6 Mayıs 2026 Çarşamba", breakfast: ["Sade Omlet", "Zeytinli/Peynirli Açma", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Muz"], dinner: ["Kaşarlı Domates Çorbası / Sebze Çorbası", "Izgara Köfte ve Elma Dilim Patates / Karışık Kızartma", "Salçalı Spagetti", "Pembe Sultan"] },
         7: { date: "7 Mayıs 2026 Perşembe", breakfast: ["Patates Kızartması", "Menemen", "Beyaz Peynir", "Siyah/Yeşil Zeytin", "Tahinli Pekmez"], dinner: ["Kırmızı Mercimek Çorba / Yayla Çorbası", "Tavuk Fajita / Zeytinyağlı Taze Fasulye", "Pirinç Pilavı", "Cacık"] },
         8: { date: "8 Mayıs 2026 Cuma", breakfast: ["Sucuklu Yumurta", "Simit", "Kaşar Peyniri", "Siyah/Yeşil Zeytin", "Bal ve Tereyağ"], dinner: ["Tel Şehriye Çorba / Tavuk Çorba", "Kuru Fasulye / Karışık Sebze Graten", "Bulgur Pilavı", "Çoban Salata", "Karışık Turşu"] },
@@ -1043,6 +1040,7 @@
             const domIndex = cardPositions[i]; const dateOffset = i - 2; const targetDateIdx = getLoopedIndex(centerDateIdx + dateOffset); const card = cards[domIndex];
             if(!card) continue;
             card.innerHTML = `
+                <div class="menu-card-date">${menuData[targetDateIdx].date}</div>
                 <div class="card-header"><div class="meal-title">${currentMeal === 'breakfast' ? 'KAHVALTI' : 'AKŞAM'}</div><button class="switch-btn ${i===2?'':'hidden-btn'}" onclick="toggleMealType()"><span class="switch-text">${currentMeal === 'breakfast' ? 'Akşama Geç' : 'Kahvaltıya Geç'}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z"/></svg></button></div>
                 <ul>${getMenuHtml(targetDateIdx)}</ul>
                 <div class="social-footer">
@@ -1050,7 +1048,7 @@
                     <div class="social-action" onclick="handleVote(${targetDateIdx}, 'dislike')"><svg viewBox="0 0 24 24" class="flip-icon"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.99-.01z"/></svg><span class="count-text" id="dislike-count-${targetDateIdx}">0</span></div>
                     <div class="social-action" onclick="openComments(${targetDateIdx})"><button class="notif-btn anim-pop" style="display:none"></button> <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg><span class="count-text" id="comment-count-${targetDateIdx}">0</span></div>
                 </div>`;
-            if(i===2) { document.getElementById('currentDate').innerText = menuData[targetDateIdx].date; fetchStats(targetDateIdx); }
+            if(i===2) { fetchStats(targetDateIdx); }
         }
     }
 
