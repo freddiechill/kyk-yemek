@@ -1425,6 +1425,24 @@
     } else {
         initUI();
     }
+
+    /* --- KLAVYE DÜZELTMESİ (GÖRSEL PENCERE İLE) --- */
+    if (window.visualViewport) {
+        const adjustForKeyboard = () => {
+            const m = document.getElementById('commentModal');
+            if (m && m.style.display === 'flex') {
+                const diff = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+                m.style.bottom = Math.max(0, diff) + 'px';
+                if (diff > 10) {
+                    m.style.height = Math.floor(window.visualViewport.height * 0.95) + 'px';
+                } else {
+                    m.style.height = '75vh';
+                }
+            }
+        };
+        window.visualViewport.addEventListener('resize', adjustForKeyboard);
+        window.visualViewport.addEventListener('scroll', adjustForKeyboard);
+    }
 </script>
 
 </body>
