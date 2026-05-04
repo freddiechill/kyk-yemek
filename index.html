@@ -302,12 +302,10 @@
         .send-btn svg { width: 24px; height: 24px; fill: currentColor; }
         
         .day-row { background: #1e1e1e; margin-bottom: 15px; border-radius: 10px; padding: 15px; border: 1px solid #333; }
-        .day-header { font-size: 1.1rem; color: #888; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 10px; gap: 10px; }
+        .day-header > span:first-child { font-size: 0.95rem; color: #bbb; font-weight: bold; text-align: left; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .switch-text { color: inherit; }
         .day-content { font-size: 1rem; line-height: 1.6; text-align: center; color: #e0e0e0; white-space: pre-line; }
-        .modal-toggle-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .modal-toggle { padding: 10px 20px; border-radius: 10px; border: 1px solid #444; background: #1e1e1e; color: #888; font-family: 'Satoshi', sans-serif; font-weight: 700; cursor: pointer; }
-        .modal-toggle.active-yellow { background: #fff59d; color: #121212; border-color: #fff59d; }
-        .modal-toggle.active-red { background: #ef9a9a; color: #121212; border-color: #ef9a9a; }
 
         #toastBox {
             position: fixed; 
@@ -497,10 +495,6 @@
         <div class="modal-header">
             <span>Tüm Ayın Listesi</span>
         </div>
-        <div class="modal-toggle-container">
-            <button class="modal-toggle" id="modalBtnBreakfast" onclick="renderFullList('breakfast')">Kahvaltı</button>
-            <button class="modal-toggle" id="modalBtnDinner" onclick="renderFullList('dinner')">Akşam</button>
-        </div>
         <div class="modal-scroll-area" id="fullListContainer"></div>
     </div>
 
@@ -648,7 +642,7 @@
         if (modal.style.display === 'flex') { 
             modal.classList.remove('anim-slide-up'); modal.classList.add('anim-slide-down');
             setTimeout(() => { modal.style.display = 'none'; modal.classList.remove('anim-slide-down'); modal.classList.add('anim-slide-up'); eyeIcon.style.display = 'block'; eyeOffIcon.style.display = 'none'; }, 350);
-        } else { modal.style.display = 'flex'; eyeIcon.style.display = 'none'; eyeOffIcon.style.display = 'block'; renderFullList(currentMeal); }
+        } else { modal.style.display = 'flex'; eyeIcon.style.display = 'none'; eyeOffIcon.style.display = 'block'; renderFullList(); }
     }
 
     let tempRegAvatarBase64 = null;
@@ -1089,22 +1083,49 @@
     window.moveCarousel = (direction) => { if(direction===1) { cardPositions.push(cardPositions.shift()); currentDayIndex = getLoopedIndex(currentDayIndex+1); } else { cardPositions.unshift(cardPositions.pop()); currentDayIndex = getLoopedIndex(currentDayIndex-1); } renderAllCards(currentDayIndex); applyClasses(); }
     window.toggleMealType = () => { currentMeal = currentMeal === 'dinner' ? 'breakfast' : 'dinner'; updateTheme(); renderAllCards(currentDayIndex); }
     
-    window.renderFullList = (mealType) => {
+    window.renderFullList = () => {
         const container = document.getElementById('fullListContainer'); 
-        const btnBreakfast = document.getElementById('modalBtnBreakfast'); 
-        const btnDinner = document.getElementById('modalBtnDinner'); 
         container.innerHTML = ''; 
-        btnBreakfast.className = 'modal-toggle'; 
-        btnDinner.className = 'modal-toggle';
-        if (mealType === 'breakfast') btnBreakfast.classList.add('active-yellow'); else btnDinner.classList.add('active-red');
+        
         for (let i = 1; i <= 31; i++) { 
             const dayData = menuData[i]; 
             if (dayData) { 
+                const shortDate = dayData.date.replace(' 2026', '');
                 const div = document.createElement('div'); div.className = 'day-row'; 
-                div.innerHTML = `<div class="day-header">${dayData.date}</div><div class="day-content">${dayData[mealType].join('<br>')}</div>`; 
+                div.dataset.meal = currentMeal;
+                
+                const isBreakfast = currentMeal === 'breakfast';
+                const btnBg = isBreakfast ? '#fff59d' : '#ef9a9a';
+                const btnText = isBreakfast ? 'Akşama Geç' : 'Kahvaltıya Geç';
+
+                div.innerHTML = `
+                    <div class="day-header">
+                        <span>${shortDate}</span>
+                        <button class="switch-btn" style="background: ${btnBg}; color: #000; padding: 6px 12px; font-size: 0.75rem; flex-shrink: 0; white-space: nowrap; font-weight: 900;" onclick="toggleRowMeal(${i}, this)">
+                            <span class="switch-text">${btnText}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z"/></svg>
+                        </button>
+                    </div>
+                    <div class="day-content">${dayData[currentMeal].join('<br>')}</div>
+                `; 
                 container.appendChild(div); 
             } 
         }
+    }
+
+    window.toggleRowMeal = (dayIdx, btn) => {
+        const row = btn.closest('.day-row');
+        const contentDiv = row.querySelector('.day-content');
+        const currentType = row.dataset.meal;
+        const newType = currentType === 'dinner' ? 'breakfast' : 'dinner';
+        row.dataset.meal = newType;
+        
+        const isBreakfast = newType === 'breakfast';
+        btn.innerHTML = `<span class="switch-text">${isBreakfast ? 'Akşama Geç' : 'Kahvaltıya Geç'}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z"/></svg>`;
+        btn.style.background = isBreakfast ? '#fff59d' : '#ef9a9a';
+        btn.style.color = '#000';
+
+        contentDiv.innerHTML = menuData[dayIdx][newType].join('<br>');
     }
 
     function fetchStats(dayIdx) { 
