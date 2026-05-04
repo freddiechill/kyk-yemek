@@ -376,7 +376,7 @@
                         <img id="regAvatarPreview" style="display:none;">
                         <span id="regAvatarLabel">Foto Seç</span>
                     </div>
-                    <input type="file" id="regFileInput" accept="image/*" onchange="handleRegAvatarSelect(this)">
+                    <input type="file" id="regFileInput" accept="image/*" capture="camera" onchange="handleRegAvatarSelect(this)">
                     
                     <input type="text" id="regNick" class="auth-input" placeholder="Kullanıcı Adı (Nick)">
                     <input type="email" id="regEmail" class="auth-input" placeholder="E-posta Adresi">
